@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/juejin/juejin",
+    "pages/girls/girls",
+    "pages/users/users"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarBackgroundColor": "#282C35",
+    "navigationBarTitleText": "Coder",
+    "navigationStyle": "default",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "backgroundColor": "#FFF",
+    "list": [
+      {
+        "pagePath": "pages/juejin/juejin",
+        "iconPath": "static/tabbar/juejin.png",
+        "selectedIconPath": "static/tabbar/juejin_cur.png"
+      },
+      {
+        "pagePath": "pages/girls/girls",
+        "iconPath": "static/tabbar/girls.png",
+        "selectedIconPath": "static/tabbar/girls_cur.png"
+      },
+      {
+        "pagePath": "pages/users/users",
+        "iconPath": "static/tabbar/users.png",
+        "selectedIconPath": "static/tabbar/users_cur.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
+  },
+  "sitemapLocation": "sitemap.json"
+}
