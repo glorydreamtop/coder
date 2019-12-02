@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/users/users",
     "pages/juejin/juejin",
-    "pages/girls/girls",
-    "pages/users/users"
+    "pages/girls/girls"
   ],
   "subPackages": [],
   "window": {
@@ -33,6 +33,5 @@
   },
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
-  },
-  "sitemapLocation": "sitemap19.json"
+  }
 }

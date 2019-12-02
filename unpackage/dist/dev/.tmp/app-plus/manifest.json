@@ -80,7 +80,6 @@
         }
       }
     },
-    "arguments": "{\"name\":\"表单\",\"query\":\"\",\"id\":0,\"pathName\":\"pages/component/form\"}",
     "allowsInlineMediaPlayback": true,
     "safearea": {
       "background": "#FFF",
@@ -89,7 +88,7 @@
       }
     },
     "uni-app": {
-      "compilerVersion": "2.4.3",
+      "compilerVersion": "2.4.4",
       "control": "v8",
       "nvueCompiler": "uni-app",
       "renderer": "auto",
@@ -118,7 +117,11 @@
       ],
       "borderStyle": "rgba(0,0,0,0.4)",
       "selectedColor": "#0062cc",
-      "height": "50px"
+      "height": "50px",
+      "child": [
+        "lauchwebview"
+      ],
+      "selected": 2
     }
   }
 }

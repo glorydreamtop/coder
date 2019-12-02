@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/users/users",
     "pages/juejin/juejin",
-    "pages/girls/girls",
-    "pages/users/users"
+    "pages/girls/girls"
   ],
   "window": {
     "navigationBarBackgroundColor": "#282C35",
@@ -37,7 +37,7 @@
     "autoclose": false
   },
   "appname": "coder",
-  "compilerVersion": "2.4.3",
+  "compilerVersion": "2.4.4",
   "usingComponents": {
     "cu-custom": "/colorui/components/cu-custom"
   }
