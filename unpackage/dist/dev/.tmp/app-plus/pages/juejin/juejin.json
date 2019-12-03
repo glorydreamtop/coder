@@ -1,7 +1,0 @@
-{
-  "disableScroll": true,
-  "bounce": "none",
-  "usingComponents": {
-    "mescroll-uni": "/node-modules/mescroll-uni/mescroll-uni"
-  }
-}

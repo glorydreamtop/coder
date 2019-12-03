@@ -1,7 +1,0 @@
-{
-  "disableScroll": true,
-  "navigationBarTitleText": "掘金",
-  "usingComponents": {
-    "mescroll-uni": "/node-modules/mescroll-uni/mescroll-uni"
-  }
-}
