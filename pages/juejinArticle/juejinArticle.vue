@@ -5,6 +5,8 @@
 </template>
 
 <script>
+	import {param} from '../../utils/funcitons';
+	
 	export default {
 		data() {
 			return {
@@ -12,8 +14,19 @@
 			};
 		},
 		onLoad(options){
-			console.log(options.url);
-			this.url = options.url;
+			console.log(options.id);
+			const url = 'https://post-storage-api-ms.juejin.im/v1/getDetailData';
+			const userData = uni.getStorageSync('juejin');
+			const params = {
+				uid: userData.userId,
+				device_id: userData.clientId,
+				token:userData.token,
+				src: 'web',
+				postId: options.id,
+				type: 'entryView'
+			};
+			this.url = `/hybrid/html/local.html?${param(params)}` 
+			                                
 		}
 	}
 </script>

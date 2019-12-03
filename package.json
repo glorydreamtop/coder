@@ -1,0 +1,12 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "mescroll-uni": "^1.1.8",
+    "prettier": {
+      "integrity": "sha1-wa0g6APndJ+vkFpAnSNn4Gu+cyU=",
+      "resolved": "http://registry.npm.taobao.org/prettier/download/prettier-1.12.1.tgz",
+      "version": "1.12.1"
+    }
+  }
+}

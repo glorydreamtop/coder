@@ -61,7 +61,7 @@
 		},
 		"upOption": {
 			"use": true,
-			"auto": false,
+			"auto": true,
 			"page": {
 				"num": 0,
 				"size": 20

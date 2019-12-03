@@ -4,7 +4,7 @@
 			<view :class="['cu-item', index === TabCur ? 'text-blue' : '']" v-for="(item, index) in categories" :key="item.title" @tap="tabSelect(index)">{{ item.name }}</view>
 		</scroll-view>
 		<mescroll-uni class="list flex flex-direction justify-start" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback">
-			<view class="card flex flex-direction justify-start margin-top-xs padding-sm" v-for="item in dataList[TabCur]" :key="item.title" @tap="toArticle(item.originalUrl)">
+			<view class="card flex flex-direction justify-start margin-top-xs padding-sm" v-for="item in dataList[TabCur]" :key="item.title" @tap="toArticle(item.postId)">
 				<view class="meta text-sm text-gray flex justify-between">
 					<text class="flex justify-start">
 						<text class="author text-grey margin-right-xs">{{ item.author }}</text>
@@ -79,8 +79,6 @@ export default {
 						console.log(err);
 						Toast('获取分类失败');
 					});
-			} else {
-				this.getArticlelist();
 			}
 		},
 		getArticlelist() {
@@ -138,6 +136,7 @@ export default {
 								info.tags = info.tags.join('/');
 								info.title = item.node.title ? item.node.title : item.node.targets[0].title;
 								info.originalUrl = item.node.originalUrl ? item.node.originalUrl : item.node.targets[0].originalUrl;
+								info.postId = info.originalUrl.split('/')[4];
 								return info;
 							})
 						);
@@ -161,9 +160,9 @@ export default {
 				});
 			}, 1500);
 		},
-		toArticle(originalUrl) {
+		toArticle(postId) {
 			uni.navigateTo({
-				url:`../juejinArticle/juejinArticle?url=${originalUrl}`
+				url:`../juejinArticle/juejinArticle?id=${postId}`
 			})
 		}
 	},
