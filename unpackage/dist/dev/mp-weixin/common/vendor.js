@@ -734,7 +734,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -7117,7 +7117,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -7138,14 +7138,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -7221,7 +7221,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"VUE_APP_PLATFORM":"mp-weixin","NODE_ENV":"development","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -7598,38 +7598,7 @@ internalMixin(Vue);
 
 /***/ }),
 
-/***/ 3:
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 33:
+/***/ 21:
 /*!****************************************!*\
   !*** D:/github/coder/utils/request.js ***!
   \****************************************/
@@ -7637,7 +7606,7 @@ module.exports = g;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.articleList = exports.categories = exports.login = void 0;var _funcitons = __webpack_require__(/*! ./funcitons */ 34);
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.articleList = exports.categories = exports.login = void 0;var _funcitons = __webpack_require__(/*! ./funcitons */ 22);
 
 
 //get globalData
@@ -7732,14 +7701,15 @@ exports.login = login;var categories = function categories(data) {
 //get article list
 exports.categories = categories;var articleList = function articleList(data) {
   return post('https://web-api.juejin.im/query', data, true).then(function (res) {
-    return Promise.resolve(res.data.articleFeed.items);
+    res = res.data.followingArticleFeed ? res.data.followingArticleFeed.items : res.data.articleFeed.items;
+    return Promise.resolve(res);
   });
 };exports.articleList = articleList;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
-/***/ 34:
+/***/ 22:
 /*!******************************************!*\
   !*** D:/github/coder/utils/funcitons.js ***!
   \******************************************/
@@ -7747,14 +7717,124 @@ exports.categories = categories;var articleList = function articleList(data) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.Toast = void 0;var Toast = function Toast(title) {
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.formatTime = exports.Toast = void 0;var _arguments = arguments;var Toast = function Toast(title) {
   uni.showToast({
     title: title,
     icon: 'none',
     position: 'bottom' });
 
 };exports.Toast = Toast;
+var parseTime = function parseTime(time, cFormat) {
+  if (_arguments.length === 0) {
+    return null;
+  }
+  cFormat = cFormat === true ? '' : cFormat;
+  var format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}';
+
+  var date;
+  if (typeof time === 'object') {
+    date = time;
+  } else {
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
+      time = parseInt(time);
+    }
+    if (typeof time === 'number' && time.toString().length === 10) {
+      time = time * 1000;
+    }
+    date = new Date(time);
+  }
+  var formatObj = {
+    y: date.getFullYear(),
+    m: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    i: date.getMinutes(),
+    s: date.getSeconds(),
+    a: date.getDay() };
+
+  var time_str = format.replace(/{([ymdhisa])+}/g, function (result, key) {
+    var value = formatObj[key];
+    // Note: getDay() returns 0 on Sunday
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value];
+    }
+    return value.toString().padStart(2, '0');
+  });
+  return time_str;
+};
+var formatTime = function formatTime(time, option) {
+  if (/^\d{4}-\d{2}-\d{2}/i.test(time)) {
+    time = new Date(time).getTime();
+  } else {
+    if (('' + time).length === 10) {
+      time = parseInt(time) * 1000;
+    } else {
+      time = +time;
+    }
+  }
+  var d = new Date(time);
+  var now = Date.now();
+
+  var diff = (now - d) / 1000;
+
+  if (diff < 30) {
+    return '刚刚';
+  } else if (diff < 3600) {
+    // less 1 hour
+    return Math.ceil(diff / 60) + '分钟前';
+  } else if (diff < 3600 * 24) {
+    return Math.ceil(diff / 3600) + '小时前';
+  } else if (diff < 3600 * 24 * 2) {
+    return '1天前';
+  }
+  if (option) {
+    return parseTime(time, option);
+  } else {
+    return (
+      d.getMonth() +
+      1 +
+      '月' +
+      d.getDate() +
+      '日' +
+      d.getHours() +
+      '时' +
+      d.getMinutes() +
+      '分');
+
+  }
+};exports.formatTime = formatTime;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 3:
+/*!***********************************!*\
+  !*** (webpack)/buildin/global.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
 
 /***/ }),
 
@@ -7770,7 +7850,7 @@ exports.categories = categories;var articleList = function articleList(data) {
 
 /***/ }),
 
-/***/ 46:
+/***/ 47:
 /*!*****************************************************************!*\
   !*** D:/github/coder/node_modules/mescroll-uni/mescroll-uni.js ***!
   \*****************************************************************/
@@ -8528,7 +8608,7 @@ MeScroll.prototype.setBounce = function (isBounce) {
 
 /***/ }),
 
-/***/ 47:
+/***/ 48:
 /*!************************************************************************!*\
   !*** D:/github/coder/node_modules/mescroll-uni/mescroll-uni-option.js ***!
   \************************************************************************/
@@ -9456,6 +9536,17 @@ main();
 
 /***/ }),
 
+/***/ 54:
+/*!************************************************!*\
+  !*** D:/github/coder/pages/juejin/config.json ***!
+  \************************************************/
+/*! exports provided: pageInfos, queryList, mescrollOption, default */
+/***/ (function(module) {
+
+module.exports = {"pageInfos":{"recommend":{"endCursor":"","hasNextPage":true},"subscribe":{"endCursor":"","hasNextPage":true},"backend":{"endCursor":"","hasNextPage":true},"frontend":{"endCursor":"","hasNextPage":true},"android":{"endCursor":"","hasNextPage":true},"ios":{"endCursor":"","hasNextPage":true},"ai":{"endCursor":"","hasNextPage":true},"freebie":{"endCursor":"","hasNextPage":true},"career":{"endCursor":"","hasNextPage":true},"article":{"endCursor":"","hasNextPage":true}},"queryList":[{"id":"21207e9ddb1de777adeaca7a2fb38030","type":"recommend"},{"id":"504f6ca050625a4270ba11eebe696b3c","type":"subscribe"},{"id":"653b587c5c7c8a00ddf67fc66f989d42","type":"other"}],"mescrollOption":{"downOption":{"use":true,"auto":false},"upOption":{"use":true,"auto":false,"page":{"num":0,"size":20},"noMoreSize":10,"empty":{"tip":"么有更多了~~"}}}};
+
+/***/ }),
+
 /***/ 6:
 /*!******************************************************!*\
   !*** ./node_modules/@dcloudio/uni-stat/package.json ***!
@@ -9475,7 +9566,7 @@ module.exports = {"_from":"@dcloudio/uni-stat@^2.0.0-alpha-24420191128001","_id"
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/juejin/juejin": { "disableScroll": true, "usingComponents": {} }, "pages/girls/girls": { "disableScroll": true, "usingComponents": {} }, "pages/users/users": { "usingComponents": {} } }, "globalStyle": { "navigationBarBackgroundColor": "#282C35", "navigationBarTitleText": "Coder", "navigationStyle": "default", "navigationBarTextStyle": "white" } };exports.default = _default;
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default = { "pages": { "pages/juejin/juejin": { "disableScroll": true, "navigationBarTitleText": "掘金", "usingComponents": { "mescroll-uni": "/node-modules/mescroll-uni/mescroll-uni" } }, "pages/users/users": { "usingComponents": {} }, "pages/girls/girls": { "disableScroll": true, "usingComponents": {} }, "pages/juejinArticle/juejinArticle": {} }, "globalStyle": { "navigationBarBackgroundColor": "#282C35", "navigationBarTitleText": "Coder", "navigationStyle": "default", "navigationBarTextStyle": "white" } };exports.default = _default;
 
 /***/ }),
 

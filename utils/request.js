@@ -92,8 +92,9 @@ const categories = (data) => {
 }
 //get article list
 const articleList = (data) => {
-	return post('https://web-api.juejin.im/query',data,true).then(res => {
-		return Promise.resolve(res.data.articleFeed.items);
+	return post('https://web-api.juejin.im/query', data, true).then(res => {
+		res = res.data.followingArticleFeed ? res.data.followingArticleFeed.items : res.data.articleFeed.items;
+		return Promise.resolve(res);
 	})
 }
 export {

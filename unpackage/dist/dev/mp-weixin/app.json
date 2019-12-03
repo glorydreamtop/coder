@@ -1,8 +1,9 @@
 {
   "pages": [
-    "pages/users/users",
     "pages/juejin/juejin",
-    "pages/girls/girls"
+    "pages/users/users",
+    "pages/girls/girls",
+    "pages/juejinArticle/juejinArticle"
   ],
   "subPackages": [],
   "window": {

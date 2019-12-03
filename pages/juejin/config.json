@@ -1,0 +1,75 @@
+{
+	"pageInfos": {
+		"recommend": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"subscribe": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"backend": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"frontend": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"android": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"ios": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"ai": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"freebie": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"career": {
+			"endCursor": "",
+			"hasNextPage": true
+		},
+		"article": {
+			"endCursor": "",
+			"hasNextPage": true
+		}
+	},
+	"queryList": [{
+			"id": "21207e9ddb1de777adeaca7a2fb38030",
+			"type": "recommend"
+		},
+		{
+			"id": "504f6ca050625a4270ba11eebe696b3c",
+			"type": "subscribe"
+		},
+		{
+			"id": "653b587c5c7c8a00ddf67fc66f989d42",
+			"type": "other"
+		}
+	],
+	"mescrollOption":{
+		"downOption": {
+			"use": true,
+			"auto": false
+		},
+		"upOption": {
+			"use": true,
+			"auto": false,
+			"page": {
+				"num": 0,
+				"size": 20
+			},
+			"noMoreSize": 10,
+			"empty": {
+				"tip": "么有更多了~~"
+			}
+		}
+	}
+}
