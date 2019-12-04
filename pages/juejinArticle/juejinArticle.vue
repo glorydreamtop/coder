@@ -25,8 +25,7 @@
 				postId: options.id,
 				type: 'entryView'
 			};
-			this.url = `/hybrid/html/local.html?${param(params)}` 
-			                                
+			this.url = `/hybrid/html/local.html?${param(params)}`                       
 		}
 	}
 </script>

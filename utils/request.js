@@ -2,7 +2,7 @@ import {
 	Toast
 } from './funcitons';
 //get globalData
-const juejin = uni.getStorageSync('juejin');
+const juejin = uni.getStorageSync('juejin') || '';
 //base ajax
 const ajax = (url, method, data, legacy) => {
 	const header1 = {

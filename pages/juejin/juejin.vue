@@ -3,30 +3,19 @@
 		<scroll-view scroll-x class="bg-white nav mescroll-touch-x" scroll-with-animation :scroll-left="scrollLeft">
 			<view :class="['cu-item', index === TabCur ? 'text-blue' : '']" v-for="(item, index) in categories" :key="item.title" @tap="tabSelect(index)">{{ item.name }}</view>
 		</scroll-view>
-		<mescroll-uni class="list flex flex-direction justify-start" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback">
-			<view class="card flex flex-direction justify-start margin-top-xs padding-sm" v-for="item in dataList[TabCur]" :key="item.title" @tap="toArticle(item.postId)">
-				<view class="meta text-sm text-gray flex justify-between">
-					<text class="flex justify-start">
-						<text class="author text-grey margin-right-xs">{{ item.author }}</text>
-						<text class="before">{{ item.createdAt | formatTime }}</text>
-					</text>
-					<text class="tags text-blue">{{ item.tags }}</text>
-				</view>
-				<view class="content margin-tb-sm">
-					<text class="title text-bold">{{ item.title }}</text>
-				</view>
-			</view>
-		</mescroll-uni>
+		<mescroll-item class="me" :mescrollOption="mescrollOption" :dataList="dataList[idx]" :index="idx" :TabCur="TabCur" @up="update" ref="`me${idx}`" v-for="idx in categories.length" :key="idx"></mescroll-item>
 	</view>
 </template>
 
 <script>
 import { categories, articleList } from '../../utils/request';
-import { formatTime } from '../../utils/funcitons';
+import { formatTime, Toast } from '../../utils/funcitons';
 import config from './config';
+import MescrollItem from '../../components/mescroll-item';
 import MescrollUni from 'mescroll-uni';
 export default {
 	components: {
+		MescrollItem,
 		MescrollUni
 	},
 	filters: {
@@ -38,7 +27,7 @@ export default {
 			TabCur: 0,
 			scrollLeft: 0,
 			// mescroll组件配置
-			...config.mescrollOption,
+			mescrollOption:config.mescrollOption,
 			// 列表数据
 			dataList: [[], [], [], [], [], [], [], [], [], []],
 			// query id 列表
@@ -79,6 +68,8 @@ export default {
 						console.log(err);
 						Toast('获取分类失败');
 					});
+			}else{
+				this.getArticlelist();
 			}
 		},
 		getArticlelist() {
@@ -118,7 +109,7 @@ export default {
 						// 保存是否有下一页
 						this.pageInfos[this.categories[index].title].hasNextPage = res.pageInfo.hasNextPage;
 						// 保存列表数据
-						console.log(this.dataList[index]);
+						
 						this.dataList[index] = this.dataList[index].concat(
 							res.edges.map(item => {
 								const info = {
@@ -140,9 +131,8 @@ export default {
 								return info;
 							})
 						);
-
-						console.log(this.dataList);
-						resolve('success');
+						// console.log(this.dataList[index]);
+						resolve(hasNextPage);
 					})
 					.catch(err => {
 						console.log(err);
@@ -153,17 +143,13 @@ export default {
 		downCallback(mescroll) {
 			mescroll.endSuccess(20, true);
 		},
-		upCallback(mescroll) {
-			setTimeout(() => {
-				this.getArticlelist().then(res => {
-					mescroll.endSuccess(20, this.pageInfos[this.categories[this.TabCur].title].hasNextPage);
-				});
-			}, 1500);
-		},
-		toArticle(postId) {
-			uni.navigateTo({
-				url:`../juejinArticle/juejinArticle?id=${postId}`
-			})
+		update() {
+			this.getArticlelist().then(res => {
+				setTimeout(() => {
+					this.$refs[`me${this.TabCur}`].endSuccess(res);
+					//mescroll.endSuccess(20, this.pageInfos[this.categories[this.TabCur].title].hasNextPage);
+				}, 3000);
+			});
 		}
 	},
 	onLoad() {
@@ -178,20 +164,8 @@ export default {
 	position: fixed;
 	z-index: 9;
 }
-/deep/.mescroll-uni-fixed {
-	top: 90upx !important;
-}
-.list {
-	width: 100vw;
-	height: 100vh;
-	.card {
-		height: auto;
-		width: 100vw;
-		background-color: #ffffff;
-		.meta {
-			width: 100%;
-			height: 1.5em;
-		}
-	}
+.me{
+	top: 90upx;
+	position: fixed;
 }
 </style>

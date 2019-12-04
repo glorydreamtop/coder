@@ -6,6 +6,7 @@
 	"versionCode": 214,
 	"transformPx": false,
 	"app-plus": {
+		// "compilerVersion": 3,
 		/* 5+App特有相关 */
 		"modules": {},
 		/* 模块配置 */
