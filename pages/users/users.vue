@@ -1,12 +1,16 @@
 <template>
 	<view>
-		<form class='form' @submit='login'>
-			<view>
-				<input name='phoneNumber' value="17320266068" placeholder='手机号/邮箱' focus></input>
-				<input name='password' value="adidas0520" placeholder='密码' password='true'></input>
-			</view>
-			<button class='login' formType='submit'>登录</button>
-		</form>
+		<view class="">
+			
+			<!-- <form class='form' @submit='login'>
+				<view>
+					<input name='phoneNumber' value="17320266068" placeholder='手机号/邮箱' focus></input>
+					<input name='password' value="adidas0520" placeholder='密码' password='true'></input>
+				</view>
+				<button class='login' formType='submit'>登录</button>
+			</form> -->
+		</view>
+		
 	</view>
 </template>
 
@@ -20,7 +24,7 @@
 	export default {
 		data() {
 			return {
-
+				
 			};
 		},
 		methods: {

@@ -97,8 +97,17 @@ const articleList = (data) => {
 		return Promise.resolve(res);
 	})
 }
+//get tags list
+const tagsList = (data) => {
+	return post('https://web-api.juejin.im/query', data, true).then(res => {
+		res = res.data.tagNav.items;
+		console.log(res);
+		return Promise.resolve(res);
+	})
+}
 export {
 	login,
 	categories,
-	articleList
+	articleList,
+	tagsList
 }

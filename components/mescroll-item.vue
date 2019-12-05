@@ -1,5 +1,5 @@
 <template>
-	<view v-show="TabCur === index">
+	<view v-show="TabCur === index" class="scroll">
 		<mescroll-uni
 			class="list flex flex-direction justify-start"
 			@init="mescrollinit"
@@ -9,7 +9,8 @@
 			@up="upCallback"
 			top="90"
 		>
-			<view class="card flex flex-direction justify-start margin-top-xs padding-sm" v-for="item in dataList" :key="item.postId" @tap="toArticle(item)">
+		<slot></slot>
+			<view class="card flex flex-direction justify-start margin-bottom-xs padding-sm" v-for="item in dataList" :key="item.postId" @tap="toArticle(item)">
 				<view class="meta text-sm text-gray flex justify-between">
 					<text class="flex justify-start">
 						<text class="author text-grey margin-right-xs">{{ item.author }}</text>
@@ -27,6 +28,7 @@
 
 <script>
 import { formatTime, Toast } from '../utils/funcitons';
+import MescrollUni from 'mescroll-uni';
 export default {
 	props: {
 		TabCur: Number,
@@ -41,6 +43,9 @@ export default {
 	},
 	filters: {
 		formatTime
+	},
+	components: {
+		MescrollUni
 	},
 	methods: {
 		toArticle(item) {
@@ -71,15 +76,24 @@ export default {
 // }
 .list {
 	width: 100vw;
-	height: 100vh;
+	height: 100%;
 	.card {
 		height: auto;
 		width: 100vw;
 		background-color: #ffffff;
 		.meta {
 			width: 100%;
+			font-size: 28upx;
 			height: 1.5em;
 		}
+		.content{
+			font-size: 32upx;
+		}
 	}
+}
+.tagList{
+	height: 90upx;
+	width: 100%;
+	background-color: #F1F1F1;
 }
 </style>
