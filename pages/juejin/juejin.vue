@@ -15,7 +15,9 @@
 			:key="idx"
 		>
 			<view class="tagList flex justify-start text-white">
-				<view :class="item.tagId === currentTagId ? 'text-blue' : ''" v-for="item in tagList[idx]" :key="item.title" @tap="selectTag(item.tagId,item.order)">{{ item.title }}</view>
+				<view :class="currentTagId[idx] === item.tagId ? 'text-blue' : ''" v-for="item in tagList[idx]" :key="item.title" @tap="selectTag(item.tagId)">
+					{{ item.title }}
+				</view>
 			</view>
 		</mescroll-item>
 	</view>
@@ -26,11 +28,9 @@ import { categories, articleList, tagsList } from '../../utils/request';
 import { formatTime, Toast } from '../../utils/funcitons';
 import config from './config';
 import MescrollItem from '../../components/mescroll-item';
-import MescrollUni from 'mescroll-uni';
 export default {
 	components: {
 		MescrollItem,
-		MescrollUni
 	},
 	filters: {
 		formatTime
@@ -52,7 +52,7 @@ export default {
 			// query id 列表
 			queryList: config.queryList,
 			// 当前tag
-			currentTagId: '',
+			currentTagId: (new Array(10)).fill(''),
 			// 分页信息
 			pageInfos: config.pageInfos
 		};
@@ -62,21 +62,35 @@ export default {
 			console.log(index);
 			if (this.TabCur === index) return;
 			this.TabCur = index;
-			this.currentTagId = '';
 			this.scrollLeft = (index - 1) * 60;
 			if (this.dataList[index].length === 0) {
 				this.getTaglist(index);
 				this.getArticlelist(index);
 			}
 		},
-		selectTag(tagId,order) {
-			console.log(order);
+		selectTag(tagId) {
 			console.log(tagId);
+			
+			let order;
+			switch (tagId) {
+				case 'coco0':
+					order = 'POPULAR';
+					break;
+				case 'coco1':
+					order = 'NEWEST';
+					break;
+				case 'coco2':
+					order = 'THREE_DAYS_HOTTEST';
+					break;
+				default:
+					order = 'POPULAR';
+					break;
+			}
 			const index = this.TabCur;
 			this.dataList[index] = [];
-			this.currentTagId = tagId;
+			this.currentTagId[index] = tagId;
 			this.pageInfos[this.categories[index].title].endCursor = '';
-			this.getArticlelist(this.TabCur, [tagId],order);
+			this.getArticlelist(this.TabCur, [tagId], order);
 		},
 		getCategories() {
 			this.categories = uni.getStorageSync('juejin_cate');
@@ -96,6 +110,7 @@ export default {
 						};
 						this.categories = [recommend, subscribe, ...res];
 						uni.setStorageSync('juejin_cate', this.categories);
+						this.currentTagId = (new Array(this.categories.length)).fill('');
 						this.getTaglist(0);
 						this.getArticlelist(0);
 					})
@@ -104,11 +119,12 @@ export default {
 						Toast('获取分类失败');
 					});
 			} else {
+				this.currentTagId = new Array(10);
 				this.getTaglist(0);
 				this.getArticlelist(0);
 			}
 		},
-		getArticlelist(index, tags,order) {
+		getArticlelist(index, tags, order) {
 			// 当前分类id
 			const category = this.categories[index].id;
 			// 当前分类请求所用queryId
@@ -145,21 +161,21 @@ export default {
 						// 保存列表数据
 						this.dataList[index] = this.dataList[index].concat(
 							res.edges.map(item => {
-								const info = {
-									author: '',
-									createdAt: '',
-									tags: []
-								};
-								info.author = item.node.user ? item.node.user.username : item.node.targets[0].user.username;
-								info.createdAt = item.node.createdAt ? item.node.createdAt : item.node.targets[0].createdAt;
-								info.tags = item.node.tags
-									? item.node.tags.map(tag => {
+								const info = {};
+								const node = index === 1 ? item.node.targets[0] : item.node;
+								info.likeCount = node.likeCount;
+								info.viewerHasLiked = node.viewerHasLiked;
+								info.author = node.user.username;
+								info.createdAt = node.createdAt;
+								info.tags = node.tags
+									? node.tags.map(tag => {
 											return tag.title;
 									  })
-									: [item.node.targets[0].user.jobTitle];
+									: [node.user.jobTitle];
 								info.tags = info.tags.join('/');
-								info.title = item.node.title ? item.node.title : item.node.targets[0].title;
-								info.originalUrl = item.node.originalUrl ? item.node.originalUrl : item.node.targets[0].originalUrl;
+								info.title = node.title;
+								info.originalUrl = node.originalUrl;
+								info.id = node.id;
 								info.postId = info.originalUrl.split('/')[4];
 								return info;
 							})
@@ -178,18 +194,15 @@ export default {
 				this.tagList[0] = [
 					{
 						title: '最热',
-						tagId: null,
-						order: 'POPULAR'
+						tagId: 'coco0'
 					},
 					{
 						title: '最新',
-						tagId: null,
-						order: 'NEWEST'
+						tagId: 'coco1'
 					},
 					{
 						title: '三天热榜',
-						tagId: null,
-						order: 'THREE_DAYS_HOTTEST'
+						tagId: 'coco2'
 					}
 				];
 			} else if (index > 1) {
@@ -209,7 +222,13 @@ export default {
 					}
 				};
 				tagsList(data).then(res => {
-					this.tagList[index] = res;
+					this.tagList[index] = [
+						{
+							title: '全部',
+							tagId: ''
+						},
+						...res
+					];
 				});
 			}
 			console.log(this.tagList[0]);
@@ -245,6 +264,9 @@ export default {
 	height: calc(100% - 50upx);
 }
 .tagList {
+	width: 96vw;
+	margin-left: auto;
+	margin-right: auto;
 	overflow: auto;
 	> view {
 		background-color: #dbdbdb;
