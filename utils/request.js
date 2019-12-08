@@ -1,6 +1,7 @@
 import {
 	Toast
 } from './funcitons';
+import urls from './urls';
 //get globalData
 const juejin = uni.getStorageSync('juejin') || '';
 //base ajax
@@ -70,7 +71,7 @@ const post = (url, data, legacy) => {
 //login
 const login = (data) => {
 	const type = data.phoneNumber ? 'phoneNumber' : 'email';
-	return post('https://juejin.im/auth/type/' + type, data).then(res => {
+	return post(`${urls.login}${type}`, data).then(res => {
 		Toast('登录成功');
 		const juejin = {};
 		[juejin.token, juejin.userId, juejin.clientId, juejin.avatarLarge, juejin.username] = [
@@ -86,28 +87,44 @@ const login = (data) => {
 }
 //get categories
 const categories = (data) => {
-	return get('https://gold-tag-ms.juejin.im/v1/categories', data).then(res => {
+	return get(urls.categories, data).then(res => {
 		return Promise.resolve(res.d.categoryList);
 	})
 }
 //get article list
 const articleList = (data) => {
-	return post('https://web-api.juejin.im/query', data, true).then(res => {
+	return post(urls.query, data, true).then(res => {
 		res = res.data.followingArticleFeed ? res.data.followingArticleFeed.items : res.data.articleFeed.items;
 		return Promise.resolve(res);
 	})
 }
 //get tags list
 const tagsList = (data) => {
-	return post('https://web-api.juejin.im/query', data, true).then(res => {
+	return post(urls.query, data, true).then(res => {
 		res = res.data.tagNav.items;
 		console.log(res);
 		return Promise.resolve(res);
+	})
+}
+//get collection set
+const collection = (data) => {
+	const id = data.id;
+	data = {
+		src: 'web',
+		userId: juejin.userId,
+		clientId: juejin.clientId,
+		token: juejin.token,
+		page: data.page
+	}
+	return get(`${urls.collection}${id}`, data).then(res => {
+		res = res.d.collectionSets;
+		return Promise.resolve(res)
 	})
 }
 export {
 	login,
 	categories,
 	articleList,
-	tagsList
+	tagsList,
+	collection
 }

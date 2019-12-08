@@ -46,13 +46,13 @@ export default {
 			// mescroll组件配置
 			mescrollOption: config.mescrollOption,
 			// 分类标签列表
-			tagList: [[], [], [], [], [], [], [], [], [], []],
+			tagList: new Array(10).fill([]),
 			// 列表数据
-			dataList: [[], [], [], [], [], [], [], [], [], []],
+			dataList: new Array(10).fill([]),
 			// query id 列表
 			queryList: config.queryList,
 			// 当前tag
-			currentTagId: (new Array(10)).fill(''),
+			currentTagId: [],
 			// 分页信息
 			pageInfos: config.pageInfos
 		};
@@ -86,6 +86,7 @@ export default {
 					order = 'POPULAR';
 					break;
 			}
+			if(tagId === 'all'){tagId = ''};
 			const index = this.TabCur;
 			this.dataList[index] = [];
 			this.currentTagId[index] = tagId;
@@ -110,7 +111,7 @@ export default {
 						};
 						this.categories = [recommend, subscribe, ...res];
 						uni.setStorageSync('juejin_cate', this.categories);
-						this.currentTagId = (new Array(this.categories.length)).fill('');
+						this.currentTagId = ['coco0','',...new Array(this.categories.length-2).fill('all')];
 						this.getTaglist(0);
 						this.getArticlelist(0);
 					})
@@ -119,7 +120,7 @@ export default {
 						Toast('获取分类失败');
 					});
 			} else {
-				this.currentTagId = new Array(10);
+				this.currentTagId = ['coco0','',...new Array(this.categories.length-2).fill('all')];
 				this.getTaglist(0);
 				this.getArticlelist(0);
 			}
@@ -225,7 +226,7 @@ export default {
 					this.tagList[index] = [
 						{
 							title: '全部',
-							tagId: ''
+							tagId: 'all'
 						},
 						...res
 					];
@@ -246,6 +247,7 @@ export default {
 	},
 	onLoad() {
 		this.getCategories();
+		console.log(this.currentTagId);
 	}
 };
 </script>
@@ -264,7 +266,7 @@ export default {
 	height: calc(100% - 50upx);
 }
 .tagList {
-	width: 96vw;
+	width: 94vw;
 	margin-left: auto;
 	margin-right: auto;
 	overflow: auto;

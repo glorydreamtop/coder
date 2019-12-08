@@ -10,7 +10,7 @@
 			top="90"
 		>
 		<slot></slot>
-			<view class="card flex flex-direction justify-start margin-bottom-xs padding-sm" v-for="item in dataList" :key="item.postId" @tap="toArticle(item)">
+			<view class="card flex flex-direction justify-start margin-bottom-sm padding-sm" v-for="item in dataList" :key="item.postId" @tap="toArticle(item)">
 				<view class="meta text-sm text-gray flex justify-between">
 					<text class="flex justify-start">
 						<text class="author text-grey margin-right-xs">{{ item.author }}</text>
@@ -51,7 +51,7 @@ export default {
 		toArticle(item) {
 			Toast(item.title);
 			uni.navigateTo({
-				url: `/pages/juejinArticle/juejinArticle?id=${item.postId}`
+				url: `/pages/juejinArticle/juejinArticle?postId=${item.postId}&id=${item.id}`
 			});
 		},
 		endSuccess(hasNextPage) {
@@ -79,7 +79,10 @@ export default {
 	height: 100%;
 	.card {
 		height: auto;
-		width: 100vw;
+		width: 94vw;
+		margin-left: auto;
+		margin-right: auto;
+		border-radius: 14upx;
 		background-color: #ffffff;
 		.meta {
 			width: 100%;

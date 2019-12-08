@@ -1,15 +1,15 @@
 {
 	"pages": [
 		//pages数组中第一项表示应用启动页
-		
+
 		{
 			"path": "pages/juejin/juejin",
 			"style": {
 				"disableScroll": true,
-				"app-plus":{
-					"bounce":"none"
+				"app-plus": {
+					"bounce": "none"
 				},
-				"navigationBarTitleText":"掘金"
+				"navigationBarTitleText": "掘金"
 			}
 		},
 		{
@@ -20,17 +20,27 @@
 			"path": "pages/girls/girls",
 			"style": {
 				"disableScroll": true,
-				"app-plus":{
-					"bounce":"none"
+				"app-plus": {
+					"bounce": "none"
 				}
 			}
 		}
-		
-	    ,{
-            "path" : "pages/juejinArticle/juejinArticle",
-            "style" : {}
-        }
-    ],
+
+		, {
+			"path": "pages/juejinArticle/juejinArticle",
+			"style": {
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+							"type": "share"
+						},{
+							"type": "favorite"
+						}]
+					}
+				}
+			}
+		}
+	],
 	"tabBar": {
 		"backgroundColor": "#FFF",
 		"list": [{
@@ -42,9 +52,9 @@
 			"iconPath": "static/tabbar/girls.png",
 			"selectedIconPath": "static/tabbar/girls_cur.png"
 		}, {
-			"pagePath":"pages/users/users",
-			"iconPath":"static/tabbar/users.png",
-			"selectedIconPath":"static/tabbar/users_cur.png"
+			"pagePath": "pages/users/users",
+			"iconPath": "static/tabbar/users.png",
+			"selectedIconPath": "static/tabbar/users_cur.png"
 		}]
 	},
 	"globalStyle": {

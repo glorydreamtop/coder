@@ -60,7 +60,7 @@
 	],
 	"mescrollOption":{
 		"downOption": {
-			"use": true,
+			"use": false,
 			"auto": false
 		},
 		"upOption": {
