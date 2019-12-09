@@ -102,8 +102,21 @@ const param = (json) => {
 		})
 	).join('&')
 }
+const getQueryObject = (params) => {
+  const obj = {}
+  const reg = /([^?&=]+)=([^?&=]*)/g
+  params.replace(reg, (rs, $1, $2) => {
+    const name = decodeURIComponent($1)
+    let val = decodeURIComponent($2)
+    val = String(val)
+    obj[name] = val
+    return rs
+  })
+  return obj
+}
 export {
 	Toast,
 	formatTime,
-	param
+	param,
+	getQueryObject
 }

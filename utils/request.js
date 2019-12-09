@@ -1,6 +1,7 @@
 import {
 	Toast
 } from './funcitons';
+import urls from './urls';
 //get globalData
 const juejin = uni.getStorageSync('juejin') || '';
 //base ajax
@@ -60,25 +61,21 @@ const ajax = (url, method, data, legacy) => {
 
 }
 //get ajax
-const get = (url, data, legacy) => {
-	return ajax(url, 'GET', data, legacy)
-}
+const get = (url, data, legacy) => ajax(url, 'GET', data, legacy)
+
 //post ajax
-const post = (url, data, legacy) => {
-	return ajax(url, 'POST', data, legacy)
-}
+const post = (url, data, legacy) => ajax(url, 'POST', data, legacy)
+
 //put ajax
-const put = (url,data,legacy) => {
-	return ajax(url, 'PUT', data, legacy)
-}
+const put = (url, data, legacy) => ajax(url, 'PUT', data, legacy)
+
 //delete ajax
-const del = (url,data,legacy) => {
-	return ajax(url, 'DELETE', data, legacy)
-}
+const del = (url, data, legacy) => ajax(url, 'DELETE', data, legacy)
+
 //login
 const login = (data) => {
 	const type = data.phoneNumber ? 'phoneNumber' : 'email';
-	return post('https://juejin.im/auth/type/' + type, data).then(res => {
+	return post(`${urls.login}${type}`, data).then(res => {
 		Toast('登录成功');
 		const juejin = {};
 		[juejin.token, juejin.userId, juejin.clientId, juejin.avatarLarge, juejin.username] = [
@@ -93,38 +90,61 @@ const login = (data) => {
 	})
 }
 //get categories
-const categories = (data) => {
-	return get('https://gold-tag-ms.juejin.im/v1/categories', data).then(res => {
-		return Promise.resolve(res.d.categoryList);
-	})
-}
+const categories = (data) => get(urls.categories, data).then(res => {
+	return Promise.resolve(res.d.categoryList);
+})
+
 //get article list
-const articleList = (data) => {
-	return post('https://web-api.juejin.im/query', data, true).then(res => {
-		res = res.data.followingArticleFeed ? res.data.followingArticleFeed.items : res.data.articleFeed.items;
-		return Promise.resolve(res);
-	})
-}
+const articleList = (data) => post(urls.query, data, true).then(res => {
+	res = res.data.followingArticleFeed ? res.data.followingArticleFeed.items : res.data.articleFeed.items;
+	return Promise.resolve(res);
+})
+
 //get tags list
-const tagsList = (data) => {
-	return post('https://web-api.juejin.im/query', data, true).then(res => {
-		res = res.data.tagNav.items;
-		console.log(res);
-		return Promise.resolve(res);
+const tagsList = (data) => post(urls.query, data, true).then(res => {
+	res = res.data.tagNav.items;
+	return Promise.resolve(res);
+})
+
+//like or dislike
+const changeLike = (data, dislike) => {
+	if (dislike) {
+		return del(`${urls.like}${data}`)
+	}
+	return put(`${urls.like}${data}`)
+}
+//get collection set
+const collection = (data) => {
+	const id = data.id;
+	data = {
+		src: 'web',
+		userId: juejin.userId,
+		clientId: juejin.clientId,
+		token: juejin.token,
+		page: data.page
+	}
+	return get(`${urls.collection}${id}`, data).then(res => {
+		res = res.d.collectionSets;
+		return Promise.resolve(res)
 	})
 }
-//like or dislike
-const changeLike = (data,dislike) => {
-	const url = 'https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/'
-	if(dislike){
-		return del(`${url}${data}`)
+//collect
+const changeCollect = (data,type) => {
+	data = {
+		src: 'web',
+		userId: juejin.userId,
+		clientId: juejin.clientId,
+		token: juejin.token,
+		...data
 	}
-	return put(`${url}${data}`)
+	return put(`${urls.collect}${type}`,data)
 }
 export {
 	login,
 	categories,
 	articleList,
 	tagsList,
-	changeLike
+	changeLike,
+	collection,
+	changeCollect
 }

@@ -6,30 +6,126 @@
 		<meta content="email=no" name="format-detection" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="https://b-gold-cdn.xitu.io/v3/static/css/0.9c3b1301627380d53cfd.css" rel="stylesheet" type="text/css" />
+		<link href="./juejin.css" rel="stylesheet" type="text/css" />
+		<link href="./article.css" rel="stylesheet" type="text/css" />
 		<title>文章详情</title>
 	</head>
 	<body>
 		<div id="article_app" class="article-content">
 		</div>
+		<div id="coder_mask" class="coder_hidden" onclick="maskHidden()">
+		</div>
+		<div id="coder_popup" class="coder_hidden">
+			<div class="coder_title">
+				收藏夹
+			</div>
+			<div class="coder_list" id="coder_list">
+
+			</div>
+		</div>
 	</body>
-	<style type="text/css">
-		.article-content{
-			width: 90%;
-			margin:0 auto;
-		}
-	</style>
+	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
 	<script type="text/javascript">
-		const url = 'https://post-storage-api-ms.juejin.im/v1/getDetailData';
-		const params = window.location.search.substring(1);
-		console.log(params);
-		document.addEventListener('plusready', function() {
-			const xhr = new plus.net.XMLHttpRequest();
-			xhr.open("GET", `${url}?${params}`);
-			xhr.send();
-			xhr.onload = () => {
-				document.getElementById('article_app').innerHTML = JSON.parse(xhr.responseText).d.content;
+		//隐藏弹窗和遮罩
+		const maskHidden = () => {
+			document.getElementById('coder_mask').className = 'coder_hidden';
+			document.getElementById('coder_popup').className = 'coder_hidden';
+			return;
+		}
+		//打开弹窗和遮罩
+		const collection = (list) => {
+			const innerHTMLs = [];
+			list.forEach(item => {
+				const innerHTML =
+					`<div class="coder_list_item">
+						<img src="${item.img}">
+						<span>${item.title}</span>
+						<img class="select" src="${item.isIn?'select_cur.png':'select.png'}" data-csId="${item.csId}" onclick="collect('${item.csId}','${item.isIn}')">
+					</div>`
+				innerHTMLs.push(innerHTML)
+			})
+			document.getElementById('coder_list').innerHTML = innerHTMLs.join('');
+			document.getElementById('coder_popup').className = 'coder_show';
+			document.getElementById('coder_mask').className = 'coder_show';
+			//fixedBody();
+			return;
+		}
+		
+		const cleanArray = (actual) => {
+		  const newArray = []
+		  for (let i = 0; i < actual.length; i++) {
+		    if (actual[i]) {
+		      newArray.push(actual[i])
+		    }
+		  }
+		  return newArray
+		}
+		const param = (json) => {
+			if (!json) return ''
+			return cleanArray(
+				Object.keys(json).map(key => {
+					if (json[key] === undefined) return ''
+					return encodeURIComponent(key) + '=' + encodeURIComponent(json[key])
+				})
+			).join('&')
+		}
+		const getQueryObject = (params) => {
+		  const obj = {}
+		  const reg = /([^?&=]+)=([^?&=]*)/g
+		  params.replace(reg, (rs, $1, $2) => {
+		    const name = decodeURIComponent($1)
+		    let val = decodeURIComponent($2)
+		    val = String(val)
+		    obj[name] = val
+		    return rs
+		  })
+		  return obj
+		}
+		//收藏
+		const collect = (csId,isIn) => {
+			const data ={
+				csId,
+				entryId:getQueryObject(params).id,
+				src:'web',
+				userId:getQueryObject(params).uid,
+				clientId:getQueryObject(params).device_id,
+				token:getQueryObject(params).token
+			};
+			console.log(JSON.stringify(data));
+			const query = param(data);
+			const xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = () => {
+				 if (xhr.readyState === 4&&xhr.status === 200&&JSON.parse(xhr.responseText).m === 'success'){
+					 // document.getElementsByClassName('select').forEach(item => {
+						//  if(item.getAttribute('data-csId') === csId){
+						// 	 item.src = isIn ? 'select.png' : 'select_cur.png',
+						// 	 setTimeout(maskHidden(),500)
+						// 	 plus.nativeUI.toast('收藏成功')
+						//  }
+					 // })
+					 // console.log(Object.values((document.getElementsByClassName('select')));
+				 }
 			}
-		}, false);
+			const type = isIn ? 'delEntry' : 'addEntry';
+			xhr.open('PUT',`https://collection-set-ms.juejin.im/v1/${type}?${query}`);
+			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+			xhr.send(data);
+			
+		}
+		const params = window.location.search.substring(1);
+		// 获取文章详情
+		const getDetail = () => {
+			const detailUrl = 'https://post-storage-api-ms.juejin.im/v1/getDetailData';
+			document.addEventListener('plusready', function() {
+				const xhr = new plus.net.XMLHttpRequest();
+				xhr.open("GET", `${detailUrl}?${params}`);
+				xhr.send();
+				xhr.onload = () => {
+					document.getElementById('article_app').innerHTML = JSON.parse(xhr.responseText).d.content;
+				}
+			}, false);
+		}
+		
+		getDetail();
 	</script>
 </html>

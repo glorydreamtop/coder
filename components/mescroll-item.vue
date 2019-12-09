@@ -59,7 +59,7 @@ export default {
 		toArticle(item) {
 			Toast(item.title);
 			uni.navigateTo({
-				url: `/pages/juejinArticle/juejinArticle?id=${item.postId}`
+				url: `/pages/juejinArticle/juejinArticle?postId=${item.postId}&id=${item.id}`
 			});
 		},
 
@@ -89,9 +89,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// /deep/.mescroll-uni-fixed {
-// 	top: 90upx !important;
-// }
 .list {
 	width: 100vw;
 	height: 100%;
