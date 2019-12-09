@@ -9,8 +9,8 @@
 			@up="upCallback"
 			top="90"
 		>
-		<slot></slot>
-			<view class="card flex flex-direction justify-start margin-bottom-xs padding-sm" v-for="item in dataList" :key="item.postId" @tap="toArticle(item)">
+			<slot></slot>
+			<view class="card flex flex-direction justify-start margin-bottom-sm padding-sm" v-for="(item, index) in dataList" :key="item.postId" @tap="toArticle(item)">
 				<view class="meta text-sm text-gray flex justify-between">
 					<text class="flex justify-start">
 						<text class="author text-grey margin-right-xs">{{ item.author }}</text>
@@ -21,6 +21,12 @@
 				<view class="content margin-tb-sm">
 					<text class="title text-bold">{{ item.title }}</text>
 				</view>
+				<view class="like">
+					<text @tap.stop="like(item.id, index)">
+						<text :class="[item.viewerHasLiked ? 'cuIcon-likefill' : 'cuIcon-like', 'text-red']"></text>
+						<text class="text-grey padding-left-xs">{{ `${item.likeCount}赞` }}</text>
+					</text>
+				</view>
 			</view>
 		</mescroll-uni>
 	</view>
@@ -28,11 +34,13 @@
 
 <script>
 import { formatTime, Toast } from '../utils/funcitons';
+import { changeLike } from '../utils/request';
 import MescrollUni from 'mescroll-uni';
 export default {
 	props: {
 		TabCur: Number,
 		index: Number,
+		currentTagId:String,
 		mescrollOption: Object,
 		dataList: Array
 	},
@@ -54,6 +62,7 @@ export default {
 				url: `/pages/juejinArticle/juejinArticle?id=${item.postId}`
 			});
 		},
+
 		endSuccess(hasNextPage) {
 			this.mescroll.endSuccess(20, hasNextPage);
 		},
@@ -65,6 +74,15 @@ export default {
 		},
 		upCallback(mescroll) {
 			this.$emit('up');
+		},
+		like(id, index) {
+			changeLike(id, this.dataList[index].viewerHasLiked).then(res => {
+				if (res.m === 'success') {
+					this.dataList[index].viewerHasLiked = !this.dataList[index].viewerHasLiked;
+					const like = this.dataList[index].viewerHasLiked ? 1 : -1;
+					this.dataList[index].likeCount += like;
+				}
+			});
 		}
 	}
 };
@@ -79,21 +97,24 @@ export default {
 	height: 100%;
 	.card {
 		height: auto;
-		width: 100vw;
+		width: 96vw;
+		margin-left: auto;
+		margin-right: auto;
+		border-radius: 20upx;
 		background-color: #ffffff;
 		.meta {
 			width: 100%;
 			font-size: 28upx;
 			height: 1.5em;
 		}
-		.content{
+		.content {
 			font-size: 32upx;
 		}
 	}
 }
-.tagList{
+.tagList {
 	height: 90upx;
 	width: 100%;
-	background-color: #F1F1F1;
+	background-color: #f1f1f1;
 }
 </style>

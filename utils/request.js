@@ -67,6 +67,14 @@ const get = (url, data, legacy) => {
 const post = (url, data, legacy) => {
 	return ajax(url, 'POST', data, legacy)
 }
+//put ajax
+const put = (url,data,legacy) => {
+	return ajax(url, 'PUT', data, legacy)
+}
+//delete ajax
+const del = (url,data,legacy) => {
+	return ajax(url, 'DELETE', data, legacy)
+}
 //login
 const login = (data) => {
 	const type = data.phoneNumber ? 'phoneNumber' : 'email';
@@ -105,9 +113,18 @@ const tagsList = (data) => {
 		return Promise.resolve(res);
 	})
 }
+//like or dislike
+const changeLike = (data,dislike) => {
+	const url = 'https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/'
+	if(dislike){
+		return del(`${url}${data}`)
+	}
+	return put(`${url}${data}`)
+}
 export {
 	login,
 	categories,
 	articleList,
-	tagsList
+	tagsList,
+	changeLike
 }
