@@ -50,7 +50,11 @@ export default {
 				id: this.id,
 				page: 0
 			};
+			uni.showLoading({
+				title:'加载收藏集'
+			})
 			collection(data).then(res => {
+				uni.hideLoading();
 				const list = [];
 				res.forEach(item => {
 					const info = {

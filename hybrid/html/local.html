@@ -40,7 +40,7 @@
 					`<div class="coder_list_item">
 						<img src="${item.img}">
 						<span>${item.title}</span>
-						<img class="select" src="${item.isIn?'select_cur.png':'select.png'}" data-csId="${item.csId}" onclick="collect('${item.csId}','${item.isIn}')">
+						<img class="select" src="${item.isIn?'select_cur.png':'select.png'}" data-csId="${item.csId}" onclick="collect('${item.csId}+${item.isIn}')">
 					</div>`
 				innerHTMLs.push(innerHTML)
 			})
@@ -50,15 +50,15 @@
 			//fixedBody();
 			return;
 		}
-		
+
 		const cleanArray = (actual) => {
-		  const newArray = []
-		  for (let i = 0; i < actual.length; i++) {
-		    if (actual[i]) {
-		      newArray.push(actual[i])
-		    }
-		  }
-		  return newArray
+			const newArray = []
+			for (let i = 0; i < actual.length; i++) {
+				if (actual[i]) {
+					newArray.push(actual[i])
+				}
+			}
+			return newArray
 		}
 		const param = (json) => {
 			if (!json) return ''
@@ -70,47 +70,45 @@
 			).join('&')
 		}
 		const getQueryObject = (params) => {
-		  const obj = {}
-		  const reg = /([^?&=]+)=([^?&=]*)/g
-		  params.replace(reg, (rs, $1, $2) => {
-		    const name = decodeURIComponent($1)
-		    let val = decodeURIComponent($2)
-		    val = String(val)
-		    obj[name] = val
-		    return rs
-		  })
-		  return obj
+			const obj = {}
+			const reg = /([^?&=]+)=([^?&=]*)/g
+			params.replace(reg, (rs, $1, $2) => {
+				const name = decodeURIComponent($1)
+				let val = decodeURIComponent($2)
+				val = String(val)
+				obj[name] = val
+				return rs
+			})
+			return obj
 		}
 		//收藏
-		const collect = (csId,isIn) => {
-			const data ={
+		const collect = (querys) => {
+			const [csId,isIn] = querys.split('+');
+			const data = {
 				csId,
-				entryId:getQueryObject(params).id,
-				src:'web',
-				userId:getQueryObject(params).uid,
-				clientId:getQueryObject(params).device_id,
-				token:getQueryObject(params).token
+				entryId: getQueryObject(params).id,
+				src: 'web',
+				userId: getQueryObject(params).uid,
+				clientId: getQueryObject(params).device_id,
+				token: getQueryObject(params).token
 			};
 			console.log(JSON.stringify(data));
 			const query = param(data);
+			const type = isIn === 'true' ? 'delEntry' : 'addEntry';
 			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = () => {
-				 if (xhr.readyState === 4&&xhr.status === 200&&JSON.parse(xhr.responseText).m === 'success'){
-					 // document.getElementsByClassName('select').forEach(item => {
-						//  if(item.getAttribute('data-csId') === csId){
-						// 	 item.src = isIn ? 'select.png' : 'select_cur.png',
-						// 	 setTimeout(maskHidden(),500)
-						// 	 plus.nativeUI.toast('收藏成功')
-						//  }
-					 // })
-					 // console.log(Object.values((document.getElementsByClassName('select')));
-				 }
+				if (xhr.readyState === 4 && xhr.status === 200 && JSON.parse(xhr.responseText).m === 'success') {
+					console.log(isIn);
+					console.log(JSON.stringify(xhr.responseText));
+					document.querySelector(`[data-csId='${csId}']`).src = type === 'addEntry' ? 'select_cur.png' : 'select.png';
+					setTimeout(maskHidden(),500);
+					plus.nativeUI.toast(type === 'addEntry' ? '收藏成功' : '取消成功');
+				}
 			}
-			const type = isIn ? 'delEntry' : 'addEntry';
-			xhr.open('PUT',`https://collection-set-ms.juejin.im/v1/${type}?${query}`);
-			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-			xhr.send(data);
-			
+			console.log(`https://collection-set-ms.juejin.im/v1/${type}?${query}`);
+			xhr.open('PUT', `https://collection-set-ms.juejin.im/v1/${type}?${query}`);
+			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.send();
 		}
 		const params = window.location.search.substring(1);
 		// 获取文章详情
@@ -125,7 +123,7 @@
 				}
 			}, false);
 		}
-		
+
 		getDetail();
 	</script>
 </html>
