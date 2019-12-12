@@ -62,12 +62,12 @@
 .coder_show#coder_popup {
 	z-index: 19;
 	visibility: visible;
-	animation: coder_fadeup 1s;
+	animation: coder_fadeup 0.5s;
 }
 
 .coder_hidden#coder_popup {
 	visibility: hidden;
-	animation: coder_fadedown 1s;
+	animation: coder_fadedown 0.5s;
 }
 
 #coder_mask {
@@ -82,12 +82,12 @@
 
 .coder_hidden#coder_mask {
 	visibility: hidden;
-	animation: coder_fadeout 1s;
+	animation: coder_fadeout 0.5s;
 }
 
 .coder_show#coder_mask {
 	visibility: visible;
-	animation: coder_fadein 1s;
+	animation: coder_fadein 0.5s;
 }
 
 @keyframes coder_fadeup {

@@ -23,7 +23,7 @@
 				</view>
 				<view class="like">
 					<text @tap.stop="like(item.id, index)">
-						<text :class="[item.viewerHasLiked ? 'cuIcon-likefill' : 'cuIcon-like', 'text-red']"></text>
+						<text :class="[item.viewerHasLiked ? 'cuIcon-appreciatefill' : 'cuIcon-appreciate', 'text-red']"></text>
 						<text class="text-grey padding-left-xs">{{ `${item.likeCount}赞` }}</text>
 					</text>
 				</view>
@@ -97,7 +97,7 @@ export default {
 		width: 96vw;
 		margin-left: auto;
 		margin-right: auto;
-		border-radius: 20upx;
+		border-radius: 16upx;
 		background-color: #ffffff;
 		.meta {
 			width: 100%;

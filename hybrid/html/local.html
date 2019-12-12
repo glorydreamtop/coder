@@ -40,7 +40,7 @@
 					`<div class="coder_list_item">
 						<img src="${item.img}">
 						<span>${item.title}</span>
-						<img class="select" src="${item.isIn?'select_cur.png':'select.png'}" data-csId="${item.csId}" onclick="collect('${item.csId}+${item.isIn}')">
+						<img class="select" src="${item.isIn?'select_cur.png':'select.png'}" data-csId="${item.csId}" onclick="collect('${item.csId}&${item.isIn}')">
 					</div>`
 				innerHTMLs.push(innerHTML)
 			})
@@ -60,6 +60,7 @@
 			}
 			return newArray
 		}
+		// object转querystring
 		const param = (json) => {
 			if (!json) return ''
 			return cleanArray(
@@ -69,6 +70,7 @@
 				})
 			).join('&')
 		}
+		// querystring转object
 		const getQueryObject = (params) => {
 			const obj = {}
 			const reg = /([^?&=]+)=([^?&=]*)/g
@@ -81,9 +83,11 @@
 			})
 			return obj
 		}
-		//收藏
+		// 收藏
 		const collect = (querys) => {
-			const [csId,isIn] = querys.split('+');
+			// 得到参数csId和是否本文在此收藏夹中
+			const [csId,isIn] = querys.split('&');
+			// 准备请求参数
 			const data = {
 				csId,
 				entryId: getQueryObject(params).id,
@@ -92,20 +96,18 @@
 				clientId: getQueryObject(params).device_id,
 				token: getQueryObject(params).token
 			};
-			console.log(JSON.stringify(data));
+			// 转化为querystring
 			const query = param(data);
+			// 根据当前状态决定增删
 			const type = isIn === 'true' ? 'delEntry' : 'addEntry';
 			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4 && xhr.status === 200 && JSON.parse(xhr.responseText).m === 'success') {
-					console.log(isIn);
-					console.log(JSON.stringify(xhr.responseText));
 					document.querySelector(`[data-csId='${csId}']`).src = type === 'addEntry' ? 'select_cur.png' : 'select.png';
 					setTimeout(maskHidden(),500);
 					plus.nativeUI.toast(type === 'addEntry' ? '收藏成功' : '取消成功');
 				}
 			}
-			console.log(`https://collection-set-ms.juejin.im/v1/${type}?${query}`);
 			xhr.open('PUT', `https://collection-set-ms.juejin.im/v1/${type}?${query}`);
 			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			xhr.send();
@@ -123,7 +125,6 @@
 				}
 			}, false);
 		}
-
 		getDetail();
 	</script>
 </html>

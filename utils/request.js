@@ -3,20 +3,20 @@ import {
 } from './funcitons';
 import urls from './urls';
 //get globalData
-const juejin = uni.getStorageSync('juejin') || '';
+const juejinHeaders = uni.getStorageSync('juejinHeaders');
 //base ajax
 const ajax = (url, method, data, legacy) => {
 	const header1 = {
-		'X-Juejin-Client': juejin.clientId || '',
+		'X-Juejin-Client': juejinHeaders.clientId || '',
 		'X-Juejin-Src': 'web',
-		'X-Juejin-Token': juejin.token || '',
-		'X-Juejin-Uid': juejin.userId || ''
+		'X-Juejin-Token': juejinHeaders.token || '',
+		'X-Juejin-Uid': juejinHeaders.userId || ''
 	}
 	const header2 = {
-		'X-Legacy-Device-Id': juejin.clientId || '',
+		'X-Legacy-Device-Id': juejinHeaders.clientId || '',
 		'X-Agent': 'Juejin/Web',
-		'X-Legacy-Token': juejin.token || '',
-		'X-Legacy-Uid': juejin.userId || ''
+		'X-Legacy-Token': juejinHeaders.token || '',
+		'X-Legacy-Uid': juejinHeaders.userId || ''
 	}
 	const header = legacy ? header2 : header1;
 	return new Promise((resolve, reject) => {
@@ -76,17 +76,21 @@ const del = (url, data, legacy) => ajax(url, 'DELETE', data, legacy)
 const login = (data) => {
 	const type = data.phoneNumber ? 'phoneNumber' : 'email';
 	return post(`${urls.login}${type}`, data).then(res => {
-		Toast('登录成功');
-		const juejin = {};
-		[juejin.token, juejin.userId, juejin.clientId, juejin.avatarLarge, juejin.username] = [
+		const juejinHeaders = {};
+		const juejinInfo = {};
+		[juejinHeaders.token, juejinHeaders.userId, juejinHeaders.clientId, juejinInfo.avatarHd, juejinInfo.userName,juejinInfo.jobTitle,juejinInfo.account,juejinInfo.password] = [
 			res.token,
 			res.userId,
 			res.clientId,
-			res.user.avatarLarge,
-			res.user.username
+			res.user.avatarHd,
+			res.user.username,
+			res.user.jobTitle,
+			data.phoneNumber||data.email,
+			data.password
 		]
-		uni.setStorageSync('juejin', juejin);
-		console.log(juejin);
+		uni.setStorageSync('juejinHeaders', juejinHeaders);
+		uni.setStorageSync('juejinInfo',juejinInfo);
+		console.log(juejinInfo);
 	})
 }
 //get categories
@@ -118,9 +122,9 @@ const collection = (data) => {
 	const id = data.id;
 	data = {
 		src: 'web',
-		userId: juejin.userId,
-		clientId: juejin.clientId,
-		token: juejin.token,
+		userId: juejinHeaders.userId,
+		clientId: juejinHeaders.clientId,
+		token: juejinHeaders.token,
 		page: data.page
 	}
 	return get(`${urls.collection}${id}`, data).then(res => {
@@ -132,9 +136,9 @@ const collection = (data) => {
 const changeCollect = (data,type) => {
 	data = {
 		src: 'web',
-		userId: juejin.userId,
-		clientId: juejin.clientId,
-		token: juejin.token,
+		userId: juejinHeaders.userId,
+		clientId: juejinHeaders.clientId,
+		token: juejinHeaders.token,
 		...data
 	}
 	return put(`${urls.collect}${type}`,data)

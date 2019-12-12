@@ -254,7 +254,7 @@ export default {
 <style lang="scss" scoped>
 .nav {
 	border-bottom: 1px solid #ececec;
-	font-size: 32upx;
+	font-size: 28upx;
 	position: fixed;
 	top: 0;
 	z-index: 9;

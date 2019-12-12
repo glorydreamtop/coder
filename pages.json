@@ -1,7 +1,12 @@
 {
 	"pages": [
 		//pages数组中第一项表示应用启动页
-
+		{
+			"path": "pages/users/users",
+			"style": {
+				"enablePullDownRefresh":true
+			}
+		},
 		{
 			"path": "pages/juejin/juejin",
 			"style": {
@@ -12,10 +17,7 @@
 				"navigationBarTitleText": "掘金"
 			}
 		},
-		{
-			"path": "pages/users/users",
-			"style": {}
-		},
+
 		{
 			"path": "pages/girls/girls",
 			"style": {
@@ -33,7 +35,7 @@
 					"titleNView": {
 						"buttons": [{
 							"type": "share"
-						},{
+						}, {
 							"type": "favorite"
 						}]
 					}
