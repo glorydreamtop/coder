@@ -11,7 +11,7 @@
 		>
 			<slot></slot>
 			<view class="card flex flex-direction justify-start margin-bottom-sm padding-sm" v-for="(item, index) in dataList" :key="item.postId" @tap="toArticle(item)">
-				<view class="meta text-sm text-gray flex justify-between">
+				<view class="meta solid-bottom text-sm text-gray flex justify-between">
 					<text class="flex justify-start">
 						<text class="author text-grey margin-right-xs">{{ item.author }}</text>
 						<text class="before">{{ item.createdAt | formatTime }}</text>

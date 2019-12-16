@@ -10,6 +10,9 @@
 			return {
 				
 			};
+		},
+		methods:{
+			
 		}
 	}
 </script>
