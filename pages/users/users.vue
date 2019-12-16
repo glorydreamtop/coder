@@ -72,7 +72,7 @@
 					Toast('请输入密码');
 					return;
 				}
-				if (phoneNumber.indexOf('@') !== -1) {
+				if (phoneNumber.includes('@')) {
 					values = {
 						email: phoneNumber,
 						password: password
