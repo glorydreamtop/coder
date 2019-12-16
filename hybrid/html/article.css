@@ -43,6 +43,18 @@
 	margin-bottom: 10px;
 }
 
+.coder_list_item>div{
+	width: auto;
+	padding: 0 6px;
+	height: 1.2em;
+	line-height: 1.2em;
+	background-color: #ececec;
+	border-radius: 4px;
+	color: #006cff;
+	font-size: 14px;
+	margin-left: 1em;
+}
+
 .coder_list_item>span {
 	margin-left: 0.5em;
 }

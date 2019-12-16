@@ -1,5 +1,5 @@
 <template>
-	<view><web-view :src="url" class="webview" @message="collect"></web-view></view>
+	<view><web-view :src="url" class="webview"></web-view></view>
 </template>
 
 <script>
@@ -14,24 +14,10 @@ export default {
 		};
 	},
 	methods: {
-		collect(event) {
-			console.log(123123);
-			const data = {
-				csId: event.detail.data,
-				entryId: this.id
-			};
-			console.log(event.detail.data);
-			const type = 'addEntry';
-			changeCollect(data, type).then(res => {
-				if (res.m === 'success') {
-					this.wv.evalJS(`checkicon()`);
-				}
-			});
-		}
 	},
 	onLoad(options) {
 		const url = 'https://post-storage-api-ms.juejin.im/v1/getDetailData';
-		const userData = uni.getStorageSync('juejin');
+		const userData = uni.getStorageSync('juejinHeaders');
 		const params = {
 			uid: userData.userId,
 			device_id: userData.clientId,
@@ -61,7 +47,8 @@ export default {
 						img: item.bgImg.url,
 						title: item.title,
 						csId: item.csId,
-						isIn:item.isIn
+						isIn:item.isIn,
+						entryCount:item.entryCount
 					};
 					list.push(info);
 				});
