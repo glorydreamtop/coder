@@ -78,19 +78,30 @@ const login = (data) => {
 	return post(`${urls.login}${type}`, data).then(res => {
 		const juejinHeaders = {};
 		const juejinInfo = {};
-		[juejinHeaders.token, juejinHeaders.userId, juejinHeaders.clientId, juejinInfo.avatarHd, juejinInfo.userName,juejinInfo.jobTitle,juejinInfo.account,juejinInfo.password] = [
+		[juejinHeaders.token, juejinHeaders.userId, juejinHeaders.clientId, juejinInfo.avatarHd, juejinInfo.userName,
+			juejinInfo.jobTitle, juejinInfo.account, juejinInfo.password
+		] = [
 			res.token,
 			res.userId,
 			res.clientId,
 			res.user.avatarHd,
 			res.user.username,
 			res.user.jobTitle,
-			data.phoneNumber||data.email,
+			data.phoneNumber || data.email,
 			data.password
 		]
-		uni.setStorageSync('juejinHeaders', juejinHeaders);
-		uni.setStorageSync('juejinInfo',juejinInfo);
-		console.log(juejinInfo);
+		uni.setStorage({
+			key: 'juejinHeaders',
+			data: juejinHeaders
+		}).then(res => {
+			uni.setStorage({
+				key: 'juejinInfo',
+				data: juejinInfo
+			}).then(res => {
+				console.log(juejinInfo);
+			});
+		});
+
 	})
 }
 //get categories
@@ -127,13 +138,15 @@ const collection = (data) => {
 		token: juejinHeaders.token,
 		page: data.page
 	}
-	return get(`${urls.collection}${id}`, data).then(res => {
-		res = res.d.collectionSets;
-		return Promise.resolve(res)
+	return new Promise((resolve) => {
+		get(`${urls.collection}${id}`, data).then(res => {
+			res = res.d.collectionSets;
+			resolve(res)
+		})
 	})
 }
 //collect
-const changeCollect = (data,type) => {
+const changeCollect = (data, type) => {
 	data = {
 		src: 'web',
 		userId: juejinHeaders.userId,
@@ -141,9 +154,13 @@ const changeCollect = (data,type) => {
 		token: juejinHeaders.token,
 		...data
 	}
-	return put(`${urls.collect}${type}`,data)
+	return put(`${urls.collect}${type}`, data)
 }
 export {
+	get,
+	post,
+	put,
+	del,
 	login,
 	categories,
 	articleList,
