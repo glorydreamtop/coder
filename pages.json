@@ -2,22 +2,36 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页
 		{
-			"path": "pages/users/users",
-			"style": {
-				"enablePullDownRefresh":true
-			}
-		},
-		{
 			"path": "pages/juejin/juejin",
 			"style": {
 				"disableScroll": true,
 				"app-plus": {
-					"bounce": "none"
+					"bounce": "none",
+					"titleNView":{
+						"searchInput":{
+							"placeholder":"快速搜索文章、用户、标签",
+							"borderRadius":"20px",
+							"backgroundColor":"rgba(255,255,255)"
+						},
+						"buttons":[
+							{
+								"fontSrc":"/static/coderfont.tff",
+								"text":"\ue706",
+								"fontSize":"28px",
+								"color":"#FFFFFF"
+							}
+						]
+					}
 				},
 				"navigationBarTitleText": "掘金"
 			}
 		},
-
+		{
+			"path": "pages/users/users",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},
 		{
 			"path": "pages/girls/girls",
 			"style": {
