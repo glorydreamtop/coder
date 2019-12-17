@@ -5,7 +5,7 @@ import urls from './urls';
 //get globalData
 const juejinHeaders = uni.getStorageSync('juejinHeaders');
 //base ajax
-const ajax = (url, method, data, legacy) => {
+const ajax = (url, method, data, headerType) => {
 	const header1 = {
 		'X-Juejin-Client': juejinHeaders.clientId || '',
 		'X-Juejin-Src': 'web',
@@ -18,7 +18,15 @@ const ajax = (url, method, data, legacy) => {
 		'X-Legacy-Token': juejinHeaders.token || '',
 		'X-Legacy-Uid': juejinHeaders.userId || ''
 	}
-	const header = legacy ? header2 : header1;
+	const header3 = {
+
+	}
+	const headerMap = {
+		juejin: header1,
+		juejinLegacy: header2,
+		noHeader: header3
+	}
+	let header = headerMap[headerType];
 	return new Promise((resolve, reject) => {
 		uni.request({
 			url,
@@ -61,21 +69,21 @@ const ajax = (url, method, data, legacy) => {
 
 }
 //get ajax
-const get = (url, data, legacy) => ajax(url, 'GET', data, legacy)
+const get = (url, data, headerType) => ajax(url, 'GET', data, headerType)
 
 //post ajax
-const post = (url, data, legacy) => ajax(url, 'POST', data, legacy)
+const post = (url, data, headerType) => ajax(url, 'POST', data, headerType)
 
 //put ajax
-const put = (url, data, legacy) => ajax(url, 'PUT', data, legacy)
+const put = (url, data, headerType) => ajax(url, 'PUT', data, headerType)
 
 //delete ajax
-const del = (url, data, legacy) => ajax(url, 'DELETE', data, legacy)
+const del = (url, data, headerType) => ajax(url, 'DELETE', data, headerType)
 
 //login
 const login = (data) => {
 	const type = data.phoneNumber ? 'phoneNumber' : 'email';
-	return post(`${urls.login}${type}`, data).then(res => {
+	return post(`${urls.login}${type}`, data, 'juejin').then(res => {
 		const juejinHeaders = {};
 		const juejinInfo = {};
 		[juejinHeaders.token, juejinHeaders.userId, juejinHeaders.clientId, juejinInfo.avatarHd, juejinInfo.userName,
@@ -105,18 +113,18 @@ const login = (data) => {
 	})
 }
 //get categories
-const categories = (data) => get(urls.categories, data).then(res => {
+const categories = (data) => get(urls.categories, data, 'juejin').then(res => {
 	return Promise.resolve(res.d.categoryList);
 })
 
 //get article list
-const articleList = (data) => post(urls.query, data, true).then(res => {
+const articleList = (data) => post(urls.query, data, 'juejinLegacy').then(res => {
 	res = res.data.followingArticleFeed ? res.data.followingArticleFeed.items : res.data.articleFeed.items;
 	return Promise.resolve(res);
 })
 
 //get tags list
-const tagsList = (data) => post(urls.query, data, true).then(res => {
+const tagsList = (data) => post(urls.query, data, 'juejinLegacy').then(res => {
 	res = res.data.tagNav.items;
 	return Promise.resolve(res);
 })
@@ -124,9 +132,9 @@ const tagsList = (data) => post(urls.query, data, true).then(res => {
 //like or dislike
 const changeLike = (data, dislike) => {
 	if (dislike) {
-		return del(`${urls.like}${data}`)
+		return del(`${urls.like}${data}`, null, 'juejin')
 	}
-	return put(`${urls.like}${data}`)
+	return put(`${urls.like}${data}`, null, 'juejin')
 }
 //get collection set
 const collection = (data) => {
@@ -139,7 +147,7 @@ const collection = (data) => {
 		page: data.page
 	}
 	return new Promise((resolve) => {
-		get(`${urls.collection}${id}`, data).then(res => {
+		get(`${urls.collection}${id}`, data, 'juejin').then(res => {
 			res = res.d.collectionSets;
 			resolve(res)
 		})
@@ -154,8 +162,21 @@ const changeCollect = (data, type) => {
 		token: juejinHeaders.token,
 		...data
 	}
-	return put(`${urls.collect}${type}`, data)
+	return put(`${urls.collect}${type}`, data, 'juejin')
 }
+
+//get one pic&sentence
+const oneSpider = () => get(urls.one, null, 'noHeader').then(res => {
+	//console.log(res);
+	const imgReg = /\(http:\/\/image.wufazhuce.com\/\S+\)/g;
+	const stcReg = /id="quote">\S+</g;
+	//console.log(res.match(reg)[0].substring(1, res.match(reg)[0].indexOf(')')));
+	const imgUrl = res.match(imgReg)[0].substring(1, res.match(imgReg)[0].indexOf(')'));
+	const sentence = res.match(stcReg)[0].substring(11, res.match(stcReg)[0].indexOf('<'));
+	return Promise.resolve({imgUrl,sentence})
+})
+
+
 export {
 	get,
 	post,
@@ -167,5 +188,6 @@ export {
 	tagsList,
 	changeLike,
 	collection,
-	changeCollect
+	changeCollect,
+	oneSpider
 }

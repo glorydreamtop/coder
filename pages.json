@@ -2,6 +2,15 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页
 		{
+			"path": "pages/girls/girls",
+			"style": {
+				"disableScroll": true,
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
+		{
 			"path": "pages/juejin/juejin",
 			"style": {
 				"disableScroll": true,
@@ -33,16 +42,6 @@
 			}
 		},
 		{
-			"path": "pages/girls/girls",
-			"style": {
-				"disableScroll": true,
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		}
-
-		, {
 			"path": "pages/juejinArticle/juejinArticle",
 			"style": {
 				"app-plus": {

@@ -20,7 +20,7 @@ const getUserInfo = () => {
 		current_uid: uid
 	}
 	return new Promise((reslove, reject) => {
-		get(urls.userInfo, data).then(res => {
+		get(urls.userInfo, data,'juejin').then(res => {
 			const info = res.d;
 			const userInfo = {
 				collectionSetCount: info.collectionSetCount,

@@ -7,22 +7,22 @@ const Toast = (title) => {
 }
 const parseTime = (time, cFormat) => {
 	if (arguments.length === 0) {
-		return null
+		return null;
 	}
 	cFormat = cFormat === true ? '' : cFormat;
-	const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+	const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}';
 
-	let date
+	let date;
 	if (typeof time === 'object') {
-		date = time
+		date = time;
 	} else {
 		if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
-			time = parseInt(time)
+			time = parseInt(time);
 		}
 		if ((typeof time === 'number') && (time.toString().length === 10)) {
-			time = time * 1000
+			time = time * 1000;
 		}
-		date = new Date(time)
+		date = new Date(time);
 	}
 	const formatObj = {
 		y: date.getFullYear(),
@@ -34,14 +34,14 @@ const parseTime = (time, cFormat) => {
 		a: date.getDay()
 	}
 	const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
-		const value = formatObj[key]
+		const value = formatObj[key];
 		// Note: getDay() returns 0 on Sunday
 		if (key === 'a') {
-			return ['日', '一', '二', '三', '四', '五', '六'][value]
+			return ['日', '一', '二', '三', '四', '五', '六'][value];
 		}
-		return value.toString().padStart(2, '0')
+		return value.toString().padStart(2, '0');
 	})
-	return time_str
+	return time_str;
 }
 const formatTime = (time, option) => {
 	if (/^\d{4}-\d{2}-\d{2}/i.test(time)) {
@@ -117,6 +117,7 @@ const getQueryObject = (params) => {
 export {
 	Toast,
 	formatTime,
+	parseTime,
 	param,
 	getQueryObject
 }
