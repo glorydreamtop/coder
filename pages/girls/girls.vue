@@ -4,7 +4,8 @@
 			
 		</view>
 		<view class="text-block flex flex-direction justify-end">
-			<text class="text-xxl text-white">{{time}}</text>
+			<text class="day text-white">{{day}}</text>
+			<text class="year text-white">{{`${month}.${year}`}}</text>
 			<text class="sentence text-white">{{sentence}}</text>
 		</view>
 	</view>
@@ -18,7 +19,10 @@ export default {
 		return {
 			background:'',
 			sentence:'',
-			time:''
+			time:'',
+			day:'',
+			month:'',
+			year:'',
 		};
 	},
 	methods: {
@@ -30,7 +34,10 @@ export default {
 		oneSpider().then(res => {
 			this.background = `url(${res.imgUrl})`;
 			this.sentence = res.sentence;
-			this.time = parseTime(new Date(),'{y} {m} {d}');
+			this.time = parseTime(new Date(),'{y}-{m}-{d}');
+			this.day = this.time.split('-')[2];
+			this.month = this.time.split('-')[1];
+			this.year = this.time.split('-')[0];
 		})
 	}
 };
@@ -47,6 +54,13 @@ export default {
 		bottom: 80upx;
 		left:40upx;
 		z-index: 19;
+	}
+	.day{
+		font-size: 144upx;
+		font-family: 'Serif';
+	}
+	.year{
+		font-size: 64upx;
 	}
 	.sentence{
 		font-size: 48upx;

@@ -5,6 +5,8 @@
 			"path": "pages/girls/girls",
 			"style": {
 				"disableScroll": true,
+				"navigationStyle":"custom",
+				"transparentTitle":"always",
 				"app-plus": {
 					"bounce": "none"
 				}

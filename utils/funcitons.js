@@ -27,17 +27,20 @@ const parseTime = (time, cFormat) => {
 	const formatObj = {
 		y: date.getFullYear(),
 		m: date.getMonth() + 1,
+		M: date.getMonth() + 1,
 		d: date.getDate(),
 		h: date.getHours(),
 		i: date.getMinutes(),
 		s: date.getSeconds(),
 		a: date.getDay()
 	}
-	const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+	const time_str = format.replace(/\{([yMmdhisa])+\}/g, (result, key) => {
 		const value = formatObj[key];
 		// Note: getDay() returns 0 on Sunday
 		if (key === 'a') {
 			return ['日', '一', '二', '三', '四', '五', '六'][value];
+		} else if (key === 'm') {
+			return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][value]
 		}
 		return value.toString().padStart(2, '0');
 	})
@@ -85,13 +88,13 @@ const formatTime = (time, option) => {
 	}
 }
 const cleanArray = (actual) => {
-  const newArray = []
-  for (let i = 0; i < actual.length; i++) {
-    if (actual[i]) {
-      newArray.push(actual[i])
-    }
-  }
-  return newArray
+	const newArray = []
+	for (let i = 0; i < actual.length; i++) {
+		if (actual[i]) {
+			newArray.push(actual[i])
+		}
+	}
+	return newArray
 }
 const param = (json) => {
 	if (!json) return ''
@@ -103,16 +106,16 @@ const param = (json) => {
 	).join('&')
 }
 const getQueryObject = (params) => {
-  const obj = {}
-  const reg = /([^?&=]+)=([^?&=]*)/g
-  params.replace(reg, (rs, $1, $2) => {
-    const name = decodeURIComponent($1)
-    let val = decodeURIComponent($2)
-    val = String(val)
-    obj[name] = val
-    return rs
-  })
-  return obj
+	const obj = {}
+	const reg = /([^?&=]+)=([^?&=]*)/g
+	params.replace(reg, (rs, $1, $2) => {
+		const name = decodeURIComponent($1)
+		let val = decodeURIComponent($2)
+		val = String(val)
+		obj[name] = val
+		return rs
+	})
+	return obj
 }
 export {
 	Toast,
