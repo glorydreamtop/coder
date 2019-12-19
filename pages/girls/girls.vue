@@ -34,7 +34,7 @@ export default {
 		oneSpider().then(res => {
 			this.background = `url(${res.imgUrl})`;
 			this.sentence = res.sentence;
-			this.time = parseTime(new Date(),'{y}-{m}-{d}');
+			this.time = parseTime(new Date(),'{y}-{M}-{d}');
 			this.day = this.time.split('-')[2];
 			this.month = this.time.split('-')[1];
 			this.year = this.time.split('-')[0];
@@ -51,6 +51,7 @@ export default {
 	}
 	.text-block{
 		position: absolute;
+		width: 92vw;
 		bottom: 80upx;
 		left:40upx;
 		z-index: 19;
@@ -61,9 +62,11 @@ export default {
 	}
 	.year{
 		font-size: 64upx;
+		font-family: 'Serif';
 	}
 	.sentence{
-		font-size: 48upx;
+		font-size: 42upx;
+		
 	}
 	.mask{
 		width: 100%;
