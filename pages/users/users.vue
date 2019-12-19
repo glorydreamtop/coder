@@ -55,28 +55,11 @@ export default {
 			isLoading: 1,
 			scrollLeft: true,
 			showLogin: false,
+			juejinInfo:null,
 			isLogin:false
 		};
 	},
 	computed: {
-		juejinInfo: {
-			get: () => {
-				let info;
-				if (uni.getStorageSync('juejinInfo')) {
-					info = uni.getStorageSync('juejinInfo');
-				} else {
-					info = null;
-				}
-				return info;
-			},
-			set: value => {
-				if (value) {
-					this.isLogin = true;
-				} else {
-					this.isLogin = false;
-				}
-			}
-		}
 	},
 	methods: {
 		focus(index) {
@@ -105,6 +88,7 @@ export default {
 			login(values).then(res => {
 				this.inputFocus = 2;
 				getUserInfo().then(res => {
+					this.juejinInfo = res;
 					setTimeout(() => {
 						this.isLoading = 3;
 					}, 800);
@@ -150,7 +134,8 @@ export default {
 		// this.updateJuejinInfo();
 	},
 	onLoad() {
-		this.isLogin = this.juejinInfo ? true : false;
+		this.juejinInfo = uni.getStorageSync('juejinInfo') || null;
+		this.isLogin = this.juejinInfo !== null ? true : false;
 	}
 };
 </script>

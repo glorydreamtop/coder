@@ -19,6 +19,7 @@
 				"app-plus": {
 					"bounce": "none",
 					"titleNView":{
+						"type":"default",
 						"searchInput":{
 							"placeholder":"快速搜索文章、用户、标签",
 							"borderRadius":"20px",
@@ -26,9 +27,9 @@
 						},
 						"buttons":[
 							{
-								"fontSrc":"/static/coderfont.tff",
+								"fontSrc":"/static/coderfont.ttf",
 								"text":"\ue706",
-								"fontSize":"28px",
+								"fontSize":"24px",
 								"color":"#FFFFFF"
 							}
 						]

@@ -23,6 +23,33 @@
 
 			</div>
 		</div>
+		<!-- <div id="coder_comments">
+			<div class="">
+				<div class="coder_comments_main">
+					<div class="coder_comments_user">
+						<img src="head.png" >
+						<div class="coder_comments_userInfo">
+							<span>略略略呵呵哈哈</span>
+							<span>签约作者他爸爸的儿子</span>
+						</div>
+					</div>
+					<div class="coder_comments_detail">
+						<div class="">
+							时代峰峻思范文覅我服你Woi而烦恼问烦恼我额覅嗡嗡狗儿干哈人得用非叫我番茄锅不够ear办呢欧日部分
+						</div>
+						<div class="">
+							
+						</div>
+					</div>
+				</div>
+				<div class="coder_comments_answer">
+					
+				</div>
+			</div>
+			<div class="">
+				
+			</div>
+		</div> -->
 	</body>
 	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
 	<script type="text/javascript">
@@ -125,6 +152,23 @@
 					document.getElementById('article_app').innerHTML = JSON.parse(xhr.responseText).d.content;
 				}
 			}, false);
+		}
+		const commentsList = [];
+		const getComments = () => {
+			const data = {
+				createdAt:'',
+				rankType:'new',
+				pageSize:6
+			}
+			const id = getQueryObject(params).id
+			const commentsUrl = 'https://comment-wrapper-ms.juejin.im/v1/comments/entry/';
+			const xhr = new plus.net.XMLHttpRequest();
+			xhr.open("GET",`${commentsUrl}${id}?${param(data)}`);
+			xhr.send();
+			xhr.onload = () => {
+				commentsList = JSON.parse(xhr.responseText).d.comments;
+				
+			}
 		}
 		getDetail();
 	</script>

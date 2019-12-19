@@ -39,7 +39,7 @@ const getUserInfo = () => {
 				}).then(res => {
 					Toast('掘金用户信息同步成功');
 				});
-				reslove('success')
+				reslove(userInfo)
 			})
 
 		})
