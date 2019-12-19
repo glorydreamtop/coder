@@ -27,7 +27,7 @@ const parseTime = (time, cFormat) => {
 	const formatObj = {
 		y: date.getFullYear(),
 		m: date.getMonth() + 1,
-		M: date.getMonth() + 1,
+		M: date.getMonth() ,
 		d: date.getDate(),
 		h: date.getHours(),
 		i: date.getMinutes(),
@@ -38,8 +38,8 @@ const parseTime = (time, cFormat) => {
 		const value = formatObj[key];
 		// Note: getDay() returns 0 on Sunday
 		if (key === 'a') {
-			return ['日', '一', '二', '三', '四', '五', '六'][value];
-		} else if (key === 'm') {
+			//return ['日', '一', '二', '三', '四', '五', '六'][value];
+		} else if (key === 'M') {
 			return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][value]
 		}
 		return value.toString().padStart(2, '0');
