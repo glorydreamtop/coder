@@ -8,6 +8,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="./juejin.css" rel="stylesheet" type="text/css" />
 		<link href="./article.css" rel="stylesheet" type="text/css" />
+		<link href="./icon.css" rel="stylesheet" type="text/css" />
 		<title>文章详情</title>
 	</head>
 	<body>
@@ -23,8 +24,8 @@
 
 			</div>
 		</div>
-		<!-- <div id="coder_comments">
-			<div class="">
+		<div id="coder_comments" class="coder_hidden">
+			<div class="coder_part">
 				<div class="coder_comments_main">
 					<div class="coder_comments_user">
 						<img src="head.png" >
@@ -37,19 +38,34 @@
 						<div class="">
 							时代峰峻思范文覅我服你Woi而烦恼问烦恼我额覅嗡嗡狗儿干哈人得用非叫我番茄锅不够ear办呢欧日部分
 						</div>
-						<div class="">
-							
+						<div class="coder_comments_func">
+							<span>6小时前</span>
+							<span class="cuIcon-appreciate">点赞</span>
+							<span class="cuIcon-comment">回复</span>
 						</div>
 					</div>
 				</div>
 				<div class="coder_comments_answer">
-					
+					<div class="coder_comments_user">
+						<img src="head.png" >
+						<div class="coder_comments_userInfo">
+							<span>略略略呵呵哈哈</span>
+							<span>签约作者他爸爸的儿子</span>
+						</div>
+					</div>
+					<div class="coder_comments_detail">
+						<div class="">
+							时代峰峻思范文覅我服你Woi而烦恼问烦恼我额覅嗡嗡狗儿干哈人得用非叫我番茄锅不够ear办呢欧日部分
+						</div>
+						<div class="coder_comments_func">
+							<span>6小时前</span>
+							<!-- <span class="cuIcon-appreciate">点赞</span>
+							<span class="cuIcon-comment">回复</span> -->
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="">
-				
-			</div>
-		</div> -->
+		</div>
 	</body>
 	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
 	<script type="text/javascript">
@@ -57,6 +73,7 @@
 		const maskHidden = () => {
 			document.getElementById('coder_mask').className = 'coder_hidden';
 			document.getElementById('coder_popup').className = 'coder_hidden';
+			document.getElementById('coder_comments').className = 'coder_hidden';
 			return;
 		}
 		//打开弹窗和遮罩
@@ -154,7 +171,7 @@
 			}, false);
 		}
 		const commentsList = [];
-		const getComments = () => {
+		const getComments = (headers) => {
 			const data = {
 				createdAt:'',
 				rankType:'new',
@@ -164,10 +181,35 @@
 			const commentsUrl = 'https://comment-wrapper-ms.juejin.im/v1/comments/entry/';
 			const xhr = new plus.net.XMLHttpRequest();
 			xhr.open("GET",`${commentsUrl}${id}?${param(data)}`);
+			xhr.setRequestHeader('X-Juejin-Client',headers.clientId);
+			xhr.setRequestHeader('X-Juejin-Src','web');
+			xhr.setRequestHeader('X-Juejin-Token',headers.token);
+			xhr.setRequestHeader('X-Juejin-Uid',headers.userId);
 			xhr.send();
 			xhr.onload = () => {
-				commentsList = JSON.parse(xhr.responseText).d.comments;
-				
+				const commentsList = JSON.parse(xhr.responseText).d.comments;
+				console.log(xhr.responseText);
+				let innerHTMLs = [];
+				const commentsDom = document.getElementById('coder_comments');
+				commentsList.forEach(item => {
+					const partDom = document.createElement('div');
+					partDom.setAttribute('class','coder_part');
+					commentsDom.appendChild(partDom);
+					const mainDom = document.createElement('div');
+					mainDom.setAttribute('class','coder_comments_main');
+					partDom.appendChild(mainDom);
+					const userDom = document.createElement('div');
+					userDom.setAttribute('class','coder_comments_user');
+					mainDom.appendChild(userDom);
+					const headDom = document.createElement('img');
+					headDom.setAttribute('src',item.userInfo.avatarLarge);
+					userDom.appendChild(headDom);
+					const userInfoDom = document.createElement('div');
+					userInfoDom.setAttribute('class','coder_comments_userInfo');
+					
+				})
+				document.getElementById('coder_comments').className = 'coder_show';
+				document.getElementById('coder_mask').className = 'coder_show';
 			}
 		}
 		getDetail();

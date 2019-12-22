@@ -79,11 +79,7 @@ const formatTime = (time, option) => {
 			1 +
 			'月' +
 			d.getDate() +
-			'日' +
-			d.getHours() +
-			'时' +
-			d.getMinutes() +
-			'分'
+			'日'
 		)
 	}
 }

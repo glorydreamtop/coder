@@ -29,6 +29,7 @@ export default {
 		};
 		this.id = options.id;
 		this.url = `/hybrid/html/local.html?${param(params)}`;
+		
 	},
 	onNavigationBarButtonTap(e) {
 		if (e.index === 1) {
@@ -58,6 +59,14 @@ export default {
 			});
 
 			//this.$mp.page.$getAppWebview().setTitleNViewButtonStyle(1,{color:'#007FFF'})
+		}else if(e.index === 0){
+			uni.getStorage({key:'juejinHeaders'}).then(res => {
+				const headers = res;
+				console.log(123);
+				this.wv = this.$mp.page.$getAppWebview().children()[0];
+				this.wv.evalJS(`getComments(${JSON.stringify(headers)});`);
+			})
+			
 		}
 	}
 };
