@@ -9,6 +9,7 @@
 		<link href="./juejin.css" rel="stylesheet" type="text/css" />
 		<link href="./article.css" rel="stylesheet" type="text/css" />
 		<link href="./icon.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="./mescroll.min.css" />
 		<title>文章详情</title>
 	</head>
 	<body>
@@ -24,50 +25,14 @@
 
 			</div>
 		</div>
-		<div id="coder_comments" class="coder_hidden">
-			<div class="coder_part">
-				<div class="coder_comments_main">
-					<div class="coder_comments_user">
-						<img src="head.png">
-						<div class="coder_comments_userInfo">
-							<span>略略略呵呵哈哈</span>
-							<span>签约作者他爸爸的儿子</span>
-						</div>
-					</div>
-					<div class="coder_comments_detail">
-						<div class="">
-							时代峰峻思范文覅我服你Woi而烦恼问烦恼我额覅嗡嗡狗儿干哈人得用非叫我番茄锅不够ear办呢欧日部分
-						</div>
-						<div class="coder_comments_func">
-							<span>6小时前</span>
-							<span class="cuIcon-appreciate">点赞</span>
-							<span class="cuIcon-comment">回复</span>
-						</div>
-					</div>
-				</div>
-				<div class="coder_comments_answer">
-					<div class="coder_comments_user">
-						<img src="head.png">
-						<div class="coder_comments_userInfo">
-							<span>略略略呵呵哈哈</span>
-							<span>签约作者他爸爸的儿子</span>
-						</div>
-					</div>
-					<div class="coder_comments_detail">
-						<div class="">
-							时代峰峻思范文覅我服你而烦恼问烦恼我额覅嗡嗡狗儿干哈人得用非叫我番茄锅不够ear办呢欧日部分
-						</div>
-						<div class="coder_comments_func">
-							<span>6小时前</span>
-							<!-- <span class="cuIcon-appreciate">点赞</span>
-							<span class="cuIcon-comment">回复</span> -->
-						</div>
-					</div>
-				</div>
+		<div id="coder_comments" class="coder_hidden mescroll">
+			<div id="coder_comments_inner">
+
 			</div>
 		</div>
 	</body>
 	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
+	<script type="text/javascript" src="./mescroll.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="./functions.js"></script>
 	<script type="text/javascript">
 		//隐藏弹窗和遮罩
@@ -93,7 +58,6 @@
 			document.getElementById('coder_list').innerHTML = innerHTMLs.join('');
 			document.getElementById('coder_popup').className = 'coder_show';
 			document.getElementById('coder_mask').className = 'coder_show';
-			//fixedBody();
 			return;
 		}
 		// 收藏
@@ -138,12 +102,14 @@
 				}
 			}, false);
 		}
-		const commentsList = [];
+
+		let lastCreatedAt = '';
+		// 获取评论列表
 		const getComments = (headers) => {
 			const data = {
-				createdAt: '',
+				createdAt: lastCreatedAt,
 				rankType: 'new',
-				pageSize: 6
+				pageSize: 10
 			}
 			const id = getQueryObject(params).id
 			const commentsUrl = 'https://comment-wrapper-ms.juejin.im/v1/comments/entry/';
@@ -156,45 +122,9 @@
 			xhr.send();
 			xhr.onload = () => {
 				const commentsList = JSON.parse(xhr.responseText).d.comments;
-				// console.log(xhr.responseText);
-				let innerHTMLs = [];
-				const commentsDom = document.getElementById('coder_comments');
-				// commentsList.forEach(item => {
-				// 	// 一条评论
-				// 	const partDom = document.createElement('div');
-				// 	partDom.setAttribute('class', 'coder_part');
-				// 	commentsDom.appendChild(partDom);
-				// 	// 主评论
-				// 	const mainDom = document.createElement('div');
-				// 	mainDom.setAttribute('class', 'coder_comments_main');
-				// 	partDom.appendChild(mainDom);
-				// 	// 用户信息模块
-				// 	const userDom = document.createElement('div');
-				// 	userDom.setAttribute('class', 'coder_comments_user');
-				// 	mainDom.appendChild(userDom);
-				// 	// 头像
-				// 	const headDom = document.createElement('img');
-				// 	headDom.setAttribute('src', item.userInfo.avatarLarge);
-				// 	userDom.appendChild(headDom);
-				// 	// 用户名和职业
-				// 	const userInfoDom = document.createElement('div');
-				// 	userInfoDom.setAttribute('class', 'coder_comments_userInfo');
-				// 	const userNameDom = document.createElement('span');
-				// 	userNameDom.innerText = item.userInfo.username;
-				// 	userInfoDom.appendChild(userNameDom);
-				// 	if (item.UserInfo.jobTitle) {
-				// 		const jobTitleDom = document.createElement('span');
-				// 		jobTitleDom.innerText = item.userInfo.jobTitle;
-				// 		userInfoDom.appendChild(jobTitleDom);
-				// 	}
-				// 	const detailDom = document.createElement('div');
-				// 	userInfoDom.setAttribute('class', 'coder_comments_detail');
-				// 	const contentDom = document.createElement('div');
-				// 	contentDom.innerText = item.content;
-				// 	detailDom.appendChild(contentDom);
-				// 	mainDom.appendChild(detailDom);
-
-				// })
+				console.log(commentsList.length)
+				lastCreatedAt = commentsList[commentsList.length - 1].createdAt;
+				mescroll.endSuccess();
 				commentsList.forEach(item => {
 					const domTree = {
 						type: 'div',
@@ -248,11 +178,11 @@
 						const parNode = parent;
 						const node = document.createElement(dom.type);
 						if (dom.className) {
-							node.setAttribute('class',dom.className);
+							node.setAttribute('class', dom.className);
 						}
 						if (dom.src) {
 							dom.src = dom.src.length === 0 ? './noAvatar.png' : dom.src;
-							node.setAttribute('src',dom.src);
+							node.setAttribute('src', dom.src);
 						}
 						if (dom.text) {
 							node.innerText = dom.text;
@@ -291,9 +221,9 @@
 									type: 'div',
 									className: 'coder_comments_detail',
 									child: [{
-										type:'div',
-										text:i.content
-									},{
+										type: 'div',
+										text: i.content
+									}, {
 										type: 'div',
 										className: 'coder_comments_func',
 										child: [{
@@ -307,16 +237,49 @@
 							finalDom = makeDom(domTree);
 							finalDom.appendChild(replyDom);
 						})
-					}else{
-						finalDom = makeDom(domTree);						
+					} else {
+						finalDom = makeDom(domTree);
 					}
-					document.getElementById('coder_comments').appendChild(finalDom);
+					document.getElementById('coder_comments_inner').appendChild(finalDom);
+					
+					document.getElementById('coder_comments').className = 'coder_show';
+					document.getElementById('coder_mask').className = 'coder_show';
 				})
 			}
-			document.getElementById('coder_comments').className = 'coder_show';
-			document.getElementById('coder_mask').className = 'coder_show';
 		}
-
+		// 创建mescroll对象
+		const mescroll = new MeScroll("coder_comments", {
+			//如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+			down:{
+				use:false
+			},
+			//解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+			up: {
+				callback: getComments, //上拉加载的回调
+				auto: false,
+				//以下是一些常用的配置,当然不写也可以的.
+				page: {
+					num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+					size: 10 //每页数据条数,默认10
+				},
+				htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
+				noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+				toTop: {
+					//回到顶部按钮
+					src: "../img/mescroll-totop.png", //图片路径,默认null,支持网络图
+					offset: 1000 //列表滚动1000px才显示回到顶部按钮	
+				},
+				empty: {
+					//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
+					warpId: "xxid", //父布局的id (1.3.5版本支持传入dom元素)
+					icon: "../img/mescroll-empty.png", //图标,默认null,支持网络图
+					tip: "暂无相关数据~" //提示
+				},
+				lazyLoad: {
+					use: true // 是否开启懒加载,默认false
+				}
+			}
+		});
 		getDetail();
 	</script>
 </html>

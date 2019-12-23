@@ -149,15 +149,21 @@
 #coder_comments {
 	height: 80vh;
 	width: 100vw;
+	padding-top: 20px;
 	position: fixed;
 	bottom: 0;
 	overflow: auto;
 	background-color: #FFFFFF;
 }
-
-#coder_comments>div {
+#coder_comments_inner{
+	height: 98%;
+	margin-top: 2%;
+	width: 100%;
+	overflow: auto;
+}
+.coder_part {
 	font-size: 14px;
-	width: 92%;
+	width: 94%;
 	margin: 0 auto;
 	padding: 2%;
 	
