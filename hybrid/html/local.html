@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8" />
@@ -28,7 +28,7 @@
 			<div class="coder_part">
 				<div class="coder_comments_main">
 					<div class="coder_comments_user">
-						<img src="head.png" >
+						<img src="head.png">
 						<div class="coder_comments_userInfo">
 							<span>略略略呵呵哈哈</span>
 							<span>签约作者他爸爸的儿子</span>
@@ -47,7 +47,7 @@
 				</div>
 				<div class="coder_comments_answer">
 					<div class="coder_comments_user">
-						<img src="head.png" >
+						<img src="head.png">
 						<div class="coder_comments_userInfo">
 							<span>略略略呵呵哈哈</span>
 							<span>签约作者他爸爸的儿子</span>
@@ -55,7 +55,7 @@
 					</div>
 					<div class="coder_comments_detail">
 						<div class="">
-							时代峰峻思范文覅我服你Woi而烦恼问烦恼我额覅嗡嗡狗儿干哈人得用非叫我番茄锅不够ear办呢欧日部分
+							时代峰峻思范文覅我服你而烦恼问烦恼我额覅嗡嗡狗儿干哈人得用非叫我番茄锅不够ear办呢欧日部分
 						</div>
 						<div class="coder_comments_func">
 							<span>6小时前</span>
@@ -68,6 +68,7 @@
 		</div>
 	</body>
 	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
+	<script type="text/javascript" src="./functions.js"></script>
 	<script type="text/javascript">
 		//隐藏弹窗和遮罩
 		const maskHidden = () => {
@@ -95,43 +96,10 @@
 			//fixedBody();
 			return;
 		}
-
-		const cleanArray = (actual) => {
-			const newArray = []
-			for (let i = 0; i < actual.length; i++) {
-				if (actual[i]) {
-					newArray.push(actual[i])
-				}
-			}
-			return newArray
-		}
-		// object转querystring
-		const param = (json) => {
-			if (!json) return ''
-			return cleanArray(
-				Object.keys(json).map(key => {
-					if (json[key] === undefined) return ''
-					return encodeURIComponent(key) + '=' + encodeURIComponent(json[key])
-				})
-			).join('&')
-		}
-		// querystring转object
-		const getQueryObject = (params) => {
-			const obj = {}
-			const reg = /([^?&=]+)=([^?&=]*)/g
-			params.replace(reg, (rs, $1, $2) => {
-				const name = decodeURIComponent($1)
-				let val = decodeURIComponent($2)
-				val = String(val)
-				obj[name] = val
-				return rs
-			})
-			return obj
-		}
 		// 收藏
 		const collect = (querys) => {
 			// 得到参数csId和是否本文在此收藏夹中
-			const [csId,isIn] = querys.split('&');
+			const [csId, isIn] = querys.split('&');
 			// 准备请求参数
 			const data = {
 				csId,
@@ -149,7 +117,7 @@
 			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4 && xhr.status === 200 && JSON.parse(xhr.responseText).m === 'success') {
 					document.querySelector(`[data-csId='${csId}']`).src = type === 'addEntry' ? 'select_cur.png' : 'select.png';
-					setTimeout(maskHidden(),500);
+					setTimeout(maskHidden(), 500);
 					plus.nativeUI.toast(type === 'addEntry' ? '收藏成功' : '取消成功');
 				}
 			}
@@ -173,45 +141,182 @@
 		const commentsList = [];
 		const getComments = (headers) => {
 			const data = {
-				createdAt:'',
-				rankType:'new',
-				pageSize:6
+				createdAt: '',
+				rankType: 'new',
+				pageSize: 6
 			}
 			const id = getQueryObject(params).id
 			const commentsUrl = 'https://comment-wrapper-ms.juejin.im/v1/comments/entry/';
 			const xhr = new plus.net.XMLHttpRequest();
-			xhr.open("GET",`${commentsUrl}${id}?${param(data)}`);
-			xhr.setRequestHeader('X-Juejin-Client',headers.clientId);
-			xhr.setRequestHeader('X-Juejin-Src','web');
-			xhr.setRequestHeader('X-Juejin-Token',headers.token);
-			xhr.setRequestHeader('X-Juejin-Uid',headers.userId);
+			xhr.open("GET", `${commentsUrl}${id}?${param(data)}`);
+			xhr.setRequestHeader('X-Juejin-Client', headers.clientId);
+			xhr.setRequestHeader('X-Juejin-Src', 'web');
+			xhr.setRequestHeader('X-Juejin-Token', headers.token);
+			xhr.setRequestHeader('X-Juejin-Uid', headers.userId);
 			xhr.send();
 			xhr.onload = () => {
 				const commentsList = JSON.parse(xhr.responseText).d.comments;
-				console.log(xhr.responseText);
+				// console.log(xhr.responseText);
 				let innerHTMLs = [];
 				const commentsDom = document.getElementById('coder_comments');
+				// commentsList.forEach(item => {
+				// 	// 一条评论
+				// 	const partDom = document.createElement('div');
+				// 	partDom.setAttribute('class', 'coder_part');
+				// 	commentsDom.appendChild(partDom);
+				// 	// 主评论
+				// 	const mainDom = document.createElement('div');
+				// 	mainDom.setAttribute('class', 'coder_comments_main');
+				// 	partDom.appendChild(mainDom);
+				// 	// 用户信息模块
+				// 	const userDom = document.createElement('div');
+				// 	userDom.setAttribute('class', 'coder_comments_user');
+				// 	mainDom.appendChild(userDom);
+				// 	// 头像
+				// 	const headDom = document.createElement('img');
+				// 	headDom.setAttribute('src', item.userInfo.avatarLarge);
+				// 	userDom.appendChild(headDom);
+				// 	// 用户名和职业
+				// 	const userInfoDom = document.createElement('div');
+				// 	userInfoDom.setAttribute('class', 'coder_comments_userInfo');
+				// 	const userNameDom = document.createElement('span');
+				// 	userNameDom.innerText = item.userInfo.username;
+				// 	userInfoDom.appendChild(userNameDom);
+				// 	if (item.UserInfo.jobTitle) {
+				// 		const jobTitleDom = document.createElement('span');
+				// 		jobTitleDom.innerText = item.userInfo.jobTitle;
+				// 		userInfoDom.appendChild(jobTitleDom);
+				// 	}
+				// 	const detailDom = document.createElement('div');
+				// 	userInfoDom.setAttribute('class', 'coder_comments_detail');
+				// 	const contentDom = document.createElement('div');
+				// 	contentDom.innerText = item.content;
+				// 	detailDom.appendChild(contentDom);
+				// 	mainDom.appendChild(detailDom);
+
+				// })
 				commentsList.forEach(item => {
-					const partDom = document.createElement('div');
-					partDom.setAttribute('class','coder_part');
-					commentsDom.appendChild(partDom);
-					const mainDom = document.createElement('div');
-					mainDom.setAttribute('class','coder_comments_main');
-					partDom.appendChild(mainDom);
-					const userDom = document.createElement('div');
-					userDom.setAttribute('class','coder_comments_user');
-					mainDom.appendChild(userDom);
-					const headDom = document.createElement('img');
-					headDom.setAttribute('src',item.userInfo.avatarLarge);
-					userDom.appendChild(headDom);
-					const userInfoDom = document.createElement('div');
-					userInfoDom.setAttribute('class','coder_comments_userInfo');
-					
+					const domTree = {
+						type: 'div',
+						className: 'coder_part',
+						child: [{
+							type: 'div',
+							className: 'coder_comments_main',
+							child: [{
+								type: 'div',
+								className: 'coder_comments_user',
+								child: [{
+									type: 'img',
+									src: item.userInfo.avatarLarge
+								}, {
+									type: 'div',
+									className: 'coder_comments_userInfo',
+									child: [{
+										type: 'span',
+										text: item.userInfo.username
+									}, {
+										type: 'span',
+										text: item.userInfo.jobTitle
+									}]
+								}]
+							}, {
+								type: 'div',
+								className: 'coder_comments_detail',
+								child: [{
+									type: 'div',
+									text: item.content
+								}, {
+									type: 'div',
+									className: 'coder_comments_func',
+									child: [{
+										type: 'span',
+										text: formatTime(item.createdAt)
+									}, {
+										type: 'span',
+										className: 'cuIcon-appreciate',
+										text: item.likesCount
+									}, {
+										type: 'span',
+										className: 'cuIcon-comment',
+										text: item.replyCount
+									}]
+								}]
+							}]
+						}]
+					}
+					const makeDom = (dom, parent) => {
+						const parNode = parent;
+						const node = document.createElement(dom.type);
+						if (dom.className) {
+							node.setAttribute('class',dom.className);
+						}
+						if (dom.src) {
+							dom.src = dom.src.length === 0 ? './noAvatar.png' : dom.src;
+							node.setAttribute('src',dom.src);
+						}
+						if (dom.text) {
+							node.innerText = dom.text;
+						}
+						if (dom.child) {
+							dom.child.forEach(item => {
+								makeDom(item, node);
+							})
+						}
+						if (parNode) {
+							parNode.appendChild(node);
+						}
+						return node;
+					}
+					let finalDom;
+					if (item.topComment !== null && item.topComment.length !== 0) {
+						item.topComment.forEach(i => {
+							const replyDomTree = {
+								type: 'div',
+								className: 'coder_comments_answer',
+								child: [{
+									type: 'div',
+									className: 'coder_comments_user',
+									child: [{
+										type: 'img',
+										src: i.userInfo.avatarLarge
+									}, {
+										type: 'div',
+										className: 'coder_comments_userInfo',
+										child: [{
+											type: 'span',
+											text: i.userInfo.username
+										}]
+									}]
+								}, {
+									type: 'div',
+									className: 'coder_comments_detail',
+									child: [{
+										type:'div',
+										text:i.content
+									},{
+										type: 'div',
+										className: 'coder_comments_func',
+										child: [{
+											type: 'span',
+											text: formatTime(i.createdAt)
+										}]
+									}]
+								}]
+							}
+							const replyDom = makeDom(replyDomTree);
+							finalDom = makeDom(domTree);
+							finalDom.appendChild(replyDom);
+						})
+					}else{
+						finalDom = makeDom(domTree);						
+					}
+					document.getElementById('coder_comments').appendChild(finalDom);
 				})
-				document.getElementById('coder_comments').className = 'coder_show';
-				document.getElementById('coder_mask').className = 'coder_show';
 			}
+			document.getElementById('coder_comments').className = 'coder_show';
+			document.getElementById('coder_mask').className = 'coder_show';
 		}
+
 		getDetail();
 	</script>
 </html>
