@@ -6,10 +6,10 @@
 		<meta content="email=no" name="format-detection" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="./juejin.css" rel="stylesheet" type="text/css" />
-		<link href="./article.css" rel="stylesheet" type="text/css" />
-		<link href="./icon.css" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" type="text/css" href="./mescroll.min.css" />
+		<link href="./css/juejin.css" rel="stylesheet" type="text/css" />
+		<link href="./css/article.css" rel="stylesheet" type="text/css" />
+		<link href="./css/icon.css" rel="stylesheet" type="text/css" />
+		<link href="./css/mescroll.min.css" rel="stylesheet" type="text/css" />
 		<title>文章详情</title>
 	</head>
 	<body>
@@ -32,8 +32,8 @@
 		</div>
 	</body>
 	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
-	<script type="text/javascript" src="./mescroll.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src="./functions.js"></script>
+	<script type="text/javascript" src="./js/mescroll.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="./js/functions.js"></script>
 	<script type="text/javascript">
 		//隐藏弹窗和遮罩
 		const maskHidden = () => {
@@ -51,7 +51,7 @@
 						<img src="${item.img}">
 						<span>${item.title}</span>
 						<div>${item.entryCount}</div>
-						<img class="select" src="${item.isIn?'select_cur.png':'select.png'}" data-csId="${item.csId}" onclick="collect('${item.csId}&${item.isIn}')">
+						<span class="${item.isIn?'cuIcon-roundcheckfill':'cuIcon-roundcheck'}" data-csId="${item.csId}" onclick="collect('${item.csId}&${item.isIn}')"></span>
 					</div>`
 				innerHTMLs.push(innerHTML)
 			})
@@ -80,7 +80,7 @@
 			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4 && xhr.status === 200 && JSON.parse(xhr.responseText).m === 'success') {
-					document.querySelector(`[data-csId='${csId}']`).src = type === 'addEntry' ? 'select_cur.png' : 'select.png';
+					document.querySelector(`[data-csId='${csId}']`).className = type === 'addEntry' ? 'cuIcon-roundcheckfill' : 'cuIcon-roundcheck';
 					setTimeout(maskHidden(), 500);
 					plus.nativeUI.toast(type === 'addEntry' ? '收藏成功' : '取消成功');
 				}

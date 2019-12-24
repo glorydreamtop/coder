@@ -55,19 +55,21 @@
 	margin-left: 1em;
 }
 
-.coder_list_item>span {
+.coder_list_item>span:first-child {
 	margin-left: 0.5em;
 }
 
-.coder_list_item>img:first-child {
+.coder_list_item>img {
 	width: 30px;
 	height: 30px;
 	border-radius: 4px;
 }
 
-.coder_list_item>img:last-child {
+.coder_list_item>span:last-child {
 	width: 24px;
 	height: 24px;
+	font-size: 24px;
+	color: #0077FF;
 	margin-left: auto;
 }
 

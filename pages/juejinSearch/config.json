@@ -1,0 +1,20 @@
+{
+	"mescrollOption": {
+		"downOption": {
+			"use": false,
+			"auto": false
+		},
+		"upOption": {
+			"use": true,
+			"auto": false,
+			"page": {
+				"num": 0,
+				"size": 20
+			},
+			"noMoreSize": 10,
+			"empty": {
+				"tip": "么有更多了~~"
+			}
+		}
+	}
+}

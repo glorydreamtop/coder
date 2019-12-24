@@ -58,7 +58,11 @@
 				}
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/juejinSearch/juejinSearch",
+            "style" : {}
+        }
+    ],
 	"tabBar": {
 		"backgroundColor": "#FFF",
 		"list": [{
