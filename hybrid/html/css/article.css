@@ -154,14 +154,17 @@
 	padding-top: 20px;
 	position: fixed;
 	bottom: 0;
-	overflow: auto;
 	background-color: #FFFFFF;
 }
 #coder_comments_inner{
 	height: 98%;
 	margin-top: 2%;
 	width: 100%;
-	overflow: auto;
+}
+.mescroll{
+	height: 98%;
+	position: absolute;
+	top: 0;
 }
 .coder_part {
 	font-size: 14px;

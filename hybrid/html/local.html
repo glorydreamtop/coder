@@ -25,9 +25,11 @@
 
 			</div>
 		</div>
-		<div id="coder_comments" class="coder_hidden mescroll">
-			<div id="coder_comments_inner">
-
+		<div id="coder_comments" class="coder_hidden ">
+			<div id="coder_comments_inner" class="mescroll">
+				<div id="coder_comments_innerList">
+					
+				</div>
 			</div>
 		</div>
 	</body>
@@ -122,9 +124,16 @@
 			xhr.send();
 			xhr.onload = () => {
 				const commentsList = JSON.parse(xhr.responseText).d.comments;
+				let hasNext = true;
 				console.log(commentsList.length)
+				if(commentsList.length<10){
+					hasNext = false;
+				}
+				setTimeout(() => {
+					mescroll.endSuccess(commentsList.length,hasNext);
+				},800)
 				lastCreatedAt = commentsList[commentsList.length - 1].createdAt;
-				mescroll.endSuccess();
+				
 				commentsList.forEach(item => {
 					const domTree = {
 						type: 'div',
@@ -240,7 +249,7 @@
 					} else {
 						finalDom = makeDom(domTree);
 					}
-					document.getElementById('coder_comments_inner').appendChild(finalDom);
+					document.getElementById('coder_comments_innerList').appendChild(finalDom);
 					
 					document.getElementById('coder_comments').className = 'coder_show';
 					document.getElementById('coder_mask').className = 'coder_show';
@@ -248,7 +257,7 @@
 			}
 		}
 		// 创建mescroll对象
-		const mescroll = new MeScroll("coder_comments", {
+		const mescroll = new MeScroll("coder_comments_inner", {
 			//如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
 			down:{
 				use:false
@@ -263,10 +272,10 @@
 					size: 10 //每页数据条数,默认10
 				},
 				htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
-				noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+				noMoreSize: 1, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
 				toTop: {
 					//回到顶部按钮
-					src: "../img/mescroll-totop.png", //图片路径,默认null,支持网络图
+					src: "toTop.png", //图片路径,默认null,支持网络图
 					offset: 1000 //列表滚动1000px才显示回到顶部按钮	
 				},
 				empty: {

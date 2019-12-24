@@ -5,8 +5,8 @@
 			"path": "pages/girls/girls",
 			"style": {
 				"disableScroll": true,
-				"navigationStyle":"custom",
-				"transparentTitle":"always",
+				"navigationStyle": "custom",
+				"transparentTitle": "always",
 				"app-plus": {
 					"bounce": "none"
 				}
@@ -18,21 +18,19 @@
 				"disableScroll": true,
 				"app-plus": {
 					"bounce": "none",
-					"titleNView":{
-						"type":"default",
-						"searchInput":{
-							"placeholder":"快速搜索文章、用户、标签",
-							"borderRadius":"20px",
-							"backgroundColor":"rgba(255,255,255)"
+					"titleNView": {
+						"type": "default",
+						"searchInput": {
+							"placeholder": "快速搜索文章、用户、标签",
+							"borderRadius": "20px",
+							"backgroundColor": "rgba(255,255,255)"
 						},
-						"buttons":[
-							{
-								"fontSrc":"/static/coderfont.ttf",
-								"text":"\ue706",
-								"fontSize":"24px",
-								"color":"#FFFFFF"
-							}
-						]
+						"buttons": [{
+							"fontSrc": "/static/coderfont.ttf",
+							"text": "\ue706",
+							"fontSize": "24px",
+							"color": "#FFFFFF"
+						}]
 					}
 				},
 				"navigationBarTitleText": "掘金"
@@ -50,7 +48,10 @@
 				"app-plus": {
 					"titleNView": {
 						"buttons": [{
-							"type": "share"
+							"fontSrc": "/static/coderfont.ttf",
+							"text": "\ue695",
+							"fontSize": "20px",
+							"color": "#FFFFFF"
 						}, {
 							"type": "favorite"
 						}]
