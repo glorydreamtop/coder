@@ -123,6 +123,11 @@ const articleList = (data) => post(urls.query, data, 'juejinLegacy').then(res =>
 	return Promise.resolve(res);
 })
 
+//search articles
+const search = (data) => post(urls.query, data, 'juejinLegacy').then(res => {
+	return Promise.resolve(res.data.search);
+})
+
 //get tags list
 const tagsList = (data) => post(urls.query, data, 'juejinLegacy').then(res => {
 	res = res.data.tagNav.items;
@@ -173,7 +178,10 @@ const oneSpider = () => get(urls.one, null, 'noHeader').then(res => {
 	//console.log(res.match(reg)[0].substring(1, res.match(reg)[0].indexOf(')')));
 	const imgUrl = res.match(imgReg)[0].substring(1, res.match(imgReg)[0].indexOf(')'));
 	const sentence = res.match(stcReg)[0].substring(11, res.match(stcReg)[0].indexOf('<'));
-	return Promise.resolve({imgUrl,sentence})
+	return Promise.resolve({
+		imgUrl,
+		sentence
+	})
 })
 
 
@@ -185,6 +193,7 @@ export {
 	login,
 	categories,
 	articleList,
+	search,
 	tagsList,
 	changeLike,
 	collection,

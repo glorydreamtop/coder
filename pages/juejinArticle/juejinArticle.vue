@@ -64,7 +64,7 @@ export default {
 				const headers = res;
 				console.log(123);
 				this.wv = this.$mp.page.$getAppWebview().children()[0];
-				this.wv.evalJS(`getComments(${JSON.stringify(headers)});`);
+				this.wv.evalJS(`wakeUpComments(${JSON.stringify(headers)});`);
 			})
 			
 		}

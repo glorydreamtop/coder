@@ -28,7 +28,7 @@
 		<div id="coder_comments" class="coder_hidden ">
 			<div id="coder_comments_inner" class="mescroll">
 				<div id="coder_comments_innerList">
-					
+
 				</div>
 			</div>
 		</div>
@@ -82,7 +82,8 @@
 			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = () => {
 				if (xhr.readyState === 4 && xhr.status === 200 && JSON.parse(xhr.responseText).m === 'success') {
-					document.querySelector(`[data-csId='${csId}']`).className = type === 'addEntry' ? 'cuIcon-roundcheckfill' : 'cuIcon-roundcheck';
+					document.querySelector(`[data-csId='${csId}']`).className = type === 'addEntry' ? 'cuIcon-roundcheckfill' :
+						'cuIcon-roundcheck';
 					setTimeout(maskHidden(), 500);
 					plus.nativeUI.toast(type === 'addEntry' ? '收藏成功' : '取消成功');
 				}
@@ -104,8 +105,17 @@
 				}
 			}, false);
 		}
-
+		// 外部唤醒评论列表弹窗
+		const wakeUpComments = (headers) => {
+			if(document.getElementById('coder_comments').className == 'coder_show')return;
+			document.getElementById('coder_comments').className = 'coder_show';
+			document.getElementById('coder_mask').className = 'coder_show';
+			if(commentsList.length !== 0)return;
+			getComments(headers);
+		}
+		// 上次请求接口的最后一条创建时间
 		let lastCreatedAt = '';
+		let commentsList = [];
 		// 获取评论列表
 		const getComments = (headers) => {
 			const data = {
@@ -122,18 +132,18 @@
 			xhr.setRequestHeader('X-Juejin-Token', headers.token);
 			xhr.setRequestHeader('X-Juejin-Uid', headers.userId);
 			xhr.send();
+			
 			xhr.onload = () => {
-				const commentsList = JSON.parse(xhr.responseText).d.comments;
+				commentsList = JSON.parse(xhr.responseText).d.comments;
 				let hasNext = true;
 				console.log(commentsList.length)
-				if(commentsList.length<10){
+				if (commentsList.length < 10) {
 					hasNext = false;
 				}
 				setTimeout(() => {
-					mescroll.endSuccess(commentsList.length,hasNext);
-				},800)
+					mescroll.endSuccess(commentsList.length, hasNext);
+				}, 800)
 				lastCreatedAt = commentsList[commentsList.length - 1].createdAt;
-				
 				commentsList.forEach(item => {
 					const domTree = {
 						type: 'div',
@@ -146,7 +156,7 @@
 								className: 'coder_comments_user',
 								child: [{
 									type: 'img',
-									src: item.userInfo.avatarLarge
+									src: item.userInfo.avatarLarge || 'noAvatar.png'
 								}, {
 									type: 'div',
 									className: 'coder_comments_userInfo',
@@ -183,6 +193,7 @@
 							}]
 						}]
 					}
+					// dom渲染器
 					const makeDom = (dom, parent) => {
 						const parNode = parent;
 						const node = document.createElement(dom.type);
@@ -190,7 +201,6 @@
 							node.setAttribute('class', dom.className);
 						}
 						if (dom.src) {
-							dom.src = dom.src.length === 0 ? './noAvatar.png' : dom.src;
 							node.setAttribute('src', dom.src);
 						}
 						if (dom.text) {
@@ -250,17 +260,14 @@
 						finalDom = makeDom(domTree);
 					}
 					document.getElementById('coder_comments_innerList').appendChild(finalDom);
-					
-					document.getElementById('coder_comments').className = 'coder_show';
-					document.getElementById('coder_mask').className = 'coder_show';
 				})
 			}
 		}
 		// 创建mescroll对象
 		const mescroll = new MeScroll("coder_comments_inner", {
 			//如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
-			down:{
-				use:false
+			down: {
+				use: false
 			},
 			//解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
 			up: {

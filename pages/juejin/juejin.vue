@@ -247,6 +247,11 @@ export default {
 	onLoad() {
 		this.getCategories();
 		console.log(this.currentTagId);
+	},
+	onNavigationBarSearchInputClicked() {
+		uni.navigateTo({
+			url:'../juejinSearch/juejinSearch'
+		})
 	}
 };
 </script>

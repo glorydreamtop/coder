@@ -2,17 +2,6 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页
 		{
-			"path": "pages/girls/girls",
-			"style": {
-				"disableScroll": true,
-				"navigationStyle": "custom",
-				"transparentTitle": "always",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		},
-		{
 			"path": "pages/juejin/juejin",
 			"style": {
 				"disableScroll": true,
@@ -23,6 +12,7 @@
 						"searchInput": {
 							"placeholder": "快速搜索文章、用户、标签",
 							"borderRadius": "20px",
+							"disabled":true,
 							"backgroundColor": "rgba(255,255,255)"
 						},
 						"buttons": [{
@@ -34,6 +24,17 @@
 					}
 				},
 				"navigationBarTitleText": "掘金"
+			}
+		},
+		{
+			"path": "pages/girls/girls",
+			"style": {
+				"disableScroll": true,
+				"navigationStyle": "custom",
+				"transparentTitle": "always",
+				"app-plus": {
+					"bounce": "none"
+				}
 			}
 		},
 		{
@@ -58,12 +59,29 @@
 					}
 				}
 			}
+		}, {
+			"path": "pages/juejinSearch/juejinSearch",
+			"style": {
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"type": "default",
+						"searchInput": {
+							"placeholder": "快速搜索文章、用户、标签",
+							"borderRadius": "20px",
+							"backgroundColor": "rgba(255,255,255)"
+						},
+						"buttons": [{
+							"fontSrc": "/static/coderfont.ttf",
+							"text": "\ue706",
+							"fontSize": "24px",
+							"color": "#FFFFFF"
+						}]
+					}
+				}
+			}
 		}
-	    ,{
-            "path" : "pages/juejinSearch/juejinSearch",
-            "style" : {}
-        }
-    ],
+	],
 	"tabBar": {
 		"backgroundColor": "#FFF",
 		"list": [{
