@@ -1,10 +1,9 @@
 <template>
-	<view v-show="TabCur === index" class="scroll">
+	<view class="scroll">
 		<mescroll-uni
 			class="list flex flex-direction justify-start"
 			@init="mescrollinit"
 			:down="mescrollOption.downOption"
-			@down="downCallback"
 			:up="mescrollOption.upOption"
 			@up="upCallback"
 		>
@@ -39,8 +38,6 @@ import { changeLike } from '../utils/request';
 import MescrollUni from 'mescroll-uni';
 export default {
 	props: {
-		TabCur: Number,
-		index: Number,
 		currentTagId: String,
 		mescrollOption: Object,
 		dataList: Array,
@@ -70,9 +67,6 @@ export default {
 		},
 		mescrollinit(mescroll) {
 			this.mescroll = mescroll;
-		},
-		downCallback(mescroll) {
-			mescroll.endSuccess(20, true);
 		},
 		upCallback(mescroll) {
 			this.$emit('up');

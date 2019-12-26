@@ -3,16 +3,13 @@
 		<scroll-view scroll-x class="bg-white nav mescroll-touch-x" scroll-with-animation :scroll-left="scrollLeft">
 			<view :class="['cu-item', index === TabCur ? 'text-blue cur' : '']" v-for="(item, index) in categories" :key="item.title" @tap="tabSelect(index)">{{ item.name }}</view>
 		</scroll-view>
+		<view class="" v-for="idx in categories.length" v-show="TabCur === idx" :key="idx">
 		<mescroll-item
 			class="me"
 			:mescrollOption="mescrollOption"
 			:dataList="dataList[idx]"
-			:index="idx"
-			:TabCur="TabCur"
 			@up="update(idx)"
 			:ref="`me${idx}`"
-			v-for="idx in categories.length"
-			:key="idx"
 		>
 			<view class="tagList flex justify-start text-white">
 				<view :class="currentTagId[idx] === item.tagId ? 'text-blue' : ''" v-for="item in tagList[idx]" :key="item.title" @tap="selectTag(item.tagId)">
@@ -20,6 +17,7 @@
 				</view>
 			</view>
 		</mescroll-item>
+		</view>
 	</view>
 </template>
 
@@ -263,7 +261,7 @@ export default {
 }
 
 .me {
-	height: calc(100% - 50upx);
+	height: 100%;
 }
 .tagList {
 	width: 96vw;
