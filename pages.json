@@ -69,14 +69,9 @@
 						"searchInput": {
 							"placeholder": "快速搜索文章、用户、标签",
 							"borderRadius": "20px",
-							"backgroundColor": "rgba(255,255,255)"
-						},
-						"buttons": [{
-							"fontSrc": "/static/coderfont.ttf",
-							"text": "\ue706",
-							"fontSize": "24px",
-							"color": "#FFFFFF"
-						}]
+							"backgroundColor": "rgba(255,255,255)",
+							"autoFocus": true
+						}
 					}
 				}
 			}

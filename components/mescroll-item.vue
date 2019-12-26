@@ -7,25 +7,26 @@
 			@down="downCallback"
 			:up="mescrollOption.upOption"
 			@up="upCallback"
-			top="90"
 		>
 			<slot></slot>
-			<view class="card flex flex-direction justify-start margin-bottom-sm padding-sm" v-for="(item, index) in dataList" :key="item.postId" @tap="toArticle(item)">
-				<view class="meta solid-bottom text-sm text-gray flex justify-between">
-					<text class="flex justify-start">
-						<text class="author text-grey margin-right-xs">{{ item.author }}</text>
-						<text class="before">{{ item.createdAt | formatTime }}</text>
-					</text>
-					<text class="tags text-blue">{{ item.tags }}</text>
-				</view>
-				<view class="content margin-tb-sm">
-					<text class="title text-bold">{{ item.title }}</text>
-				</view>
-				<view class="like">
-					<text @tap.stop="like(item.id, index)">
-						<text :class="[item.viewerHasLiked ? 'cuIcon-appreciatefill' : 'cuIcon-appreciate', 'text-red']"></text>
-						<text class="text-grey padding-left-xs">{{ `${item.likeCount}赞` }}</text>
-					</text>
+			<view class="scroll-item">
+				<view class="card flex flex-direction justify-start margin-bottom-sm padding-sm" v-for="(item, index) in dataList" :key="item.postId" @tap="toArticle(item)">
+					<view class="meta solid-bottom text-sm text-gray flex justify-between">
+						<text class="flex justify-start">
+							<text class="author text-grey margin-right-xs">{{ item.author }}</text>
+							<text class="before">{{ item.createdAt | formatTime }}</text>
+						</text>
+						<text class="tags text-blue">{{ item.tags }}</text>
+					</view>
+					<view class="content margin-tb-sm">
+						<text class="title text-bold">{{ item.title }}</text>
+					</view>
+					<view class="like">
+						<text @tap.stop="like(item.id, index)">
+							<text :class="[item.viewerHasLiked ? 'cuIcon-appreciatefill' : 'cuIcon-appreciate', 'text-red']"></text>
+							<text class="text-grey padding-left-xs">{{ `${item.likeCount}赞` }}</text>
+						</text>
+					</view>
 				</view>
 			</view>
 		</mescroll-uni>
@@ -40,9 +41,10 @@ export default {
 	props: {
 		TabCur: Number,
 		index: Number,
-		currentTagId:String,
+		currentTagId: String,
 		mescrollOption: Object,
-		dataList: Array
+		dataList: Array,
+		top: Number
 	},
 	data() {
 		return {
@@ -103,6 +105,19 @@ export default {
 			width: 100%;
 			font-size: 28upx;
 			height: 1.5em;
+			.author {
+				width: 35%;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+			.tags {
+				text-align: right;
+				width: 35%;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
 		}
 		.content {
 			font-size: 32upx;
@@ -113,5 +128,8 @@ export default {
 	height: 90upx;
 	width: 100%;
 	background-color: #f1f1f1;
+}
+.scroll-item{
+	margin-top: 20upx;
 }
 </style>

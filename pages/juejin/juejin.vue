@@ -30,7 +30,7 @@ import config from './config';
 import MescrollItem from '../../components/mescroll-item';
 export default {
 	components: {
-		MescrollItem,
+		MescrollItem
 	},
 	filters: {
 		formatTime
@@ -43,18 +43,16 @@ export default {
 			TabCur: 0,
 			// 分类tab左划距离
 			scrollLeft: 0,
-			// mescroll组件配置
-			mescrollOption: config.mescrollOption,
+			// mescroll组件配置 mescrollOption
+			// 分页信息 pageInfos
+			// query id 列表 queryList
+			...config,
 			// 分类标签列表
 			tagList: new Array(10).fill([]),
 			// 列表数据
 			dataList: new Array(10).fill([]),
-			// query id 列表
-			queryList: config.queryList,
 			// 当前tag
-			currentTagId: [],
-			// 分页信息
-			pageInfos: config.pageInfos
+			currentTagId: []
 		};
 	},
 	methods: {
@@ -70,7 +68,7 @@ export default {
 		},
 		selectTag(tagId) {
 			console.log(tagId);
-			
+
 			let order;
 			switch (tagId) {
 				case 'coco0':
@@ -86,7 +84,9 @@ export default {
 					order = 'POPULAR';
 					break;
 			}
-			if(tagId === 'all'){tagId = ''};
+			if (tagId === 'all') {
+				tagId = '';
+			}
 			const index = this.TabCur;
 			this.dataList[index] = [];
 			this.currentTagId[index] = tagId;
@@ -111,7 +111,7 @@ export default {
 						};
 						this.categories = [recommend, subscribe, ...res];
 						uni.setStorageSync('juejin_cate', this.categories);
-						this.currentTagId = ['coco0','',...new Array(this.categories.length-2).fill('all')];
+						this.currentTagId = ['coco0', '', ...new Array(this.categories.length - 2).fill('all')];
 						this.getTaglist(0);
 						this.getArticlelist(0);
 					})
@@ -120,7 +120,7 @@ export default {
 						Toast('获取分类失败');
 					});
 			} else {
-				this.currentTagId = ['coco0','',...new Array(this.categories.length-2).fill('all')];
+				this.currentTagId = ['coco0', '', ...new Array(this.categories.length - 2).fill('all')];
 				this.getTaglist(0);
 				this.getArticlelist(0);
 			}
@@ -233,9 +233,6 @@ export default {
 			}
 			console.log(this.tagList[0]);
 		},
-		downCallback(mescroll) {
-			mescroll.endSuccess(20, true);
-		},
 		update(idx) {
 			setTimeout(() => {
 				this.getArticlelist(idx).then(res => {
@@ -250,8 +247,8 @@ export default {
 	},
 	onNavigationBarSearchInputClicked() {
 		uni.navigateTo({
-			url:'../juejinSearch/juejinSearch'
-		})
+			url: '../juejinSearch/juejinSearch'
+		});
 	}
 };
 </script>
@@ -264,16 +261,14 @@ export default {
 	top: 0;
 	z-index: 9;
 }
+
 .me {
-	position: relative;
-	top: 90upx;
 	height: calc(100% - 50upx);
 }
 .tagList {
-	width: 94vw;
-	margin-left: auto;
-	margin-right: auto;
-	overflow: auto;
+	width: 96vw;
+	margin: 90upx auto -20upx auto;
+	overflow-x: auto;
 	> view {
 		background-color: #dbdbdb;
 		padding: 12upx 16upx;
