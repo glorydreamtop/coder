@@ -2,23 +2,6 @@
 	"pages": [
 		//pages数组中第一项表示应用启动页
 		{
-			"path": "pages/juejinSearch/juejinSearch",
-			"style": {
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"type": "default",
-						"searchInput": {
-							"placeholder": "快速搜索文章、用户、标签",
-							"borderRadius": "20px",
-							"backgroundColor": "rgba(255,255,255)",
-							"autoFocus": true
-						}
-					}
-				}
-			}
-		},
-		{
 			"path": "pages/juejin/juejin",
 			"style": {
 				"disableScroll": true,
@@ -58,6 +41,23 @@
 			"path": "pages/users/users",
 			"style": {
 				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/juejinSearch/juejinSearch",
+			"style": {
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"type": "default",
+						"searchInput": {
+							"placeholder": "快速搜索文章、用户、标签",
+							"borderRadius": "20px",
+							"backgroundColor": "rgba(255,255,255)",
+							"autoFocus": true
+						}
+					}
+				}
 			}
 		},
 		{

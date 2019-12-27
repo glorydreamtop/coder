@@ -6,6 +6,7 @@
 			:down="mescrollOption.downOption"
 			:up="mescrollOption.upOption"
 			@up="upCallback"
+			:top="top"
 		>
 			<slot></slot>
 			<view class="scroll-item">
@@ -22,7 +23,7 @@
 					</view>
 					<view class="like">
 						<text @tap.stop="like(item.id, index)">
-							<text :class="[item.viewerHasLiked ? 'cuIcon-appreciatefill' : 'cuIcon-appreciate', 'text-red']"></text>
+							<text :class="[item.viewerHasLiked || item.liked ? 'cuIcon-appreciatefill' : 'cuIcon-appreciate', 'text-red']"></text>
 							<text class="text-grey padding-left-xs">{{ `${item.likeCount}赞` }}</text>
 						</text>
 					</view>
@@ -126,4 +127,8 @@ export default {
 .scroll-item{
 	margin-top: 20upx;
 }
+/deep/.mescroll-uni-fixed{
+		position: relative;
+		top: 0 !important;
+	}
 </style>

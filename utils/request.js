@@ -169,7 +169,17 @@ const changeCollect = (data, type) => {
 	}
 	return put(`${urls.collect}${type}`, data, 'juejin')
 }
-
+//follow
+const follow = (followee) => {
+	const data = {
+		src: 'web',
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		follower: juejinHeaders.userId,
+		followee: followee
+	}
+	return get(urls.follow,data,'noHeader')
+}
 //get one pic&sentence
 const oneSpider = () => get(urls.one, null, 'noHeader').then(res => {
 	//console.log(res);
@@ -198,5 +208,6 @@ export {
 	changeLike,
 	collection,
 	changeCollect,
+	follow,
 	oneSpider
 }

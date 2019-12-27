@@ -6,5 +6,6 @@
 	"collect":"https://collection-set-ms.juejin.im/v1/",
 	"like":"https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/",
 	"userInfo":"https://user-storage-api-ms.juejin.im/v1/getUserInfo",
+	"follow":"https://follow-api-ms.juejin.im/v1/follow",
 	"one":"http://m.wufazhuce.com"
 }

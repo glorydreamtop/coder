@@ -1,18 +1,19 @@
 <template>
-	<view>
-		<mescroll-uni @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback">
-			<view class="scroll-item">
-				<view class="card flex justify-between margin-bottom-sm padding-sm">
-					<image class="avatar" src="../static/noAvatar.png" mode="widthFix"></image>
+	<view class="content">
+		<mescroll-uni top="80" class="scroll-item" @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback">
+			<view>
+				<view class="card flex justify-start align-center margin-bottom-sm padding-sm" v-for="item in dataList" :key="item.id">
+					<image class="avatar margin-right-sm" :src="item.avatarHd" mode="widthFix"></image>
 					<view class="info flex flex-direction justify-between">
-						<view class="user">
-							<text>前端爸爸</text><text>阿里巴巴工程师</text>
+						<view class="user flex flex-direction">
+							<text class="text-lg">{{item.username}}</text>
+							<text class="text-gray">{{item.jobTitle || item.company}}</text>
 						</view>
 						<view class="counts">
-							12个关注1922个文章
+							{{`${item.postedPostsCount}个专栏·${item.followersCount}人关注`}}
 						</view>
 					</view>
-					<view class="btn">
+					<view :class="['btn',item.viewerIsFollowing ? 'followed' : 'unfollowed']">
 						关注
 					</view>
 				</view>
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+	import {follow} from '../utils/request';
 	import MescrollUni from 'mescroll-uni';
 	export default {
 		props: {
@@ -46,15 +48,16 @@
 			upCallback(mescroll) {
 				this.$emit('up');
 			},
+			follow(followee){
+				follow(followee).then(res => {
+					console.log(res.m);
+				})
+			}
 		}
 	};
 </script>
 
 <style lang="scss">
-	.scroll-item {
-		margin-top: 20upx;
-	}
-
 	.card {
 		height: auto;
 		width: 96vw;
@@ -62,10 +65,44 @@
 		margin-right: auto;
 		border-radius: 16upx;
 		background-color: #ffffff;
+		.info{
+			width: auto;
+			flex:1;
+			.user>text:nth-child(2){
+				overflow-x: hidden;
+				text-overflow: ellipsis;
+			}
+		}
 		.avatar{
 			width: 96upx;
 			height: 96upx;
-			border-radius: 48upx;
+			border-radius: 54upx;
 		}
+		.btn{
+			width: 120upx;
+			height: 48upx;
+			border-radius: 8upx;
+			border: 1px solid #006CFF;
+			color: #006CFF;
+			text-align: center;
+			margin-left: auto;
+		}
+		.unfollowed{
+			color: #006CFF;
+		}
+		.followed{
+			color: #FFFFFF;
+			background-color: #006CFF;
+		}
+	}
+	.scroll-item{
+		position: relative;
+		top: 0;
+		bottom: 0;
+		height: auto;
+	}
+	.mescroll-uni-fixed{
+		position: relative !important;
+		top: 0 !important;
 	}
 </style>
