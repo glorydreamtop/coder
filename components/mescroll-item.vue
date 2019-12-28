@@ -6,6 +6,7 @@
 			:down="mescrollOption.downOption"
 			:up="mescrollOption.upOption"
 			@up="upCallback"
+			@down="downCallback"
 			:top="top"
 		>
 			<slot></slot>
@@ -71,6 +72,9 @@ export default {
 		},
 		upCallback(mescroll) {
 			this.$emit('up');
+		},
+		downCallback(mescroll){
+			this.$emit('down');
 		},
 		like(id, index) {
 			changeLike(id, this.dataList[index].viewerHasLiked).then(res => {
