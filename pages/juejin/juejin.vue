@@ -5,7 +5,7 @@
 			 @tap="tabSelect(index)">{{ item.name }}</view>
 		</scroll-view>
 		<view class="" v-for="idx in categories.length" v-show="TabCur === idx" :key="idx">
-			<mescroll-item class="me" :mescrollOption="mescrollOption" :dataList="dataList[idx]" @up="update(idx)" @down="reset(idx)"
+			<mescroll-item class="me" :mescrollOption="mescrollOption" :dataListprop="dataList[idx]" @up="update(idx)" @down="reset(idx)"
 			 :ref="`me${idx}`">
 				<view class="tagList flex justify-start text-white">
 					<view :class="currentTagId[idx] === item.tagId ? 'text-blue' : ''" v-for="item in tagList[idx]" :key="item.title"
@@ -39,25 +39,17 @@
 		},
 		data() {
 			return {
-				// 分类列表
-				categories: [],
-				// 当前tab
-				TabCur: 0,
-				// 分类tab左划距离
-				scrollLeft: 0,
-				// mescroll组件配置 mescrollOption
-				// 分页信息 pageInfos
-				// query id 列表 queryList
-				...config,
-				// 分类标签列表
-				tagList: new Array(10).fill([]),
-				// 列表数据
-				dataList: new Array(10).fill([]),
-				// 当前tag
-				currentTagId: []
+				categories: [],// 分类列表
+				TabCur: 0,// 当前tab
+				scrollLeft: 0,// 分类tab左划距离
+				...config,// mescroll组件配置 mescrollOption 分页信息 pageInfos query id 列表 queryList
+				tagList: new Array(10).fill([]),// 分类标签列表
+				dataList: new Array(10).fill([]),// 列表数据
+				currentTagId: []// 当前tag
 			};
 		},
 		methods: {
+			// 选择分类
 			tabSelect(index) {
 				console.log(index);
 				if (this.TabCur === index) return;
@@ -68,9 +60,8 @@
 					this.getArticlelist(index);
 				}
 			},
+			// 选择当前分类下tag
 			selectTag(tagId) {
-				console.log(tagId);
-
 				let order;
 				switch (tagId) {
 					case 'coco0':
@@ -95,6 +86,7 @@
 				this.pageInfos[this.categories[index].title].endCursor = '';
 				this.getArticlelist(this.TabCur, [tagId], order);
 			},
+			// 获取分类列表
 			getCategories() {
 				this.categories = uni.getStorageSync('juejin_cate');
 				// 检查缓存中是否存在分类
@@ -115,7 +107,7 @@
 							uni.setStorageSync('juejin_cate', this.categories);
 							this.currentTagId = ['coco0', '', ...new Array(this.categories.length - 2).fill('all')];
 							this.getTaglist(0);
-							this.getArticlelist(0);
+							this.reset(0);
 						})
 						.catch(err => {
 							console.log(err);
@@ -124,9 +116,10 @@
 				} else {
 					this.currentTagId = ['coco0', '', ...new Array(this.categories.length - 2).fill('all')];
 					this.getTaglist(0);
-					this.getArticlelist(0);
+					this.reset(0);
 				}
 			},
+			// 获取文章列表
 			getArticlelist(index, tags, order) {
 				// 当前分类id
 				const category = this.categories[index].id;
@@ -153,43 +146,38 @@
 						order: order || 'POPULAR'
 					}
 				};
-				return new Promise((resolve, reject) => {
-					articleList(data)
-						.then(res => {
-							// 保存下次查询的偏移量
-							this.pageInfos[this.categories[index].title].endCursor = res.pageInfo.endCursor;
-							// 保存是否有下一页
-							this.pageInfos[this.categories[index].title].hasNextPage = res.pageInfo.hasNextPage;
-							// 保存列表数据
-							this.dataList[index] = this.dataList[index].concat(
-								res.edges.map(item => {
-									const info = {};
-									const node = index === 1 ? item.node.targets[0] : item.node;
-									info.likeCount = node.likeCount;
-									info.viewerHasLiked = node.viewerHasLiked;
-									info.author = node.user.username;
-									info.createdAt = node.createdAt;
-									info.tags = node.tags ?
-										node.tags.map(tag => {
-											return tag.title;
-										}) :
-										[node.user.jobTitle];
-									info.tags = info.tags.join('/');
-									info.title = node.title;
-									info.originalUrl = node.originalUrl;
-									info.id = node.id;
-									info.postId = info.originalUrl.split('/')[4];
-									return info;
-								})
-							);
-							resolve(hasNextPage);
-						})
-						.catch(err => {
-							console.log(err);
-							reject('faild');
-						});
-				});
+				return articleList(data);
 			},
+			// 文章列表数据赋值
+			setDataList(res,index){
+				// 保存下次查询的偏移量
+				this.pageInfos[this.categories[index].title].endCursor = res.pageInfo.endCursor;
+				// 保存是否有下一页
+				this.pageInfos[this.categories[index].title].hasNextPage = res.pageInfo.hasNextPage;
+				// 保存列表数据
+				this.dataList[index] = this.dataList[index].concat(
+					res.edges.map(item => {
+						const info = {};
+						const node = index === 1 ? item.node.targets[0] : item.node;
+						info.likeCount = node.likeCount;
+						info.viewerHasLiked = node.viewerHasLiked;
+						info.author = node.user.username;
+						info.createdAt = node.createdAt;
+						info.tags = node.tags ?
+							node.tags.map(tag => {
+								return tag.title;
+							}) :
+							[node.user.jobTitle];
+						info.tags = info.tags.join('/');
+						info.title = node.title;
+						info.originalUrl = node.originalUrl;
+						info.id = node.id;
+						info.postId = info.originalUrl.split('/')[4];
+						return info;
+					})
+				);
+			},
+			// 获取各个分类下tag列表
 			getTaglist(index) {
 				// 当前分类id
 				if (index === 0) {
@@ -231,25 +219,33 @@
 						];
 					});
 				}
-				console.log(this.tagList[0]);
 			},
 			update(idx) {
 				setTimeout(() => {
 					this.getArticlelist(idx).then(res => {
-						this.$refs[`me${idx}`][0].endSuccess(res);
-					}).catch((err) => {
-						this.$refs[`me${idx}`][0].endSuccess(res);
+						this.setDataList(res,idx);
+						this.$refs[`me${idx}`][0].endSuccess(res.pageInfo.hasNextPage);
+					}).catch(err => {
+						this.$refs[`me${idx}`][0].endErr();
 					});
-				}, 1000);
+				}, 600);
 			},
 			reset(idx) {
-				this.dataList[idx] = [];
+				// 备份原数据
+				const endCursor = this.pageInfos[this.categories[idx].title].endCursor;
+				const hasNextPage = this.pageInfos[this.categories[idx].title].hasNextPage;
+				// 清空原数据
 				this.pageInfos[this.categories[idx].title].endCursor = '';
 				this.pageInfos[this.categories[idx].title].hasNextPage = true;
 				this.getArticlelist(idx).then(res => {
-					this.$refs[`me${idx}`][0].endSuccess(res);
-				}).catch((err) => {
-					this.$refs[`me${idx}`][0].endSuccess(res);
+					this.dataList[idx] = [];
+					this.setDataList(res,idx);
+					this.$refs[`me${idx}`][0].endSuccess(res.pageInfo.hasNextPage);
+				}).catch(err => {
+					// 失败则恢复原样
+					this.pageInfos[this.categories[idx].title].endCursor = endCursor;
+					this.pageInfos[this.categories[idx].title].hasNextPage = hasNextPage;
+					this.$refs[`me${idx}`][0].endErr();
 				})
 			}
 		},
@@ -257,6 +253,11 @@
 			this.getCategories();
 		},
 		onNavigationBarSearchInputClicked() {
+			uni.navigateTo({
+				url: '../juejinSearch/juejinSearch'
+			});
+		},
+		onNavigationBarButtonTap(e) {
 			uni.navigateTo({
 				url: '../juejinSearch/juejinSearch'
 			});

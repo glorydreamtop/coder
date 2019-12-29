@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<mescroll-uni top="80" class="scroll-item" @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback">
+		<mescroll-uni top="80" class="scroll-item" @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback" @down="downCallback">
 			<view>
 				<view class="card flex justify-start align-center margin-bottom-sm padding-sm" v-for="(item,index) in dataList" :key="item.id">
 					<image class="avatar margin-right-sm" :src="item.avatarHd" mode="widthFix"></image>
@@ -28,12 +28,19 @@
 	export default {
 		props: {
 			mescrollOption: Object,
-			dataList: Array,
+			dataListprop: Array,
 		},
 		data() {
 			return {
-				mescroll: null
+				mescroll: null,
+				dataList: []
 			};
+		},
+		watch:{
+			// 此处不能用箭头函数,箭头函数会在上下文中寻找this
+			dataListprop:function(val){
+				this.dataList = val;
+			}
 		},
 		components: {
 			MescrollUni
@@ -48,14 +55,14 @@
 			upCallback(mescroll) {
 				this.$emit('up');
 			},
+			downCallback(mescroll) {
+				this.$emit('down');
+			},
 			follow(id,type,index){
 				type = type ? 'unfollow' : 'follow';
 				follow(id,type).then(res => {
-					console.log(res.s);
 					if(res.s === 1){
-						const followedData = this.dataList[index];
-						followedData.viewerIsFollowing = !followedData.viewerIsFollowing;
-						this.dataList[index] = followedData;
+						this.dataList[index].viewerIsFollowing = !this.dataList[index].viewerIsFollowing;
 					}
 				})
 			}
@@ -63,7 +70,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.card {
 		height: auto;
 		width: 96vw;

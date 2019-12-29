@@ -4,10 +4,10 @@
 			<view :class="currentsearchType === item.type ? 'text-blue' : ''" v-for="(item,index) in searchTypes" :key="item.type" @tap="selectType(item.type,index)">{{ item.title }}</view>
 		</view>
 		<view class="resList" v-show="currentsearchType === searchTypes[0].type">
-			<mescroll-item class="me" ref="ARTICLE" top="80" :mescrollOption="mescrollOption" :dataList="dataList[0]" @up="update" @down="reset" />
+			<mescroll-item class="me" ref="ARTICLE" top="80" :mescrollOption="mescrollOption" :dataListprop="dataList[0]" @up="update" @down="reset" />
 		</view>
 		<view class="resList" v-show="currentsearchType === searchTypes[1].type">
-			<user-item ref="USER" class="me" :mescrollOption="mescrollOption" :dataList="dataList[1]" @up="update" />
+			<user-item ref="USER" class="me" :mescrollOption="mescrollOption" :dataListprop="dataList[1]" @up="update" @down="reset" />
 		</view>
 	</view>
 </template>
@@ -27,8 +27,7 @@
 		},
 		data() {
 			return {
-				// mescroll组件配置
-				mescrollOption: config.mescrollOption,
+				mescrollOption: config.mescrollOption,// mescroll组件配置
 				dataList: [
 					[],
 					[]
@@ -46,17 +45,13 @@
 					}
 				],
 				currentsearchType: 'USER',
+				currentsearchIndex:1,
 				endCursor: ''
 			};
 		},
 		methods: {
 			search() {
-				let idx;
-				// 当前搜索类型
-				this.searchTypes.forEach((item, index) => {
-					if (item.type === this.currentsearchType)
-						idx = index;
-				})
+				const idx = this.currentsearchIndex;
 				console.log(idx);
 				this.endCursor = this.searchTypes[idx].endCursor
 				const data = {
@@ -75,20 +70,7 @@
 						after: this.endCursor
 					}
 				};
-				return new Promise((resolve, reject) => {
-					search(data)
-						.then(res => {
-							// 分页标记
-							const hasNextPage = res.pageInfo.hasNextPage;
-							this.searchTypes[idx].endCursor = res.pageInfo.endCursor;
-							this.setDataList(res.edges, idx);
-							resolve(hasNextPage);
-						})
-						.catch(err => {
-							console.log(err);
-							reject('faild');
-						});
-				});
+				return search(data);
 			},
 			setDataList(edgesList, idx) {
 				this.dataList[idx] = this.dataList[idx].concat(
@@ -109,35 +91,59 @@
 				);
 			},
 			selectType(type,index) {
+				this.currentsearchIndex = index;
 				this.currentsearchType = type;
 				if(this.dataList[index].length === 0){
-					this.search();
+					this.update();
 				}
 				
 			},
 			update() {
 				this.search().then(res => {
-					this.$refs[this.currentsearchType].endSuccess(res);
+					const idx = this.currentsearchIndex;
+					// 分页标记
+					const hasNextPage = res.pageInfo.hasNextPage;
+					this.searchTypes[idx].endCursor = res.pageInfo.endCursor;
+					this.setDataList(res.edges, idx);
+					this.$refs[this.currentsearchType].endSuccess(hasNextPage);
+				}).catch(err => {
+					this.$refs[this.currentsearchType].endErr();
 				});
 			},
 			reset(){
-				this.dataList[0] = [];
-				this.searchTypes[0].endCursor = '';
-				this.search();
+				const idx = this.currentsearchIndex;
+				// 备份原数据
+				const endCursor = this.searchTypes[idx].endCursor;
+				// 清空原数据
+				this.searchTypes[idx].endCursor = '';
+				this.search().then(res => {
+					const idx = this.currentsearchIndex;;
+					this.dataList[idx] = [];
+					// 分页标记
+					const hasNextPage = res.pageInfo.hasNextPage;
+					this.searchTypes[idx].endCursor = res.pageInfo.endCursor;
+					this.setDataList(res.edges, idx);
+					this.$refs[this.currentsearchType].endSuccess(hasNextPage);
+				}).catch(err => {
+					// 失败则恢复原样
+					this.searchTypes[idx].endCursor = endCursor;
+					this.$refs[this.currentsearchType].endErr();
+				});
 			}
 		},
 		onNavigationBarSearchInputConfirmed(e) {
-			console.log(e);
 			this.serachText = e.text;
 			this.dataList = [
 				[],
 				[]
 			];
 			this.mescrollOption.upOption.page.num = 0;
-			this.endCursor = '';
-			this.search().then(res => {
-				uni.hideKeyboard();
-			});
+			this.searchTypes.forEach(item => {
+				item.endCursor = '';
+			})
+			this.reset();
+			uni.hideKeyboard();
+		
 		}
 	};
 </script>
@@ -152,7 +158,6 @@
 		width: 96vw;
 		margin: 0 auto;
 		height: auto;
-
 		>view {
 			background-color: #dbdbdb;
 			padding: 12upx 16upx;

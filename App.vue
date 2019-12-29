@@ -1,16 +1,6 @@
 <script>
 	import Vue from 'vue'
 	export default {
-		globalData: {
-			juejin: {
-				token: '',
-				userId: '',
-				clientId: '',
-				avatarLarge: '',
-				username: ''
-			}
-
-		},
 		onLaunch: function() {
 
 		},
