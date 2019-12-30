@@ -61,7 +61,8 @@
 	"mescrollOption":{
 		"downOption": {
 			"use": false,
-			"auto": false
+			"auto": false,
+			"textOutOffset": "放开我,我要刷新啦~"
 		},
 		"upOption": {
 			"use": true,

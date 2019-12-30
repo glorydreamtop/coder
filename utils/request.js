@@ -3,7 +3,7 @@ import {
 } from './funcitons';
 import urls from './urls';
 //get globalData
-const juejinHeaders = uni.getStorageSync('juejinHeaders');
+let juejinHeaders = uni.getStorageSync('juejinHeaders');
 //base ajax
 const ajax = (url, method, data, headerType) => {
 	const header1 = {
@@ -83,35 +83,48 @@ const del = (url, data, headerType) => ajax(url, 'DELETE', data, headerType)
 //login
 const login = (data) => {
 	const type = data.phoneNumber ? 'phoneNumber' : 'email';
-	return post(`${urls.login}${type}`, data, 'juejin').then(res => {
-		const juejinHeaders = {};
-		const juejinInfo = {};
-		[juejinHeaders.token, juejinHeaders.userId, juejinHeaders.clientId, juejinInfo.avatarHd, juejinInfo.userName,
-			juejinInfo.jobTitle, juejinInfo.account, juejinInfo.password
-		] = [
-			res.token,
-			res.userId,
-			res.clientId,
-			res.user.avatarHd,
-			res.user.username,
-			res.user.jobTitle,
-			data.phoneNumber || data.email,
-			data.password
-		]
-		uni.setStorage({
-			key: 'juejinHeaders',
-			data: juejinHeaders
-		}).then(res => {
+	return new Promise((resolve, reject) => {
+		post(`${urls.login}${type}`, data, 'juejin').then(res => {
+			const Headers = {};
+			[Headers.token, Headers.userId, Headers.clientId] = [
+				res.token,
+				res.userId,
+				res.clientId
+			]
+			uni.setStorage({
+				key: 'juejinHeaders',
+				data: Headers
+			}).then(res => {
+				juejinHeaders = uni.getStorageSync('juejinHeaders');
+				resolve('success')
+			})
+		})
+	})
+}
+
+//get userInfo
+const userInfo = (data) => {
+	const current_uid = data ? data : juejinHeaders.userId;
+	data = {
+		src: 'web',
+		uid: juejinHeaders.userId,
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		current_uid
+	}
+	return new Promise((resolve, reject) => {
+		get(urls.userInfo, data, 'noHeader').then(res => {
+			const juejinInfo = res.d;
 			uni.setStorage({
 				key: 'juejinInfo',
 				data: juejinInfo
 			}).then(res => {
-				console.log(juejinInfo);
-			});
-		});
-
+				resolve(juejinInfo);
+			})
+		})
 	})
 }
+
 //get categories
 const categories = (data) => get(urls.categories, data, 'juejin').then(res => {
 	return Promise.resolve(res.d.categoryList);
@@ -151,7 +164,7 @@ const collection = (data) => {
 		token: juejinHeaders.token,
 		page: data.page
 	}
-	return new Promise((resolve) => {
+	return new Promise(resolve => {
 		get(`${urls.collection}${id}`, data, 'juejin').then(res => {
 			res = res.d.collectionSets;
 			resolve(res)
@@ -178,21 +191,37 @@ const follow = (followee) => {
 		follower: juejinHeaders.userId,
 		followee: followee
 	}
-	return get(urls.follow,data,'noHeader')
+	return get(urls.follow, data, 'noHeader')
 }
 //get one pic&sentence
-const oneSpider = () => get(urls.one, null, 'noHeader').then(res => {
-	//console.log(res);
-	const imgReg = /\(http:\/\/image.wufazhuce.com\/\S+\)/g;
-	const stcReg = /id="quote">\S+</g;
-	//console.log(res.match(reg)[0].substring(1, res.match(reg)[0].indexOf(')')));
-	const imgUrl = res.match(imgReg)[0].substring(1, res.match(imgReg)[0].indexOf(')'));
-	const sentence = res.match(stcReg)[0].substring(11, res.match(stcReg)[0].indexOf('<'));
-	return Promise.resolve({
-		imgUrl,
-		sentence
+const oneSpider = () => {
+	return new Promise((resolve, reject) => {
+
+		get(urls.one, null, 'noHeader').then(res => {
+
+			// const imgReg = /\(http:\/\/image.wufazhuce.com\/\S+\)/g;
+			const stcReg = /id="quote">\S+</g;
+			// const imgUrl = res.match(imgReg)[0].substring(1, res.match(imgReg)[0].indexOf(')'));
+			const sentence = res.match(stcReg)[0].substring(11, res.match(stcReg)[0].indexOf('<'));
+			picSpider().then(res => {
+				const imgUrl = res;
+				resolve({
+					imgUrl,
+					sentence
+				})
+			})
+			
+		})
 	})
-})
+}
+const picSpider = () => {
+	return new Promise((resolve, reject) => {
+		get(urls.pics.xjh, null, 'noHeader').then(res => {
+			resolve(`https:${res.img}`);
+		})
+	})
+
+}
 
 
 export {
@@ -201,6 +230,7 @@ export {
 	put,
 	del,
 	login,
+	userInfo,
 	categories,
 	articleList,
 	search,

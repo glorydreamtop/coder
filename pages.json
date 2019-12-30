@@ -27,7 +27,7 @@
 			}
 		},
 		{
-			"path": "pages/girls/girls",
+			"path": "pages/discover/discover",
 			"style": {
 				"disableScroll": true,
 				"navigationStyle": "custom",
@@ -79,15 +79,16 @@
 		}
 	],
 	"tabBar": {
+		"iconWidth":"30px",
 		"backgroundColor": "#FFF",
 		"list": [{
 			"pagePath": "pages/juejin/juejin",
 			"iconPath": "static/tabbar/juejin.png",
 			"selectedIconPath": "static/tabbar/juejin_cur.png"
 		}, {
-			"pagePath": "pages/girls/girls",
-			"iconPath": "static/tabbar/girls.png",
-			"selectedIconPath": "static/tabbar/girls_cur.png"
+			"pagePath": "pages/discover/discover",
+			"iconPath": "static/tabbar/discover.png",
+			"selectedIconPath": "static/tabbar/discover_cur.png"
 		}, {
 			"pagePath": "pages/users/users",
 			"iconPath": "static/tabbar/users.png",

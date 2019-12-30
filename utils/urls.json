@@ -7,5 +7,8 @@
 	"like":"https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/",
 	"userInfo":"https://user-storage-api-ms.juejin.im/v1/getUserInfo",
 	"follow":"https://follow-api-ms.juejin.im/v1/follow",
-	"one":"http://m.wufazhuce.com"
+	"one":"http://m.wufazhuce.com",
+	"pics":{
+		"xjh":"https://img.xjh.me/random_img.php?type=bg&ctype=nature&return=json&device=mobile"
+	}
 }

@@ -16,25 +16,41 @@
 						<text class="loading" v-if="isLoading === 2"></text>
 					</button>
 				</form>
-				<view class="infoBox flex justify-between align-center">
-					<view class="personal flex justify-between align-center">
-						<image :src="juejinInfo.avatarHd" class="cu-avatar lg round" mode="widthFix"></image>
-						<view class="flex flex-direction justify-between margin-left-sm">
-							<text class="text-lg">{{ juejinInfo.userName }}</text>
-							<text class="text-gray">{{ juejinInfo.jobTitle }}</text>
+				<view class="infoBox">
+					<view class="flex justify-between align-center">
+						<view class="personal flex justify-between align-center">
+							<image :src="juejinInfo.avatarHd" class="cu-avatar lg round" mode="widthFix"></image>
+							<view class="flex flex-direction justify-between margin-left-sm">
+								<text class="text-lg">{{ juejinInfo.username }}</text>
+								<text class="text-gray">{{ juejinInfo.jobTitle }}</text>
+							</view>
+						</view>
+						<view class="base-num flex justify-between text-center">
+							<view class=" flex flex-direction justify-between">
+								<text class="text-lg">赞</text>
+								<text>{{ juejinInfo.collectedEntriesCount }}</text>
+							</view>
+							<view class=" flex flex-direction justify-between text-center">
+								<text class="text-lg">收藏</text>
+								<text>{{ juejinInfo.collectionSetCount }}</text>
+							</view>
+							<view class=" flex flex-direction justify-between text-center">
+								<text class="text-lg">读过</text>
+								<text>{{ juejinInfo.viewedEntriesCount }}</text>
+							</view>
 						</view>
 					</view>
-					<view class="flex justify-between text-center">
+					<view class="more-num flex justify-between align-center">
 						<view class=" flex flex-direction justify-between">
-							<text class="text-lg">赞</text>
+							<text class="text-lg">关注</text>
 							<text>{{ juejinInfo.collectedEntriesCount }}</text>
 						</view>
 						<view class=" flex flex-direction justify-between text-center">
-							<text class="text-lg">收藏</text>
+							<text class="text-lg">粉丝</text>
 							<text>{{ juejinInfo.collectionSetCount }}</text>
 						</view>
 						<view class=" flex flex-direction justify-between text-center">
-							<text class="text-lg">读过</text>
+							<text class="text-lg">专栏</text>
 							<text>{{ juejinInfo.viewedEntriesCount }}</text>
 						</view>
 					</view>
@@ -45,9 +61,8 @@
 </template>
 
 <script>
-import { login } from '../../utils/request';
+import { login, userInfo } from '../../utils/request';
 import { Toast } from '../../utils/funcitons';
-import { getUserInfo } from '../../utils/init';
 export default {
 	data() {
 		return {
@@ -55,12 +70,11 @@ export default {
 			isLoading: 1,
 			scrollLeft: true,
 			showLogin: false,
-			juejinInfo:null,
-			isLogin:false
+			juejinInfo: null,
+			isLogin: false
 		};
 	},
-	computed: {
-	},
+	computed: {},
 	methods: {
 		focus(index) {
 			this.inputFocus = index;
@@ -87,34 +101,32 @@ export default {
 			this.isLoading = 2;
 			login(values).then(res => {
 				this.inputFocus = 2;
-				getUserInfo().then(res => {
-					this.juejinInfo = res;
+				this.updateJuejinInfo().then(res => {
 					setTimeout(() => {
 						this.isLoading = 3;
-					}, 800);
+						this.isLogin = this.juejinInfo !== null ? true : false;
+					}, 500);
 				});
-
-				// uni.switchTab({
-				// 	url: '../juejin/juejin'
-				// });
 			});
 		},
 		updateJuejinInfo() {
-			const values = {};
-			if (this.juejinInfo.account.indexOf('@') !== -1) {
-				values.email = this.juejinInfo.account;
-			} else {
-				values.phoneNumber = this.juejinInfo.account;
-			}
-			values.password = this.juejinInfo.password;
-			login(values).then(res => {
-				Toast('更新成功');
-				uni.stopPullDownRefresh();
+			return new Promise((resolve, reject) => {
+				userInfo().then(res => {
+					uni.getStorage({
+						key:'juejinInfo'
+					}).then(res => {
+						this.juejinInfo = res[1].data;
+						resolve('success');
+					})
+					// this.juejinInfo = uni.getStorageInfoSync('juejinInfo');
+					
+				});
 			});
 		}
 	},
 	onPullDownRefresh() {
 		if (this.juejinInfo) {
+			this.juejinInfo = null
 			uni.removeStorage({
 				key: 'juejinInfo'
 			}).then(res => {
@@ -227,13 +239,21 @@ input {
 	width: 80vw;
 	height: auto;
 	padding: 5vw 0;
-
-	> view:last-child {
-		min-width: 8em;
-		height: 96upx;
-	}
 }
-
+.base-num{
+	min-width: 8em;
+	height: 96upx;
+}
+.more-num{
+	height: 96upx;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 20upx;
+	padding:0 10%;
+	box-sizing: border-box;
+	border-top: 1px solid #ececec;
+}
+	
 .personal {
 	> view {
 		height: 96upx;
