@@ -183,7 +183,7 @@ const changeCollect = (data, type) => {
 	return put(`${urls.collect}${type}`, data, 'juejin')
 }
 //follow
-const follow = (followee) => {
+const follow = (followee, type) => {
 	const data = {
 		src: 'web',
 		token: juejinHeaders.token,
@@ -191,7 +191,7 @@ const follow = (followee) => {
 		follower: juejinHeaders.userId,
 		followee: followee
 	}
-	return get(urls.follow, data, 'noHeader')
+	return get(`${urls.follow}${type}`,data,'noHeader')
 }
 //get one pic&sentence
 const oneSpider = () => {

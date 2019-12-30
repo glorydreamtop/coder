@@ -1,8 +1,8 @@
 <template>
 	<view class="content">
-		<mescroll-uni top="80" class="scroll-item" @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback">
+		<mescroll-uni top="80" class="scroll-item" @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback" @down="downCallback">
 			<view>
-				<view class="card flex justify-start align-center margin-bottom-sm padding-sm" v-for="item in dataList" :key="item.id">
+				<view class="card flex justify-start align-center margin-bottom-sm padding-sm" v-for="(item,index) in dataList" :key="item.id">
 					<image class="avatar margin-right-sm" :src="item.avatarHd" mode="widthFix"></image>
 					<view class="info flex flex-direction justify-between">
 						<view class="user flex flex-direction">
@@ -13,8 +13,8 @@
 							{{`${item.postedPostsCount}个专栏·${item.followersCount}人关注`}}
 						</view>
 					</view>
-					<view :class="['btn',item.viewerIsFollowing ? 'followed' : 'unfollowed']">
-						关注
+					<view :class="['btn',item.viewerIsFollowing ? 'followed' : 'unfollowed']" @tap="follow(item.id,item.viewerIsFollowing,index)">
+						{{item.viewerIsFollowing ? '已关注' : '关注'}}
 					</view>
 				</view>
 			</view>
@@ -28,12 +28,19 @@
 	export default {
 		props: {
 			mescrollOption: Object,
-			dataList: Array,
+			dataListprop: Array,
 		},
 		data() {
 			return {
-				mescroll: null
+				mescroll: null,
+				dataList: []
 			};
+		},
+		watch:{
+			// 此处不能用箭头函数,箭头函数会在上下文中寻找this
+			dataListprop:function(val){
+				this.dataList = val;
+			}
 		},
 		components: {
 			MescrollUni
@@ -48,16 +55,22 @@
 			upCallback(mescroll) {
 				this.$emit('up');
 			},
-			follow(followee){
-				follow(followee).then(res => {
-					console.log(res.m);
+			downCallback(mescroll) {
+				this.$emit('down');
+			},
+			follow(id,type,index){
+				type = type ? 'unfollow' : 'follow';
+				follow(id,type).then(res => {
+					if(res.s === 1){
+						this.dataList[index].viewerIsFollowing = !this.dataList[index].viewerIsFollowing;
+					}
 				})
 			}
 		}
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.card {
 		height: auto;
 		width: 96vw;
@@ -83,12 +96,12 @@
 			height: 48upx;
 			border-radius: 8upx;
 			border: 1px solid #006CFF;
-			color: #006CFF;
 			text-align: center;
 			margin-left: auto;
 		}
 		.unfollowed{
 			color: #006CFF;
+			background-color:#FFFFFF;
 		}
 		.followed{
 			color: #FFFFFF;

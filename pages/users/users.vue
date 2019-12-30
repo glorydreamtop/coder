@@ -66,12 +66,11 @@ import { Toast } from '../../utils/funcitons';
 export default {
 	data() {
 		return {
-			inputFocus: 2,
-			isLoading: 1,
-			scrollLeft: true,
-			showLogin: false,
-			juejinInfo: null,
-			isLogin: false
+			inputFocus: 2, // 0:账号框,1:密码框,2空状态
+			isLoading: 1, // 1:未登录,2:登录中,3:已登录
+			scrollLeft: true, // 是否显示个人信息框
+			juejinInfo: null, // 掘金用户信息
+			isLogin: false // 登录状态
 		};
 	},
 	computed: {},
@@ -113,20 +112,19 @@ export default {
 			return new Promise((resolve, reject) => {
 				userInfo().then(res => {
 					uni.getStorage({
-						key:'juejinInfo'
+						key: 'juejinInfo'
 					}).then(res => {
 						this.juejinInfo = res[1].data;
 						resolve('success');
-					})
+					});
 					// this.juejinInfo = uni.getStorageInfoSync('juejinInfo');
-					
 				});
 			});
 		}
 	},
 	onPullDownRefresh() {
 		if (this.juejinInfo) {
-			this.juejinInfo = null
+			this.juejinInfo = null;
 			uni.removeStorage({
 				key: 'juejinInfo'
 			}).then(res => {
@@ -143,7 +141,6 @@ export default {
 			this.isLoading = 1;
 			uni.stopPullDownRefresh();
 		}
-		// this.updateJuejinInfo();
 	},
 	onLoad() {
 		this.juejinInfo = uni.getStorageSync('juejinInfo') || null;
@@ -240,20 +237,20 @@ input {
 	height: auto;
 	padding: 5vw 0;
 }
-.base-num{
+.base-num {
 	min-width: 8em;
 	height: 96upx;
 }
-.more-num{
+.more-num {
 	height: 96upx;
 	width: 100%;
 	margin: 0 auto;
 	margin-top: 20upx;
-	padding:0 10%;
+	padding: 0 10%;
 	box-sizing: border-box;
 	border-top: 1px solid #ececec;
 }
-	
+
 .personal {
 	> view {
 		height: 96upx;

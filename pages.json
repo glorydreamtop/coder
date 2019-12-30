@@ -10,7 +10,7 @@
 					"titleNView": {
 						"type": "default",
 						"searchInput": {
-							"placeholder": "快速搜索文章、用户、标签",
+							"placeholder": "快速搜索文章、用户",
 							"borderRadius": "20px",
 							"disabled":true,
 							"backgroundColor": "rgba(255,255,255)"
@@ -51,7 +51,7 @@
 					"titleNView": {
 						"type": "default",
 						"searchInput": {
-							"placeholder": "快速搜索文章、用户、标签",
+							"placeholder": "快速搜索文章、用户",
 							"borderRadius": "20px",
 							"backgroundColor": "rgba(255,255,255)",
 							"autoFocus": true
