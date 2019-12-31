@@ -154,6 +154,7 @@ const changeLike = (data, dislike) => {
 	}
 	return put(`${urls.like}${data}`, null, 'juejin')
 }
+
 //get collection set
 const collection = (data) => {
 	const id = data.id;
@@ -171,6 +172,7 @@ const collection = (data) => {
 		})
 	})
 }
+
 //collect
 const changeCollect = (data, type) => {
 	data = {
@@ -182,6 +184,7 @@ const changeCollect = (data, type) => {
 	}
 	return put(`${urls.collect}${type}`, data, 'juejin')
 }
+
 //follow
 const follow = (followee, type) => {
 	const data = {
@@ -193,12 +196,11 @@ const follow = (followee, type) => {
 	}
 	return get(`${urls.follow}${type}`,data,'noHeader')
 }
+
 //get one pic&sentence
 const oneSpider = () => {
 	return new Promise((resolve, reject) => {
-
 		get(urls.one, null, 'noHeader').then(res => {
-
 			// const imgReg = /\(http:\/\/image.wufazhuce.com\/\S+\)/g;
 			const stcReg = /id="quote">\S+</g;
 			// const imgUrl = res.match(imgReg)[0].substring(1, res.match(imgReg)[0].indexOf(')'));
@@ -214,15 +216,14 @@ const oneSpider = () => {
 		})
 	})
 }
+
 const picSpider = () => {
 	return new Promise((resolve, reject) => {
 		get(urls.pics.xjh, null, 'noHeader').then(res => {
 			resolve(`https:${res.img}`);
 		})
 	})
-
 }
-
 
 export {
 	get,

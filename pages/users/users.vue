@@ -11,47 +11,43 @@
 						<input name="password" placeholder="密码" value="adidas0520" @focus="focus(1)" @blur="focus(2)" password="true" />
 						<view class="focus" v-if="inputFocus === 1"></view>
 					</view>
-					<button :class="[inputFocus === 1 ? 'btn_show' : 'btn_hidden', 'btn']" formType="submit">
+					<button v-if="isLoading < 4" :class="[inputFocus === 1 ? 'btn_show' : 'btn_hidden', 'btn']" formType="submit">
 						<text>登录</text>
 						<text class="loading" v-if="isLoading === 2"></text>
 					</button>
 				</form>
 				<view class="infoBox">
-					<view class="flex justify-between align-center">
-						<view class="personal flex justify-between align-center">
-							<image :src="juejinInfo.avatarHd" class="cu-avatar lg round" mode="widthFix"></image>
-							<view class="flex flex-direction justify-between margin-left-sm">
-								<text class="text-lg">{{ juejinInfo.username }}</text>
-								<text class="text-gray">{{ juejinInfo.jobTitle }}</text>
-							</view>
-						</view>
-						<view class="base-num flex justify-between text-center">
-							<view class=" flex flex-direction justify-between">
-								<text class="text-lg">赞</text>
-								<text>{{ juejinInfo.collectedEntriesCount }}</text>
-							</view>
-							<view class=" flex flex-direction justify-between text-center">
-								<text class="text-lg">收藏</text>
-								<text>{{ juejinInfo.collectionSetCount }}</text>
-							</view>
-							<view class=" flex flex-direction justify-between text-center">
-								<text class="text-lg">读过</text>
-								<text>{{ juejinInfo.viewedEntriesCount }}</text>
-							</view>
+					<view class="personal flex justify-start align-center">
+						<image :src="juejinInfo.avatarHd" class="cu-avatar lg round" mode="widthFix"></image>
+						<view class="flex flex-direction justify-between margin-left-sm">
+							<text class="text-lg">{{ juejinInfo.username }}</text>
+							<text class="text-gray">{{ juejinInfo.jobTitle }}</text>
 						</view>
 					</view>
-					<view class="more-num flex justify-between align-center">
+					<view :class="['base-num','flex','justify-between','text-center',isLoading === 4 ? 'base-num_show' : 'base-num_hidden']">
 						<view class=" flex flex-direction justify-between">
-							<text class="text-lg">关注</text>
+							<text class="text-lg">赞</text>
 							<text>{{ juejinInfo.collectedEntriesCount }}</text>
 						</view>
 						<view class=" flex flex-direction justify-between text-center">
-							<text class="text-lg">粉丝</text>
+							<text class="text-lg">收藏</text>
 							<text>{{ juejinInfo.collectionSetCount }}</text>
 						</view>
 						<view class=" flex flex-direction justify-between text-center">
-							<text class="text-lg">专栏</text>
+							<text class="text-lg">读过</text>
 							<text>{{ juejinInfo.viewedEntriesCount }}</text>
+						</view>
+						<view class=" flex flex-direction justify-between text-center">
+							<text class="text-lg">关注</text>
+							<text>{{ juejinInfo.followeesCount }}</text>
+						</view>
+						<view class=" flex flex-direction justify-between text-center">
+							<text class="text-lg">粉丝</text>
+							<text>{{ juejinInfo.followersCount }}</text>
+						</view>
+						<view class=" flex flex-direction justify-between text-center">
+							<text class="text-lg">专栏</text>
+							<text>{{ juejinInfo.postedPostsCount }}</text>
 						</view>
 					</view>
 				</view>
@@ -67,7 +63,7 @@ export default {
 	data() {
 		return {
 			inputFocus: 2, // 0:账号框,1:密码框,2空状态
-			isLoading: 1, // 1:未登录,2:登录中,3:已登录
+			isLoading: 1, // 1:未登录,2:现在登录中,3:刚刚已登录,4:已登录
 			scrollLeft: true, // 是否显示个人信息框
 			juejinInfo: null, // 掘金用户信息
 			isLogin: false // 登录状态
@@ -104,6 +100,9 @@ export default {
 					setTimeout(() => {
 						this.isLoading = 3;
 						this.isLogin = this.juejinInfo !== null ? true : false;
+						setTimeout(() => {
+							this.isLoading = 4;
+						},300)
 					}, 500);
 				});
 			});
@@ -145,6 +144,7 @@ export default {
 	onLoad() {
 		this.juejinInfo = uni.getStorageSync('juejinInfo') || null;
 		this.isLogin = this.juejinInfo !== null ? true : false;
+		this.isLoading = this.isLogin ? 4 : 1;
 	}
 };
 </script>
@@ -157,11 +157,10 @@ export default {
 .juejin {
 	height: auto;
 	width: 90vw;
-	padding: 5vw;
+	padding: 0 5vw;
 	margin: 20upx auto;
 	border-radius: 18upx;
-	overflow: hidden;
-
+	overflow: auto;
 	> view {
 		width: 165vw;
 		padding: 0;
@@ -184,6 +183,8 @@ export default {
 	}
 
 	.btn {
+		min-height: 0;
+		max-height: 68upx;
 		transition: height linear 0.3s;
 		transition-delay: 0.3s;
 		border: none;
@@ -238,22 +239,30 @@ input {
 	padding: 5vw 0;
 }
 .base-num {
-	min-width: 8em;
-	height: 96upx;
-}
-.more-num {
-	height: 96upx;
+	transition: all linear 0.3s;
+	transition-delay: 0.3s;
 	width: 100%;
 	margin: 0 auto;
+	overflow: hidden;
+}
+
+.base-num_hidden{
+	max-height: 0;
+	margin-top: 0upx;
+}
+
+.base-num_show{
+	max-height: 96upx;
 	margin-top: 20upx;
-	padding: 0 10%;
-	box-sizing: border-box;
-	border-top: 1px solid #ececec;
 }
 
 .personal {
 	> view {
 		height: 96upx;
+	}
+	> image {
+		width: 144upx;
+		height: 144upx;
 	}
 }
 
