@@ -1,6 +1,6 @@
 <template>
 	<view class="all">
-		<view class="juejin bg-white">
+		<view class="boxes juejin bg-white">
 			<view :class="['flex', 'justify-between', isLoading === 3 ? 'toleft' : '', isLogin ? 'onleft' : '']">
 				<form class="inputs flex flex-direction justify-between" @submit="login">
 					<view class="">
@@ -51,6 +51,11 @@
 						</view>
 					</view>
 				</view>
+			</view>
+		</view>
+		<view class="boxes bg-white">
+			<view class="">
+				切换每日一图来源
 			</view>
 		</view>
 	</view>
@@ -154,24 +159,30 @@ export default {
 	font-size: 28upx;
 }
 
-.juejin {
+.boxes{
 	height: auto;
-	width: 90vw;
-	padding: 0 5vw;
+	width: 94vw;
+	padding: 5vw;
+	box-sizing: border-box;
 	margin: 20upx auto;
 	border-radius: 18upx;
+}
+ 
+.juejin {
 	overflow: auto;
 	> view {
-		width: 165vw;
+		width: 178vw;
+		box-sizing: border-box;
 		padding: 0;
+		padding-right: 5vw;
 	}
 }
 
 .inputs {
-	width: 70vw;
+	width: 84vw;
 	height: auto;
-	padding: 5vw;
-
+	box-sizing: border-box;
+border: 1px solid #000000;
 	> view {
 		width: 50%;
 		margin: 0 auto;
@@ -234,9 +245,10 @@ input {
 }
 
 .infoBox {
-	width: 80vw;
+	width: 84vw;
 	height: auto;
-	padding: 5vw 0;
+	box-sizing: border-box;
+	border: 1px solid #000000;
 }
 .base-num {
 	transition: all linear 0.3s;
@@ -268,11 +280,11 @@ input {
 
 .toleft {
 	animation: toleft 0.3s linear;
-	transform: translateX(-85vw);
+	transform: translateX(-87vw);
 }
 
 .onleft {
-	transform: translateX(-85vw);
+	transform: translateX(-87vw);
 }
 
 @keyframes toleft {
@@ -281,7 +293,7 @@ input {
 	}
 
 	to {
-		transform: translateX(-85vw);
+		transform: translateX(-87vw);
 	}
 }
 
