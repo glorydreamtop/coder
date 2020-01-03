@@ -53,9 +53,12 @@
 				</view>
 			</view>
 		</view>
-		<view class="boxes bg-white">
+		<view class="boxes bg-white flex justify-between align-center">
 			<view class="">
 				切换每日一图来源
+			</view>
+			<view class="btns">
+				<button :class="['cu-btn','round',item.selected ? `bg-${item.color}` : `line-${item.color}`,'shadow','margin-right-xs','sm']" @tap="checkPic(item,index)" v-for="(item,index) in pics" :key="item.name">{{item.name}}</button>
 			</view>
 		</view>
 	</view>
@@ -64,6 +67,7 @@
 <script>
 import { login, userInfo } from '../../utils/request';
 import { Toast } from '../../utils/funcitons';
+import { pics } from './pics';
 export default {
 	data() {
 		return {
@@ -71,7 +75,8 @@ export default {
 			isLoading: 1, // 1:未登录,2:现在登录中,3:刚刚已登录,4:已登录
 			scrollLeft: true, // 是否显示个人信息框
 			juejinInfo: null, // 掘金用户信息
-			isLogin: false // 登录状态
+			isLogin: false ,// 登录状态
+			pics
 		};
 	},
 	computed: {},
@@ -124,6 +129,31 @@ export default {
 					// this.juejinInfo = uni.getStorageInfoSync('juejinInfo');
 				});
 			});
+		},
+		checkPic(info,index){
+			let url = info.url;
+			const currentPic = uni.getStorageSync('currentPic');
+			if(index === 2){
+				this.pics[2].selected = true;
+				const onePic = uni.getStorageInfoSync('onePic');
+				uni.setStorage({
+					key:'currentPic',
+					data:onePic
+				})
+			}else{
+				if(info.url !== currentPic){
+					uni.setStorage({
+						key:'currentPic',
+						data:url
+					}).then(res => {
+						this.pics.forEach(item =>{
+							item.selected = item.name === info.name ? true : false;
+						})
+					})
+				}
+			}
+			
+			
 		}
 	},
 	onPullDownRefresh() {
@@ -150,6 +180,9 @@ export default {
 		this.juejinInfo = uni.getStorageSync('juejinInfo') || null;
 		this.isLogin = this.juejinInfo !== null ? true : false;
 		this.isLoading = this.isLogin ? 4 : 1;
+		this.pics.forEach(item =>{
+			item.selected = item.url === uni.getStorageSync('currentPic') ? true : false;
+		})
 	}
 };
 </script>
@@ -182,7 +215,6 @@ export default {
 	width: 84vw;
 	height: auto;
 	box-sizing: border-box;
-border: 1px solid #000000;
 	> view {
 		width: 50%;
 		margin: 0 auto;
@@ -248,7 +280,6 @@ input {
 	width: 84vw;
 	height: auto;
 	box-sizing: border-box;
-	border: 1px solid #000000;
 }
 .base-num {
 	transition: all linear 0.3s;
@@ -280,11 +311,11 @@ input {
 
 .toleft {
 	animation: toleft 0.3s linear;
-	transform: translateX(-87vw);
+	transform: translateX(-89vw);
 }
 
 .onleft {
-	transform: translateX(-87vw);
+	transform: translateX(-89vw);
 }
 
 @keyframes toleft {
@@ -293,7 +324,7 @@ input {
 	}
 
 	to {
-		transform: translateX(-87vw);
+		transform: translateX(-89vw);
 	}
 }
 
@@ -304,6 +335,12 @@ input {
 
 	to {
 		width: 100%;
+	}
+}
+
+.btns{
+	>button{
+		width: 5em;
 	}
 }
 </style>

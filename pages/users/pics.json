@@ -1,0 +1,15 @@
+{
+	"pics": [{
+			"name": "xjh",
+			"url": "https://img.xjh.me/random_img.php?type=bg&ctype=nature&return=302&device=mobile",
+			"color": "cyan",
+			"selected":false
+		},
+		{
+			"name": "btstu",
+			"url": "http://api.btstu.cn/sjbz/zsy.php",
+			"color": "blue",
+			"selected":false
+		}
+	]
+}

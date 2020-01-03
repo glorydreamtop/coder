@@ -199,18 +199,16 @@ const follow = (followee, type) => {
 
 //get one pic&sentence
 const oneSpider = () => {
+	const data ={
+		key:'6e6c7a8ec059d6bfe58eba3b1f53a5d0'
+	}
 	return new Promise((resolve, reject) => {
-		get(urls.one, null, 'noHeader').then(res => {
-			// const imgReg = /\(http:\/\/image.wufazhuce.com\/\S+\)/g;
-			const stcReg = /id="quote">\S+</g;
-			// const imgUrl = res.match(imgReg)[0].substring(1, res.match(imgReg)[0].indexOf(')'));
-			const sentence = res.match(stcReg)[0].substring(11, res.match(stcReg)[0].indexOf('<'));
-			picSpider().then(res => {
-				const imgUrl = res;
-				resolve({
-					imgUrl,
-					sentence
-				})
+		get(urls.one, data, 'noHeader').then(res => {
+			const sentence = res.newslist[0].word;
+			const imgUrl = res.newslist[0].imgurl;
+			resolve({
+				imgUrl,
+				sentence
 			})
 			
 		})
@@ -218,9 +216,12 @@ const oneSpider = () => {
 }
 
 const picSpider = () => {
+	const url = uni.getStorageSync('dailyPic');
 	return new Promise((resolve, reject) => {
-		get(urls.pics.xjh, null, 'noHeader').then(res => {
+		get(url, null, 'noHeader').then(res => {
 			resolve(`https:${res.img}`);
+		}).catch(err => {
+			reject(err)
 		})
 	})
 }
