@@ -226,6 +226,21 @@ const picSpider = () => {
 	})
 }
 
+const picSpider302 = (url) => {
+	return new Promise((resolve,reject) => {
+		uni.request({
+			url,
+			header:{
+				"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
+			},
+			success:(res) => {
+				console.log(res.header.location)
+				resolve(res.header.Location|| res.header.location);
+			}
+		})
+	})
+}
+
 export {
 	get,
 	post,
@@ -241,5 +256,6 @@ export {
 	collection,
 	changeCollect,
 	follow,
-	oneSpider
+	oneSpider,
+	picSpider302
 }

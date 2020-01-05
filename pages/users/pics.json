@@ -10,6 +10,12 @@
 			"url": "http://api.btstu.cn/sjbz/zsy.php",
 			"color": "blue",
 			"selected":false
+		},
+		{
+			"name": "one",
+			"url": "http://image.wufazhuce.com/FkdzcGb7HzmKWVGWDCmF5JmP07XO",
+			"color": "purple",
+			"selected":false
 		}
 	]
 }

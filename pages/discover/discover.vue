@@ -1,7 +1,7 @@
 <template>
 	<view class="bg">
 		<view class="mask"></view>
-		<image class="pic" :src="background" mode="aspectFill"></image>
+		<image v-if="background !== ''" class="pic" :src="background" mode="aspectFill"></image>
 		<view class="text-block flex flex-direction justify-end">
 			<text class="day text-white">{{ day }}</text>
 			<text class="year text-white">{{ `${month}.${year}` }}</text>
@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import { oneSpider } from '../../utils/request';
-import { parseTime } from '../../utils/funcitons';
+import { oneSpider,picSpider302 } from '../../utils/request';
+import { parseTime,Toast } from '../../utils/funcitons';
 export default {
 	data() {
 		return {
@@ -35,6 +35,7 @@ export default {
 			const now = new Date(new Date().toLocaleDateString()).getTime();
 			const lastTime = uni.getStorageSync('dailyWord_last_time') || 0;
 			if (now !== lastTime) {
+				Toast('获取今日一句');
 				oneSpider().then(res => {
 					const background = res.imgUrl;
 					const sentence = res.sentence;
@@ -53,20 +54,48 @@ export default {
 							uni.setStorage({
 								key: 'dailyWord_last_time',
 								data: now
+							}).then(res => {
+								Toast('今日已更新')
 							})
 						});
 					});
 				});
+			}else{
+				this.sentence = uni.getStorageSync('dailyWord') || '';
 			}
+		},
+		getPic302(){
+			const url = uni.getStorageSync('currentPic');
+			const Reg = /wufazhuce/g;
+			if(Reg.test(url)){
+				this.background = url;
+			}else{
+				picSpider302(uni.getStorageSync('currentPic')).then(res =>{
+					this.background = res;
+				})
+			}
+			
 		}
 	},
 	onLoad() {
-		this.setTime();
-		this.background = uni.getStorageSync('currentPic');
-		this.sentence = uni.getStorageSync('dailyWord') || '';
-		this.getSentence();
+		
 	},
-	onShow() {}
+	onShow() {
+		this.setTime();
+		this.getSentence();
+		this.background = '';
+		this.getPic302();
+	},
+	onHide(){
+		this.background = '';
+	},
+	onPullDownRefresh() {
+		this.background = '';
+		setTimeout(() => {
+			this.getPic302();
+			uni.stopPullDownRefresh();
+		},200)
+	}
 };
 </script>
 

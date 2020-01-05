@@ -143,7 +143,6 @@
 			})
 			this.reset();
 			uni.hideKeyboard();
-		
 		}
 	};
 </script>
