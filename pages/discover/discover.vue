@@ -78,11 +78,10 @@ export default {
 		}
 	},
 	onLoad() {
-		
-	},
-	onShow() {
 		this.setTime();
 		this.getSentence();
+	},
+	onShow() {
 		this.background = '';
 		this.getPic302();
 	},
