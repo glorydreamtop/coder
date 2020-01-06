@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<scroll-view scroll-x class="bg-white nav mescroll-touch-x" scroll-with-animation :scroll-left="scrollLeft">
+		<scroll-view scroll-x class="bg-white shadow nav mescroll-touch-x" scroll-with-animation :scroll-left="scrollLeft">
 			<view :class="['cu-item', index === TabCur ? 'text-blue cur' : '']" v-for="(item, index) in categories" :key="item.title"
 			 @tap="tabSelect(index)">{{ item.name }}</view>
 		</scroll-view>
@@ -57,7 +57,9 @@
 				this.scrollLeft = (index - 1) * 60;
 				if (this.dataList[index].length === 0) {
 					this.getTaglist(index);
-					this.getArticlelist(index);
+					this.getArticlelist(index).then(res => {
+						this.setDataList(res,index);
+					});
 				}
 			},
 			// 选择当前分类下tag
@@ -84,7 +86,9 @@
 				this.dataList[index] = [];
 				this.currentTagId[index] = tagId;
 				this.pageInfos[this.categories[index].title].endCursor = '';
-				this.getArticlelist(this.TabCur, [tagId], order);
+				this.getArticlelist(index, [tagId], order).then(res => {
+						this.setDataList(res,index);
+					});;
 			},
 			// 获取分类列表
 			getCategories() {

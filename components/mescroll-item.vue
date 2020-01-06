@@ -4,7 +4,7 @@
 		 :up="mescrollOption.upOption" @up="upCallback" @down="downCallback" :top="top">
 			<slot></slot>
 			<view class="scroll-item">
-				<view class="card flex flex-direction justify-start margin-bottom-sm padding-sm" v-for="(item, index) in dataList"
+				<view class="card flex flex-direction justify-start margin-bottom-sm padding-sm shadow-warp" v-for="(item, index) in dataList"
 				 :key="item.postId" @tap="toArticle(item)">
 					<view class="meta solid-bottom text-sm text-gray flex justify-between">
 						<text class="flex justify-start">
@@ -99,17 +99,16 @@
 
 <style lang="scss" scoped>
 	.list {
-		width: 100vw;
+		width: 100%;
 		height: 100%;
 
 		.card {
 			height: auto;
-			width: 96vw;
+			width: 96%;
 			margin-left: auto;
 			margin-right: auto;
 			border-radius: 16upx;
 			background-color: #ffffff;
-
 			.meta {
 				width: 100%;
 				font-size: 28upx;

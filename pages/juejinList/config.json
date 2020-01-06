@@ -1,0 +1,35 @@
+{
+	"pageInfos": {
+		"like": {
+			"total": "",
+			"hasNextPage": true
+		},
+		"collection": {
+			"total": "",
+			"hasNextPage": true
+		},
+		"subscribe": {
+			"total": "",
+			"hasNextPage": true
+		}
+	},
+	"mescrollOption":{
+		"downOption": {
+			"use": true,
+			"auto": false,
+			"textOutOffset": "放开我,我要刷新啦~"
+		},
+		"upOption": {
+			"use": true,
+			"auto": false,
+			"page": {
+				"num": 0,
+				"size": 20
+			},
+			"noMoreSize": 10,
+			"empty": {
+				"tip": "么有更多了~~"
+			}
+		}
+	}
+}

@@ -74,7 +74,11 @@
 				}
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/juejinList/juejinList",
+            "style" : {}
+        }
+    ],
 	"tabBar": {
 		"iconWidth":"30px",
 		"backgroundColor": "#FFF",

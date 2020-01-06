@@ -147,7 +147,7 @@ const tagsList = (data) => post(urls.query, data, 'juejinLegacy').then(res => {
 	return Promise.resolve(res);
 })
 
-//like or dislike
+// like or dislike
 const changeLike = (data, dislike) => {
 	if (dislike) {
 		return del(`${urls.like}${data}`, null, 'juejin')
@@ -155,7 +155,17 @@ const changeLike = (data, dislike) => {
 	return put(`${urls.like}${data}`, null, 'juejin')
 }
 
-//get collection set
+// get likeList
+const likeList = (data) => {
+	const uid = data.userId || juejinHeaders.userId;
+	return new Promise((resolve, reject) => {
+		get(`${urls.likeList}${uid}/like/entry`, data, 'juejin').then(res => {
+			resolve(res.d);
+		})
+	})
+}
+
+// get collection set
 const collection = (data) => {
 	const id = data.id;
 	data = {
@@ -194,13 +204,13 @@ const follow = (followee, type) => {
 		follower: juejinHeaders.userId,
 		followee: followee
 	}
-	return get(`${urls.follow}${type}`,data,'noHeader')
+	return get(`${urls.follow}${type}`, data, 'noHeader')
 }
 
 //get one pic&sentence
 const oneSpider = () => {
-	const data ={
-		key:'6e6c7a8ec059d6bfe58eba3b1f53a5d0'
+	const data = {
+		key: '6e6c7a8ec059d6bfe58eba3b1f53a5d0'
 	}
 	return new Promise((resolve, reject) => {
 		get(urls.one, data, 'noHeader').then(res => {
@@ -210,7 +220,7 @@ const oneSpider = () => {
 				imgUrl,
 				sentence
 			})
-			
+
 		})
 	})
 }
@@ -227,15 +237,15 @@ const picSpider = () => {
 }
 
 const picSpider302 = (url) => {
-	return new Promise((resolve,reject) => {
+	return new Promise((resolve, reject) => {
 		uni.request({
 			url,
-			header:{
+			header: {
 				"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"
 			},
-			success:(res) => {
+			success: (res) => {
 				console.log(res.header.location)
-				resolve(res.header.Location|| res.header.location);
+				resolve(res.header.Location || res.header.location);
 			}
 		})
 	})
@@ -253,6 +263,7 @@ export {
 	search,
 	tagsList,
 	changeLike,
+	likeList,
 	collection,
 	changeCollect,
 	follow,

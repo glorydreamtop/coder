@@ -25,7 +25,7 @@
 						</view>
 					</view>
 					<view :class="['base-num','flex','justify-between','text-center',isLoading === 4 ? 'base-num_show' : 'base-num_hidden']">
-						<view class=" flex flex-direction justify-between">
+						<view class=" flex flex-direction justify-between" @tap="toList('我的赞',juejinInfo.collectedEntriesCount)">
 							<text class="text-lg">赞</text>
 							<text>{{ juejinInfo.collectedEntriesCount }}</text>
 						</view>
@@ -127,6 +127,11 @@
 						}, 500);
 					});
 				});
+			},
+			toList(type,num){
+				uni.navigateTo({
+					url:`../juejinList/juejinList?type=${type}&num=${num}`
+				})
 			},
 			updateJuejinInfo() {
 				return new Promise((resolve, reject) => {
