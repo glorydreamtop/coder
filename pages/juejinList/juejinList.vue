@@ -40,20 +40,10 @@ export default {
 	data() {
 		return {
 			current: '',
-			TabCur: 0,
-			collectionSets: [
-				{
-					title: '创建的',
-					type: ''
-				},
-				{
-					title: '关注的',
-					type: ''
-				}
-			],
+			TabCur: 0,			
 			dataList: [],
 			diaLogdata:[],
-			...config, // mescroll组件配置 mescrollOption 分页信息 pageInfos query id 列表 queryList
+			...config, // mescroll组件配置 mescrollOption 分页信息 pageInfos 收藏来源 collectionSets
 			showDialog: false
 		};
 	},

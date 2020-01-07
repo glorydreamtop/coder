@@ -190,6 +190,11 @@ const collectionSet = (data) => {
 	})
 }
 
+// get collection
+const colletcion = (data) => {
+	
+}
+
 //collect
 const changeCollect = (data, type) => {
 	data = {
@@ -272,6 +277,7 @@ export {
 	changeLike,
 	likeList,
 	collectionSet,
+	colletcion,
 	changeCollect,
 	follow,
 	oneSpider,

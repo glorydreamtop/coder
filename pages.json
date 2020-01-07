@@ -12,7 +12,7 @@
 						"searchInput": {
 							"placeholder": "快速搜索文章、用户",
 							"borderRadius": "20px",
-							"disabled":true,
+							"disabled": true,
 							"backgroundColor": "rgba(255,255,255)"
 						},
 						"buttons": [{
@@ -73,14 +73,17 @@
 					}
 				}
 			}
+		}, {
+			"path": "pages/juejinList/juejinList",
+			"style": {
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
 		}
-	    ,{
-            "path" : "pages/juejinList/juejinList",
-            "style" : {}
-        }
-    ],
+	],
 	"tabBar": {
-		"iconWidth":"30px",
+		"iconWidth": "30px",
 		"backgroundColor": "#FFF",
 		"list": [{
 			"pagePath": "pages/juejin/juejin",
