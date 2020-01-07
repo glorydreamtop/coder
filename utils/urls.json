@@ -2,7 +2,7 @@
 	"login": "https://juejin.im/auth/type/",
 	"categories": "https://gold-tag-ms.juejin.im/v1/categories",
 	"query": "https://web-api.juejin.im/query",
-	"collection": "https://collection-set-ms.juejin.im/v1/getUserCollectionSet/",
+	"collection": "https://collection-set-ms.juejin.im/v1/getUserCollectionSet",
 	"collect": "https://collection-set-ms.juejin.im/v1/",
 	"like": "https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/",
 	"userInfo": "https://user-storage-api-ms.juejin.im/v1/getUserInfo",

@@ -4,7 +4,7 @@
 
 <script>
 import { param } from '../../utils/funcitons';
-import { collection, changeCollect } from '../../utils/request';
+import { collectionSet, changeCollect } from '../../utils/request';
 export default {
 	data() {
 		return {
@@ -40,7 +40,7 @@ export default {
 			uni.showLoading({
 				title:'加载收藏集'
 			})
-			collection(data).then(res => {
+			collectionSet(data).then(res => {
 				uni.hideLoading();
 				const list = [];
 				res.forEach(item => {

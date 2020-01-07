@@ -2,15 +2,18 @@
 	"pageInfos": {
 		"like": {
 			"total": "",
-			"hasNextPage": true
+			"hasNextPage": true,
+			"title": "我的赞"
 		},
 		"collection": {
 			"total": "",
-			"hasNextPage": true
+			"hasNextPage": true,
+			"title": "我的收藏"
 		},
-		"subscribe": {
+		"follow": {
 			"total": "",
-			"hasNextPage": true
+			"hasNextPage": true,
+			"title": "我的关注"
 		}
 	},
 	"mescrollOption":{

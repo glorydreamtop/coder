@@ -15,8 +15,8 @@
 </script>
 
 <style>
-	@import "colorui/main.css";
-	@import "colorui/icon.css";
-	@import "colorui/animation.css";
-	
+	@import "static/css/cu-main.css";
+	@import "static/css/cu-icon.css";
+	@import "static/css/cu-animation.css";
+	@import "static/css/magic.min.css";
 </style>

@@ -166,20 +166,27 @@ const likeList = (data) => {
 }
 
 // get collection set
-const collection = (data) => {
+const collectionSet = (data) => {
 	const id = data.id;
 	data = {
 		src: 'web',
 		userId: juejinHeaders.userId,
 		clientId: juejinHeaders.clientId,
 		token: juejinHeaders.token,
-		page: data.page
+		...data
 	}
 	return new Promise(resolve => {
-		get(`${urls.collection}${id}`, data, 'juejin').then(res => {
-			res = res.d.collectionSets;
-			resolve(res)
-		})
+		if(id){
+			get(`${urls.collection}/${id}`, data, 'juejin').then(res => {
+				res = res.d.collectionSets;
+				resolve(res)
+			})
+		}else{
+			get(urls.collection, data, 'noHeader').then(res => {
+				res = res.d.collectionSets;
+				resolve(res)
+			})
+		}
 	})
 }
 
@@ -264,7 +271,7 @@ export {
 	tagsList,
 	changeLike,
 	likeList,
-	collection,
+	collectionSet,
 	changeCollect,
 	follow,
 	oneSpider,

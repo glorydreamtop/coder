@@ -97,11 +97,6 @@
 		}]
 	},
 	"globalStyle": {
-		"mp-alipay": {
-			/* 支付宝小程序特有相关 */
-			"transparentTitle": "always",
-			"allowsBounceVertical": "NO"
-		},
 		"navigationBarBackgroundColor": "#282C35",
 		"navigationBarTitleText": "Coder",
 		"navigationStyle": "default",
