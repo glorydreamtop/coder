@@ -177,21 +177,50 @@ const collectionSet = (data) => {
 	}
 	return new Promise(resolve => {
 		if(id){
-			get(`${urls.collection}/${id}`, data, 'juejin').then(res => {
+			get(`${urls.collectionSet}/${id}`, data, 'juejin').then(res => {
 				res = res.d.collectionSets;
 				resolve(res)
 			})
 		}else{
-			get(urls.collection, data, 'noHeader').then(res => {
+			get(urls.collectionSet, data, 'noHeader').then(res => {
 				res = res.d.collectionSets;
 				resolve(res)
+			}).catch(err => {
+				console.log(err)
 			})
 		}
 	})
 }
 
+// get collectionSetEntries
+const collectionSetEntries = (data) => {
+	data = {
+		rankType: 'new',
+		src: 'web',
+		...data
+	}
+	return new Promise(resolve => {
+		get(urls.collection,data,'noHeader').then(res => {
+			resolve(res.d);
+		})
+	})
+}
+
+
 // get collection
 const colletcion = (data) => {
+	data = {
+		src: 'web',
+		uid: juejinHeaders.userId,
+		device_id: juejinHeaders.clientId,
+		token: juejinHeaders.token,
+		...data
+	}
+	return new Promise((resolve, reject) => {
+		get(urls.timeline,data,'noHeader').then(res => {
+			resolve(res.d)
+		})
+	})
 	
 }
 
@@ -277,6 +306,7 @@ export {
 	changeLike,
 	likeList,
 	collectionSet,
+	collectionSetEntries,
 	colletcion,
 	changeCollect,
 	follow,
