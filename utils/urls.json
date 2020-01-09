@@ -2,13 +2,16 @@
 	"login": "https://juejin.im/auth/type/",
 	"categories": "https://gold-tag-ms.juejin.im/v1/categories",
 	"query": "https://web-api.juejin.im/query",
-	"collectionSet": "https://collection-set-ms.juejin.im/v1/getUserCollectionSet",
+	"usercollectionSet": "https://collection-set-ms.juejin.im/v1/getUserCollectionSet",
+	"followedCollectionSet":"https://collection-set-ms.juejin.im/v1/getFollowedCollectionSet",
 	"collect": "https://collection-set-ms.juejin.im/v1/",
 	"collection":"https://collection-set-ms.juejin.im/v1/getCollectionSetEntries",
 	"timeline":"https://timeline-merger-ms.juejin.im/v1/get_entry_by_ids",
+	"followee":"https://follow-api-ms.juejin.im/v1/getUserFolloweeList",
 	"like": "https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/",
 	"userInfo": "https://user-storage-api-ms.juejin.im/v1/getUserInfo",
 	"follow": "https://follow-api-ms.juejin.im/v1/follow",
 	"likeList":"https://user-like-wrapper-ms.juejin.im/v1/user/",
+	"postList": "https://timeline-merger-ms.juejin.im/v1/get_entry_by_self",
 	"one": "http://api.tianapi.com/txapi/one/index"
 }

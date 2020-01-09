@@ -7,7 +7,7 @@
 			<mescroll-item class="me" ref="ARTICLE" top="80" :mescrollOption="mescrollOption" :dataListprop="dataList[0]" @up="update" @down="reset" />
 		</view>
 		<view class="resList" v-show="currentsearchType === searchTypes[1].type">
-			<user-item ref="USER" class="me" :mescrollOption="mescrollOption" :dataListprop="dataList[1]" @up="update" @down="reset" />
+			<user-item ref="USER" class="me" :mescrollOption="mescrollOption" :dataListprop="dataList[1]" @up="update" @down="reset" top="80" />
 		</view>
 	</view>
 </template>
@@ -44,8 +44,8 @@
 						endCursor: ''
 					}
 				],
-				currentsearchType: 'USER',
-				currentsearchIndex:1,
+				currentsearchType: 'ARTICLE',
+				currentsearchIndex:0,
 				endCursor: ''
 			};
 		},
@@ -84,7 +84,7 @@
 							info.author = info.user.username;
 						} else {
 							info = node;
-							info.avatarHd = info.avatarHd ? info.avatarHd : '/static/noAvatar.png'
+							info.avatarHd = info.avatarHd ? info.avatarHd : info.avatarLarge ? info.avatarLarge : '/static/noAvatar.png'
 						}
 						return info;
 					})

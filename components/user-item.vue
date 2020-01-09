@@ -1,24 +1,25 @@
 <template>
 	<view class="content">
-		<mescroll-uni top="80" class="scroll-item" @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback" @down="downCallback">
-			<view>
-				<view class="card flex justify-start align-center margin-bottom-sm padding-sm" v-for="(item,index) in dataList" :key="item.id">
-					<image class="avatar margin-right-sm" :src="item.avatarHd" mode="widthFix"></image>
-					<view class="info flex flex-direction justify-between">
-						<view class="user flex flex-direction">
-							<text class="text-lg">{{item.username}}</text>
-							<text class="text-gray">{{item.jobTitle || item.company}}</text>
+		
+			<mescroll-uni :top="top"  @init="mescrollinit" :down="mescrollOption.downOption" :up="mescrollOption.upOption" @up="upCallback" @down="downCallback">
+				<view class="scroll-item">
+					<view class="card flex justify-start align-center margin-bottom-sm padding-sm" v-for="(item,index) in dataList" :key="item.id">
+						<image class="avatar margin-right-sm" :src="item.avatarHd" mode="widthFix"></image>
+						<view class="info flex flex-direction justify-between">
+							<view class="user flex flex-direction">
+								<text class="text-lg">{{item.username}}</text>
+								<text class="text-gray">{{item.jobTitle || item.company}}</text>
+							</view>
+							<view v-if="item.postedPostsCount" class="counts">
+								{{`${item.postedPostsCount}个专栏·${item.followersCount}人关注`}}
+							</view>
 						</view>
-						<view class="counts">
-							{{`${item.postedPostsCount}个专栏·${item.followersCount}人关注`}}
+						<view :class="['btn',item.viewerIsFollowing ? 'followed' : 'unfollowed']" @tap="follow(item.id,item.viewerIsFollowing,index)">
+							{{item.viewerIsFollowing ? '已关注' : '关注'}}
 						</view>
-					</view>
-					<view :class="['btn',item.viewerIsFollowing ? 'followed' : 'unfollowed']" @tap="follow(item.id,item.viewerIsFollowing,index)">
-						{{item.viewerIsFollowing ? '已关注' : '关注'}}
 					</view>
 				</view>
-			</view>
-		</mescroll-uni>
+			</mescroll-uni>
 	</view>
 </template>
 
@@ -29,6 +30,7 @@
 		props: {
 			mescrollOption: Object,
 			dataListprop: Array,
+			top:Number
 		},
 		data() {
 			return {
@@ -38,7 +40,7 @@
 		},
 		watch:{
 			// 此处不能用箭头函数,箭头函数会在上下文中寻找this
-			dataListprop:function(val){
+			dataListprop(val){
 				this.dataList = val;
 			}
 		},
@@ -109,10 +111,7 @@
 		}
 	}
 	.scroll-item{
-		position: relative;
-		top: 0;
-		bottom: 0;
-		height: auto;
+		margin-top: 20upx;
 	}
 	.mescroll-uni-fixed{
 		position: relative !important;

@@ -166,7 +166,7 @@ const likeList = (data) => {
 }
 
 // get collection set
-const collectionSet = (data) => {
+const collectionSet = (data,type) => {
 	const id = data.id;
 	data = {
 		src: 'web',
@@ -182,7 +182,8 @@ const collectionSet = (data) => {
 				resolve(res)
 			})
 		}else{
-			get(urls.collectionSet, data, 'noHeader').then(res => {
+			const url = type === 'follow' ? urls.followedCollectionSet : urls.usercollectionSet;
+			get(url, data, 'noHeader').then(res => {
 				res = res.d.collectionSets;
 				resolve(res)
 			}).catch(err => {
@@ -208,7 +209,7 @@ const collectionSetEntries = (data) => {
 
 
 // get collection
-const colletcion = (data) => {
+const collection = (data) => {
 	data = {
 		src: 'web',
 		uid: juejinHeaders.userId,
@@ -246,6 +247,40 @@ const follow = (followee, type) => {
 		followee: followee
 	}
 	return get(`${urls.follow}${type}`, data, 'noHeader')
+}
+
+//get followList
+const followList = (uid) => {
+	const data = {
+		currentUid:juejinHeaders.userId,
+		src:'web',
+		uid:uid || juejinHeaders.userId
+	}
+	return new Promise((resolve,reject) => {
+		get(urls.followee,data,'noHeader').then(res => {
+			resolve(res.d)
+		})
+	})
+}
+
+// get postList
+const postList = (data) => {
+	data = {
+		src: 'web',
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		uid: juejinHeaders.userId,
+		targetUid: data.targetUid || juejinHeaders.userId,
+		type: 'post',
+		limit: 20,
+		order: 'createdAt',
+		before: data.before
+	}
+	return new Promise((resolve,reject) => {
+		get(urls.postList,data,'noHeader').then(res => {
+			resolve(res.d);
+		})
+	})
 }
 
 //get one pic&sentence
@@ -307,9 +342,11 @@ export {
 	likeList,
 	collectionSet,
 	collectionSetEntries,
-	colletcion,
+	collection,
 	changeCollect,
 	follow,
+	followList,
+	postList,
 	oneSpider,
 	picSpider302
 }

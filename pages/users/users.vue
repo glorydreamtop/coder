@@ -1,6 +1,6 @@
 <template>
 	<view class="all">
-		<view class="boxes juejin bg-white">
+		<view class="boxes juejin">
 			<view :class="['flex', 'justify-between', isLoading === 3 ? 'toleft' : '', isLogin ? 'onleft' : '']">
 				<form class="inputs flex flex-direction justify-between" @submit="login">
 					<view class="">
@@ -33,7 +33,7 @@
 							<text class="text-lg">收藏集</text>
 							<text>{{ juejinInfo.collectionSetCount }}</text>
 						</view>
-						<view class=" flex flex-direction justify-between">
+						<view class=" flex flex-direction justify-between" @tap="Toast('看过这么多，都会了？')">
 							<text class="text-lg">读过</text>
 							<text>{{ juejinInfo.viewedEntriesCount }}</text>
 						</view>
@@ -45,7 +45,7 @@
 							<text class="text-lg">粉丝</text>
 							<text>{{ juejinInfo.followersCount }}</text>
 						</view>
-						<view class=" flex flex-direction justify-between" @tap="toList('post', juejinInfo.followeesCount)">
+						<view class=" flex flex-direction justify-between" @tap="toList('post', juejinInfo.postedPostsCount)">
 							<text class="text-lg">专栏</text>
 							<text>{{ juejinInfo.postedPostsCount }}</text>
 						</view>
@@ -53,7 +53,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="boxes bg-white flex justify-between align-center">
+		<view class="boxes flex justify-between align-center">
 			<view class="">切换每日一图来源</view>
 			<view class="btns">
 				<button
@@ -66,7 +66,7 @@
 				</button>
 			</view>
 		</view>
-		<view class="boxes bg-white text-red text-bold text-lg text-center" @tap="showModal = true">清除所有缓存</view>
+		<view class="boxes text-red text-bold text-lg text-center" @tap="showModal = true">清除所有缓存</view>
 		<neil-modal 
 		    :show="showModal" 
 		    title="操作提示" 
@@ -245,11 +245,12 @@ export default {
 	box-sizing: border-box;
 	margin: 20upx auto;
 	border-radius: 18upx;
+	background-color: #FFFFFF;
+	box-shadow: 10upx 10upx 5upx #eaeaea;
 }
 
 .juejin {
 	overflow: auto;
-
 	> view {
 		width: 178vw;
 		box-sizing: border-box;
