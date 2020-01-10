@@ -185,9 +185,11 @@ export default {
 		},
 		postList() {
 			const data = {
-				limit: this.$refs.like.mescroll.options.up.page.size,
-				before: this.dataList[this.dataList.length - 1].creatAt
+				limit: this.$refs.post.mescroll.options.up.page.size 
 			};
+			if(this.dataList.length > 0){
+				data.before = this.dataList[this.dataList.length - 1].creatAt;
+			}
 			return new Promise((resolve, reject) => {
 				postList(data).then(res => {
 					const newData = res.entrylist.map(item => {
@@ -228,7 +230,7 @@ export default {
 					});
 					break;
 				case 'follow':
-					this.$refs.follow.mescroll.showNoMore();
+					this.followList();
 					break;
 				case 'post':
 					this.postList().then(res => {
@@ -277,9 +279,10 @@ export default {
 					this.tabSelect(0);
 					break;
 				case 'follow':
-					this.followList().then(res => {
-						this.$refs.follow.mescroll.endSuccess(res, false);
-					});
+					this.followList();
+					break;
+				case 'post':
+					this.postList();
 			}
 		});
 	}

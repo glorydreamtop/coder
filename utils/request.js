@@ -147,6 +147,23 @@ const tagsList = (data) => post(urls.query, data, 'juejinLegacy').then(res => {
 	return Promise.resolve(res);
 })
 
+// get articleDetail
+const articleDetail = (data) => {
+	data = {
+		src: 'web',
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		uid: juejinHeaders.userId,
+		type: 'entryView',
+		...data
+	}
+	return new Promise((resolve,reject) => {
+		get(urls.articleDetail,data,'noHeader').then(res => {
+			resolve(res.d.content)
+		})
+	})
+}
+
 // like or dislike
 const changeLike = (data, dislike) => {
 	if (dislike) {
@@ -274,7 +291,10 @@ const postList = (data) => {
 		type: 'post',
 		limit: 20,
 		order: 'createdAt',
-		before: data.before
+		before: data.before || null
+	}
+	if(data.before === null){
+		delete data.before;
 	}
 	return new Promise((resolve,reject) => {
 		get(urls.postList,data,'noHeader').then(res => {
@@ -336,6 +356,7 @@ export {
 	userInfo,
 	categories,
 	articleList,
+	articleDetail,
 	search,
 	tagsList,
 	changeLike,
