@@ -37,6 +37,11 @@
 	<script type="text/javascript" src="./js/mescroll.min.js" charset="utf-8"></script>
 	<script type="text/javascript" src="./js/functions.js"></script>
 	<script type="text/javascript">
+		// 上次请求接口的最后一条创建时间
+		let lastCreatedAt = '';
+		let commentsList = [];
+		const params = window.location.search.substring(1);
+		
 		//隐藏弹窗和遮罩
 		const maskHidden = () => {
 			document.getElementById('coder_mask').className = 'coder_hidden';
@@ -93,7 +98,7 @@
 			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			xhr.send();
 		}
-		const params = window.location.search.substring(1);
+		
 		// 获取文章详情
 		const getDetail = () => {
 			const detailUrl = 'https://post-storage-api-ms.juejin.im/v1/getDetailData';
@@ -114,9 +119,7 @@
 			if(commentsList.length !== 0)return;
 			getComments(headers);
 		}
-		// 上次请求接口的最后一条创建时间
-		let lastCreatedAt = '';
-		let commentsList = [];
+		
 		// 获取评论列表
 		const getComments = (headers) => {
 			const data = {
@@ -133,7 +136,6 @@
 			xhr.setRequestHeader('X-Juejin-Token', headers.token);
 			xhr.setRequestHeader('X-Juejin-Uid', headers.userId);
 			xhr.send();
-			
 			xhr.onload = () => {
 				commentsList = JSON.parse(xhr.responseText).d.comments;
 				let hasNext = true;
@@ -188,7 +190,9 @@
 									}, {
 										type: 'span',
 										className: 'cuIcon-comment',
-										text: item.replyCount
+										text: item.replyCount,
+										id:item.id,
+										
 									}]
 								}]
 							}]
@@ -219,6 +223,7 @@
 					}
 					let finalDom;
 					if (item.topComment !== null && item.topComment.length !== 0) {
+						finalDom = makeDom(domTree);
 						item.topComment.forEach(i => {
 							const replyDomTree = {
 								type: 'div',
@@ -254,7 +259,7 @@
 								}]
 							}
 							const replyDom = makeDom(replyDomTree);
-							finalDom = makeDom(domTree);
+							
 							finalDom.appendChild(replyDom);
 						})
 					} else {
@@ -263,6 +268,10 @@
 					document.getElementById('coder_comments_innerList').appendChild(finalDom);
 				})
 			}
+		}
+		// 评论
+		const comment = () => {
+			
 		}
 		// 创建mescroll对象
 		const mescroll = new MeScroll("coder_comments_inner", {
