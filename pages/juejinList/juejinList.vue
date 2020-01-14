@@ -282,7 +282,9 @@ export default {
 					this.followList();
 					break;
 				case 'post':
-					this.postList();
+					this.postList().then(res => {
+						this.$refs.post.mescroll.endSuccess(res.len, res.hasNextpage);
+					});
 			}
 		});
 	}

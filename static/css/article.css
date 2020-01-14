@@ -63,6 +63,7 @@
 	width: 30px;
 	height: 30px;
 	border-radius: 4px;
+	margin-right: 20px;
 }
 
 .coder_list_item>span:last-child {
@@ -151,7 +152,6 @@
 #coder_comments {
 	height: 80vh;
 	width: 100vw;
-	padding-top: 20px;
 	position: fixed;
 	bottom: 0;
 	background-color: #FFFFFF;
@@ -226,4 +226,13 @@
 	margin-top: 10px;
 	padding: 10px;
 	background-color: #F6F6F6;
+}
+
+#coder_dialog{
+	width: 60vw;
+	height: 40vh;
+	position: fixed;
+	top: 30vh;
+	margin: 0 auto;
+	background-color: #FFFFFF;
 }

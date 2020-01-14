@@ -32,6 +32,12 @@
 				</div>
 			</div>
 		</div>
+		<!-- <div id="coder_dialog">
+			<div class="">
+				评论
+			</div>
+			<input type="text" name="" id="reply" value="" />
+		</div> -->
 	</body>
 	<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.2.js"></script>
 	<script type="text/javascript" src="./js/mescroll.min.js" charset="utf-8"></script>
@@ -41,7 +47,8 @@
 		let lastCreatedAt = '';
 		let commentsList = [];
 		const params = window.location.search.substring(1);
-		
+
+
 		//隐藏弹窗和遮罩
 		const maskHidden = () => {
 			document.getElementById('coder_mask').className = 'coder_hidden';
@@ -98,7 +105,7 @@
 			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			xhr.send();
 		}
-		
+
 		// 获取文章详情
 		const getDetail = () => {
 			const detailUrl = 'https://post-storage-api-ms.juejin.im/v1/getDetailData';
@@ -113,13 +120,17 @@
 		}
 		// 外部唤醒评论列表弹窗
 		const wakeUpComments = (headers) => {
-			if(document.getElementById('coder_comments').className == 'coder_show')return;
+			
+			if (document.getElementById('coder_comments').className == 'coder_show') return;
 			document.getElementById('coder_comments').className = 'coder_show';
 			document.getElementById('coder_mask').className = 'coder_show';
-			if(commentsList.length !== 0)return;
-			getComments(headers);
+			if (commentsList.length !== 0) return;
+			setTimeout(() => {
+				mescroll.resetUpScroll()
+			},550)
+			
 		}
-		
+
 		// 获取评论列表
 		const getComments = (headers) => {
 			const data = {
@@ -143,9 +154,7 @@
 				if (commentsList.length < 10) {
 					hasNext = false;
 				}
-				setTimeout(() => {
-					mescroll.endSuccess(commentsList.length, hasNext);
-				}, 800)
+				mescroll.endSuccess(commentsList.length, hasNext);
 				lastCreatedAt = commentsList[commentsList.length - 1].createdAt;
 				commentsList.forEach(item => {
 					const domTree = {
@@ -191,8 +200,9 @@
 										type: 'span',
 										className: 'cuIcon-comment',
 										text: item.replyCount,
-										id:item.id,
-										
+										dataId: item.id,
+										dataUserId: item.userInfo.objectId,
+
 									}]
 								}]
 							}]
@@ -259,7 +269,7 @@
 								}]
 							}
 							const replyDom = makeDom(replyDomTree);
-							
+
 							finalDom.appendChild(replyDom);
 						})
 					} else {
@@ -270,8 +280,29 @@
 			}
 		}
 		// 评论
-		const comment = () => {
-			
+		const comment = ({
+			firstComment,
+			respComment,
+			respUser
+		}) => {
+
+			const commentsUrl = 'https://comment-wrapper-ms.juejin.im/v1/comment';
+			const targetId = getQueryObject(params).id
+			const data = {
+				firstComment,
+				respComment,
+				respUser,
+				targetId,
+				targetType: 'entry',
+				content: ''
+			}
+			const xhr = new plus.net.XMLHttpRequest();
+			xhr.open("POST", commentsUrl);
+			xhr.setRequestHeader('X-Juejin-Client', headers.clientId);
+			xhr.setRequestHeader('X-Juejin-Src', 'web');
+			xhr.setRequestHeader('X-Juejin-Token', headers.token);
+			xhr.setRequestHeader('X-Juejin-Uid', headers.userId);
+			xhr.send();
 		}
 		// 创建mescroll对象
 		const mescroll = new MeScroll("coder_comments_inner", {
@@ -289,7 +320,7 @@
 					size: 10 //每页数据条数,默认10
 				},
 				htmlNodata: '<p class="upwarp-nodata">-- END --</p>',
-				noMoreSize: 1, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
+				noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;
 				toTop: {
 					//回到顶部按钮
 					src: "toTop.png", //图片路径,默认null,支持网络图

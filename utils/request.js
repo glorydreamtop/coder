@@ -194,7 +194,7 @@ const collectionSet = (data,type) => {
 	}
 	return new Promise(resolve => {
 		if(id){
-			get(`${urls.collectionSet}/${id}`, data, 'juejin').then(res => {
+			get(`${urls.usercollectionSet}/${id}`, data, 'juejin').then(res => {
 				res = res.d.collectionSets;
 				resolve(res)
 			})

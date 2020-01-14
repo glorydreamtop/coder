@@ -29,7 +29,7 @@ export default {
 		};
 		this.id = options.id;
 		this.url = `/hybrid/html/local.html?${param(params)}`;
-		
+		// this.url = `http://127.0.0.1:8848/coder/hybrid/html/local.html?${param(params)}`
 	},
 	onNavigationBarButtonTap(e) {
 		if (e.index === 1) {
@@ -41,7 +41,6 @@ export default {
 				title:'加载收藏集'
 			})
 			collectionSet(data).then(res => {
-				uni.hideLoading();
 				const list = [];
 				res.forEach(item => {
 					const info = {
@@ -54,6 +53,7 @@ export default {
 					list.push(info);
 				});
 				console.log(JSON.stringify(list));
+				uni.hideLoading();
 				this.wv = this.$mp.page.$getAppWebview().children()[0];
 				this.wv.evalJS(`collection(${JSON.stringify(list)});`);
 			});
