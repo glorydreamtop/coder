@@ -83,20 +83,23 @@
 		}
 	],
 	"tabBar": {
-		"iconWidth": "30px",
+		"iconWidth": "24px",
 		"backgroundColor": "#FFF",
 		"list": [{
 			"pagePath": "pages/juejin/juejin",
 			"iconPath": "static/tabbar/juejin.png",
-			"selectedIconPath": "static/tabbar/juejin_cur.png"
+			"selectedIconPath": "static/tabbar/juejin_cur.png",
+			"text":"掘金"
 		}, {
 			"pagePath": "pages/discover/discover",
 			"iconPath": "static/tabbar/discover.png",
-			"selectedIconPath": "static/tabbar/discover_cur.png"
+			"selectedIconPath": "static/tabbar/discover_cur.png",
+			"text":"发现"
 		}, {
 			"pagePath": "pages/users/users",
 			"iconPath": "static/tabbar/users.png",
-			"selectedIconPath": "static/tabbar/users_cur.png"
+			"selectedIconPath": "static/tabbar/users_cur.png",
+			"text":"我的"
 		}]
 	},
 	"globalStyle": {

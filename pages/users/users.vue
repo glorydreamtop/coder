@@ -18,7 +18,7 @@
 				</form>
 				<view class="infoBox">
 					<view class="personal flex justify-start align-center">
-						<image :src="juejinInfo.avatarHd" class="cu-avatar lg round" mode="widthFix"></image>
+						<image :src="juejinInfo.avatarLarge" class="cu-avatar lg round" mode="aspectFill"></image>
 						<view class="flex flex-direction justify-between margin-left-sm">
 							<text class="text-lg">{{ juejinInfo.username }}</text>
 							<text class="text-gray">{{ juejinInfo.jobTitle }}</text>
@@ -202,9 +202,11 @@ export default {
 			uni.removeStorage({
 				key: 'juejinInfo'
 			}).then(res => {
+				Toast('已清除用户信息');
 				uni.removeStorage({
 					key: 'juejinHeaders'
 				}).then(res => {
+					Toast('已清除登录信息');
 					this.isLogin = false;
 					this.isLoading = 1;
 					uni.stopPullDownRefresh();

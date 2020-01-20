@@ -56,6 +56,9 @@ export default {
 				uni.hideLoading();
 				this.wv = this.$mp.page.$getAppWebview().children()[0];
 				this.wv.evalJS(`collection(${JSON.stringify(list)});`);
+			}).catch(err => {
+				uni.hideLoading();
+				Toast('未登录/登录状态失效')
 			});
 
 			//this.$mp.page.$getAppWebview().setTitleNViewButtonStyle(1,{color:'#007FFF'})

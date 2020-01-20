@@ -8,7 +8,7 @@
 			<mescroll-item class="me" :mescrollOption="mescrollOption" :dataListprop="dataList[idx]" @up="update(idx)" @down="reset(idx)"
 			 :ref="`me${idx}`">
 				<view class="tagList flex justify-start text-white">
-					<view :class="currentTagId[idx] === item.tagId ? 'text-blue magictime swashIn' : ''" v-for="item in tagList[idx]" :key="item.title"
+					<view :class="currentTagId[idx] === item.tagId ? 'text-blue bounceIn animated' : ''" v-for="item in tagList[idx]" :key="item.title"
 					 @tap="selectTag(item.tagId)">
 						{{ item.title }}
 					</view>
@@ -293,7 +293,7 @@
 			line-height: 28upx;
 			height: 52upx;
 			margin: 14upx 10upx;
-			border-radius: 26upx;
+			border-radius: 10upx;
 			white-space: nowrap;
 		}
 	}

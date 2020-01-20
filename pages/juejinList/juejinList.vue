@@ -175,6 +175,8 @@ export default {
 				const newData = res.map(item => {
 					const info = item.followee;
 					info.viewerIsFollowing = info.currentUserFollowed;
+					info.id=info.objectId;
+					delete info.objectId;
 					info.avatarHd = info.avatarHd ? info.avatarHd : info.avatarLarge ? info.avatarLarge : '/static/noAvatar.png';
 					return info;
 				});
