@@ -1,6 +1,24 @@
 {
 	"pages": [
 		//pages数组中第一项表示应用启动页
+		
+		{
+		    "path" : "pages/personal/personal",
+		    "style" : {
+				"app-plus":{
+					"bounce":"none",
+					"titleNView":{
+						"titleText":"个人资料"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/users/users",
+			"style": {
+				"enablePullDownRefresh": true
+			}
+		},
 		{
 			"path": "pages/juejin/juejin",
 			"style": {
@@ -34,12 +52,7 @@
 				"enablePullDownRefresh": true
 			}
 		},
-		{
-			"path": "pages/users/users",
-			"style": {
-				"enablePullDownRefresh": true
-			}
-		},
+		
 		{
 			"path": "pages/juejinSearch/juejinSearch",
 			"style": {
@@ -81,7 +94,8 @@
 				}
 			}
 		}
-	],
+	    
+    ],
 	"tabBar": {
 		"iconWidth": "24px",
 		"backgroundColor": "#FFF",

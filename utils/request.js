@@ -21,10 +21,14 @@ const ajax = (url, method, data, headerType) => {
 	const header3 = {
 
 	}
+	const header4 = {
+		"content-Type": "application/x-www-form-urlencoded"
+	}
 	const headerMap = {
 		juejin: header1,
 		juejinLegacy: header2,
-		noHeader: header3
+		noHeader: header3,
+		formData:header4
 	}
 	let header = headerMap[headerType];
 	return new Promise((resolve, reject) => {
@@ -115,12 +119,34 @@ const userInfo = (data) => {
 	return new Promise((resolve, reject) => {
 		get(urls.userInfo, data, 'noHeader').then(res => {
 			const juejinInfo = res.d;
+			const avatarLarge = juejinInfo.avatarLarge.split('?')[0];
 			uni.setStorage({
 				key: 'juejinInfo',
 				data: juejinInfo
 			}).then(res => {
 				resolve(juejinInfo);
 			})
+		})
+	})
+}
+
+// update userInfo
+	
+const updateUserinfo = (data) => {
+	data ={
+		src: 'web',
+		uid: juejinHeaders.userId,
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		...data
+	}
+	return new  Promise((resolve,reject) => {
+		post(urls.updateUserinfo,data,'formData').then(res =>{
+			if(res.s === 1 && res.m === 'ok'){
+				resolve()
+			}else{
+				reject(res)
+			}
 		})
 	})
 }
@@ -354,6 +380,7 @@ export {
 	del,
 	login,
 	userInfo,
+	updateUserinfo,
 	categories,
 	articleList,
 	articleDetail,

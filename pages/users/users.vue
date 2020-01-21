@@ -23,6 +23,9 @@
 							<text class="text-lg">{{ juejinInfo.username }}</text>
 							<text class="text-gray">{{ juejinInfo.jobTitle }}</text>
 						</view>
+						<view class="text-grey text-xl" @tap="toPersonal">
+							<text class="cuIcon-edit"></text>
+						</view>
 					</view>
 					<view :class="['base-num', 'flex', 'justify-between', 'text-center', isLoading === 4 ? 'base-num_show' : 'base-num_hidden']">
 						<view class=" flex flex-direction justify-between" @tap="toList('like', juejinInfo.collectedEntriesCount)">
@@ -194,6 +197,11 @@ export default {
 					Toast('清除成功');
 				}
 			});
+		},
+		toPersonal(){
+			uni.navigateTo({
+				url:'../personal/personal'
+			})
 		}
 	},
 	onPullDownRefresh() {
@@ -352,13 +360,20 @@ input {
 }
 
 .personal {
-	> view {
+	position: relative;
+	> view:first-child {
 		height: 96upx;
 	}
 
 	> image {
 		width: 144upx;
 		height: 144upx;
+	}
+	
+	>view:last-child{
+		position: absolute;
+		top: 0;
+		right: 10upx;
 	}
 }
 

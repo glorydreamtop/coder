@@ -3040,6 +3040,11 @@ scroll-view.cu-steps .cu-item {
 	margin-top: 50upx;
 }
 
+.margin-right-auto {
+	margin-right: auto;
+	margin-left: 0;
+}
+
 .margin-right-xs {
 	margin-right: 10upx;
 }
@@ -3078,6 +3083,11 @@ scroll-view.cu-steps .cu-item {
 
 .margin-bottom-xl {
 	margin-bottom: 50upx;
+}
+
+.margin-left-auto {
+	margin-left: auto;
+	margin-right: 0;
 }
 
 .margin-left-xs {

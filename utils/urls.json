@@ -10,6 +10,7 @@
 	"followee":"https://follow-api-ms.juejin.im/v1/getUserFolloweeList",
 	"like": "https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/",
 	"userInfo": "https://user-storage-api-ms.juejin.im/v1/getUserInfo",
+	"updateUserinfo":"https://user-storage-api-ms.juejin.im/v1/updateUserInfo",
 	"follow": "https://follow-api-ms.juejin.im/v1/",
 	"articleDetail": "https://post-storage-api-ms.juejin.im/v1/getDetailData",
 	"likeList":"https://user-like-wrapper-ms.juejin.im/v1/user/",
