@@ -24,11 +24,15 @@ const ajax = (url, method, data, headerType) => {
 	const header4 = {
 		"content-Type": "application/x-www-form-urlencoded"
 	}
+	const header5 = {
+		"content-Type": "multipart/form-data"
+	}
 	const headerMap = {
 		juejin: header1,
 		juejinLegacy: header2,
 		noHeader: header3,
-		formData:header4
+		urlencoded:header4,
+		formData:header5
 	}
 	let header = headerMap[headerType];
 	return new Promise((resolve, reject) => {
@@ -131,7 +135,6 @@ const userInfo = (data) => {
 }
 
 // update userInfo
-	
 const updateUserinfo = (data) => {
 	data ={
 		src: 'web',
@@ -141,7 +144,7 @@ const updateUserinfo = (data) => {
 		...data
 	}
 	return new  Promise((resolve,reject) => {
-		post(urls.updateUserinfo,data,'formData').then(res =>{
+		post(urls.updateUserinfo,data,'urlencoded').then(res =>{
 			if(res.s === 1 && res.m === 'ok'){
 				resolve()
 			}else{
@@ -150,6 +153,83 @@ const updateUserinfo = (data) => {
 		})
 	})
 }
+
+// update useremail
+const updateUseremail = (data) => {
+	data ={
+		src: 'web',
+		uid: juejinHeaders.userId,
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		...data
+	}
+	return new Promise((resolve,reject) => {
+		post(urls.updateUseremail,data,'urlencoded').then(res => {
+			if(res.s === 1 && res.m === 'ok'){
+				resolve()
+			}else{
+				reject(res)
+			}
+		})
+	})
+}
+
+//subscribe email
+const subscribeEmail = (data) => {
+	data = {
+		src: 'web',
+		uid: juejinHeaders.userId,
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		...data,
+		type: 'week'
+	}
+	get(urls.subscribeEmail,data,'noHeader').then(res => {
+		if(res.s === 1 && res.m === 'ok'){
+			resolve()
+		}else{
+			reject(res)
+		}
+	})
+}
+
+//check subscribe email
+const checkEmailsub = () => {
+	const data = {
+		src: 'web',
+		uid: juejinHeaders.userId,
+		token: juejinHeaders.token,
+		device_id: juejinHeaders.clientId,
+		type: 'week'
+	}
+	get(urls.checkEmailsub,data,'noHeader').then(res => {
+		if(res.s === 1 && res.m === 'ok'){
+			resolve(res.d.week)
+		}else{
+			reject(res)
+		}
+	})
+}
+
+
+// upload pic
+const uploadPic = (data) => {
+	return new Promise((resolve,reject) => {
+		uni.uploadFile({
+			url:urls.upload,
+			name:'file',
+			filePath:data
+		}).then(res => {
+			res = JSON.parse(res[1].data);
+			if(res.s === 1 && res.m === 'ok'){
+				resolve(res.d.url.https);
+			}else{
+				reject(res);
+			}
+		})
+	})
+}
+
 
 //get categories
 const categories = (data) => get(urls.categories, data, 'juejin').then(res => {
@@ -381,6 +461,10 @@ export {
 	login,
 	userInfo,
 	updateUserinfo,
+	updateUseremail,
+	subscribeEmail,
+	checkEmailsub,
+	uploadPic,
 	categories,
 	articleList,
 	articleDetail,
