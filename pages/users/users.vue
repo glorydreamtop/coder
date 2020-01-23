@@ -4,11 +4,11 @@
 			<view :class="['flex', 'justify-between', isLoading === 3 ? 'toleft' : '', isLogin ? 'onleft' : '']">
 				<form class="inputs flex flex-direction justify-between" @submit="login">
 					<view class="">
-						<input name="phoneNumber" placeholder="手机号/邮箱" value="17320266068" @focus="focus(0)" @blur="focus(2)" />
+						<input name="phoneNumber" placeholder="手机号/邮箱" @focus="focus(0)" @blur="focus(2)" />
 						<view class="focus" v-if="inputFocus === 0"></view>
 					</view>
 					<view class="margin-top">
-						<input name="password" placeholder="密码" value="adidas0520" @focus="focus(1)" @blur="focus(2)" password="true" />
+						<input name="password" placeholder="密码" @focus="focus(1)" @blur="focus(2)" password="true" />
 						<view class="focus" v-if="inputFocus === 1"></view>
 					</view>
 					<button v-if="isLoading < 4" :class="[inputFocus === 1 ? 'btn_show' : 'btn_hidden', 'btn']" formType="submit">

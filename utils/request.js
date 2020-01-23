@@ -27,6 +27,7 @@ const ajax = (url, method, data, headerType) => {
 	const header5 = {
 		"content-Type": "multipart/form-data"
 	}
+	// 创建一个header的映射
 	const headerMap = {
 		juejin: header1,
 		juejinLegacy: header2,
@@ -99,6 +100,7 @@ const login = (data) => {
 				res.userId,
 				res.clientId
 			]
+			// 保存header信息
 			uni.setStorage({
 				key: 'juejinHeaders',
 				data: Headers
@@ -217,7 +219,6 @@ const checkEmailsub = () => {
 
 }
 
-
 // upload pic
 const uploadPic = (data) => {
 	return new Promise((resolve, reject) => {
@@ -235,7 +236,6 @@ const uploadPic = (data) => {
 		})
 	})
 }
-
 
 //get categories
 const categories = (data) => get(urls.categories, data, 'juejin').then(res => {

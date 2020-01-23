@@ -77,6 +77,7 @@ export default {
 		avatar
 	},
 	methods: {
+		// 提交更改,传入field为待修改字段名
 		submit(field) {
 			const data = {
 				field,
@@ -94,22 +95,23 @@ export default {
 					this.juejinInfo = uni.getStorageSync('juejinInfo');
 				});
 		},
-		subscribe(e) {
-			subscribeEmail({ check: e.detail.value[0] === 'true' ? true : false })
-				.then(res => {
-					Toast('修改成功');
-				})
-				.catch(err => {
-					Toast(err.m);
-					this.checkEmailsub();
-				});
-		},
-		checkEmailsub() {
-			checkEmailsub().then(res => {
-				this.emailSub = res;
-				console.log(res);
-			});
-		},
+		// subscribe(e) {
+		// 	subscribeEmail({ check: e.detail.value[0] === 'true' ? true : false })
+		// 		.then(res => {
+		// 			Toast('修改成功');
+		// 		})
+		// 		.catch(err => {
+		// 			Toast(err.m);
+		// 			this.checkEmailsub();
+		// 		});
+		// },
+		// checkEmailsub() {
+		// 	checkEmailsub().then(res => {
+		// 		this.emailSub = res;
+		// 		console.log(res);
+		// 	});
+		// },
+		// 修改绑定邮箱
 		updateEmail() {
 			const checkFormat = /^([a-zA-Z0-9.-])+\@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/.test(this.juejinInfo.email);
 			if (!checkFormat) {
@@ -128,6 +130,7 @@ export default {
 				});
 			}
 		},
+		// 上传头像图片
 		uploadPic(e) {
 			uploadPic(e.path)
 				.then(response => {
@@ -138,6 +141,7 @@ export default {
 					Toast(err.m);
 				});
 		},
+		// 选择图片并裁剪
 		choosePic() {
 			this.$refs.avatar.fChooseImg(0, {
 				selWidth: '100%',

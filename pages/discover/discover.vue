@@ -32,7 +32,7 @@ export default {
 			this.year = this.time.split('-')[0];
 		},
 		getSentence() {
-			const now = new Date(new Date().toLocaleDateString()).getTime();
+			const now = new Date(new Date().setHours(0, 0, 0, 0)) / 1000;
 			const lastTime = uni.getStorageSync('dailyWord_last_time') || 0;
 			if (now !== lastTime) {
 				Toast('获取今日一句');

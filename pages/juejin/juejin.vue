@@ -254,7 +254,13 @@
 			}
 		},
 		onLoad() {
-			this.getCategories();
+			// if(!uni.getStorageSync('juejinHeaders')){
+			// 	uni.switchTab({
+			// 		url:'/pages/users/users'
+			// 	})
+			// }else {
+			// 	this.getCategories();
+			// }
 		},
 		onNavigationBarSearchInputClicked() {
 			uni.navigateTo({
