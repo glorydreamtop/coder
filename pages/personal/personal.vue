@@ -44,19 +44,22 @@
 					<input class="text-grey" type="text" v-model="juejinInfo.email" placeholder="暂未填写" placeholder-class="text-grey" @confirm="updateEmail" />
 				</view>
 			</view>
-			<view class="cu-item arrow">
+			<!-- <view class="cu-item arrow">
 				<view class="content flex justify-between align-center">
 					<text class="text-grey">邮箱订阅每周5篇精选</text>
 					<switch @change="subscribe" :checked="emailSub" />
+					<checkbox-group @change="subscribe"><checkbox :value="!emailSub" :checked="emailSub" /></checkbox-group>
 				</view>
-			</view>
+			</view> -->
 		</view>
+		<avatar ref="avatar" @upload="uploadPic"></avatar>
 	</view>
 </template>
 
 <script>
 import { Toast } from '../../utils/funcitons';
-import { updateUserinfo, userInfo, uploadPic, updateUseremail,subscribeEmail,checkEmailsub } from '../../utils/request';
+import { updateUserinfo, userInfo, uploadPic, updateUseremail, subscribeEmail, checkEmailsub } from '../../utils/request';
+import avatar from '../../components/yq-avatar/yq-avatar';
 export default {
 	data() {
 		return {
@@ -66,9 +69,12 @@ export default {
 				company: '',
 				selfDescription: '',
 				email: '',
-				emailSub:false
+				emailSub: true
 			}
 		};
+	},
+	components: {
+		avatar
 	},
 	methods: {
 		submit(field) {
@@ -88,18 +94,21 @@ export default {
 					this.juejinInfo = uni.getStorageSync('juejinInfo');
 				});
 		},
-		subscribe(e){
-			subscribeEmail({check:e.target.value}).then(res => {
-				Toast('修改成功');
-			}).catch(err => {
+		subscribe(e) {
+			subscribeEmail({ check: e.detail.value[0] === 'true' ? true : false })
+				.then(res => {
+					Toast('修改成功');
+				})
+				.catch(err => {
 					Toast(err.m);
 					this.checkEmailsub();
 				});
 		},
-		checkEmailsub(){
+		checkEmailsub() {
 			checkEmailsub().then(res => {
 				this.emailSub = res;
-			})
+				console.log(res);
+			});
 		},
 		updateEmail() {
 			const checkFormat = /^([a-zA-Z0-9.-])+\@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/.test(this.juejinInfo.email);
@@ -119,24 +128,27 @@ export default {
 				});
 			}
 		},
+		uploadPic(e) {
+			uploadPic(e.path)
+				.then(response => {
+					this.juejinInfo.avatarLarge = response;
+					this.submit('avatarLarge');
+				})
+				.catch(err => {
+					Toast(err.m);
+				});
+		},
 		choosePic() {
-			uni.chooseImage({
-				count: 1
-			}).then(res => {
-				uploadPic(res[1].tempFilePaths[0])
-					.then(response => {
-						this.juejinInfo.avatarLarge = response;
-						this.submit('avatarLarge');
-					})
-					.catch(err => {
-						Toast(err.m);
-					});
+			this.$refs.avatar.fChooseImg(0, {
+				selWidth: '100%',
+				selHeight: '100%',
+				expWidth: '600upx',
+				expHeight: '600upx'
 			});
 		}
 	},
 	onLoad() {
 		this.juejinInfo = uni.getStorageSync('juejinInfo');
-		this.checkEmailsub();
 	}
 };
 </script>

@@ -226,11 +226,14 @@ export default {
 			uni.stopPullDownRefresh();
 		}
 	},
-	onLoad() {
+	onShow() {
 		this.juejinInfo = uni.getStorageSync('juejinInfo') || null;
 		this.isLogin = this.juejinInfo !== null ? true : false;
 		this.isLoading = this.isLogin ? 4 : 1;
 		const url = uni.getStorageSync('currentPic');
+		if(!url){
+			this.checkPic({url:uni.getStorageSync('onePic'),name:'one'},2)
+		}
 		const Reg = /wufazhuce/g;
 		if (Reg.test(url)) {
 			this.pics[2].selected = true;

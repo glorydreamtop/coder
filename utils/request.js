@@ -31,8 +31,8 @@ const ajax = (url, method, data, headerType) => {
 		juejin: header1,
 		juejinLegacy: header2,
 		noHeader: header3,
-		urlencoded:header4,
-		formData:header5
+		urlencoded: header4,
+		formData: header5
 	}
 	let header = headerMap[headerType];
 	return new Promise((resolve, reject) => {
@@ -136,18 +136,18 @@ const userInfo = (data) => {
 
 // update userInfo
 const updateUserinfo = (data) => {
-	data ={
+	data = {
 		src: 'web',
 		uid: juejinHeaders.userId,
 		token: juejinHeaders.token,
 		device_id: juejinHeaders.clientId,
 		...data
 	}
-	return new  Promise((resolve,reject) => {
-		post(urls.updateUserinfo,data,'urlencoded').then(res =>{
-			if(res.s === 1 && res.m === 'ok'){
+	return new Promise((resolve, reject) => {
+		post(urls.updateUserinfo, data, 'urlencoded').then(res => {
+			if (res.s === 1 && res.m === 'ok') {
 				resolve()
-			}else{
+			} else {
 				reject(res)
 			}
 		})
@@ -156,18 +156,18 @@ const updateUserinfo = (data) => {
 
 // update useremail
 const updateUseremail = (data) => {
-	data ={
+	data = {
 		src: 'web',
 		uid: juejinHeaders.userId,
 		token: juejinHeaders.token,
 		device_id: juejinHeaders.clientId,
 		...data
 	}
-	return new Promise((resolve,reject) => {
-		post(urls.updateUseremail,data,'urlencoded').then(res => {
-			if(res.s === 1 && res.m === 'ok'){
+	return new Promise((resolve, reject) => {
+		post(urls.updateUseremail, data, 'urlencoded').then(res => {
+			if (res.s === 1 && res.m === 'ok') {
 				resolve()
-			}else{
+			} else {
 				reject(res)
 			}
 		})
@@ -184,13 +184,16 @@ const subscribeEmail = (data) => {
 		...data,
 		type: 'week'
 	}
-	get(urls.subscribeEmail,data,'noHeader').then(res => {
-		if(res.s === 1 && res.m === 'ok'){
-			resolve()
-		}else{
-			reject(res)
-		}
+	return new Promise((resolve, reject) => {
+		get(urls.subscribeEmail, data, 'noHeader').then(res => {
+			if (res.s === 1 && res.m === 'ok') {
+				resolve()
+			} else {
+				reject(res)
+			}
+		})
 	})
+
 }
 
 //check subscribe email
@@ -202,28 +205,31 @@ const checkEmailsub = () => {
 		device_id: juejinHeaders.clientId,
 		type: 'week'
 	}
-	get(urls.checkEmailsub,data,'noHeader').then(res => {
-		if(res.s === 1 && res.m === 'ok'){
-			resolve(res.d.week)
-		}else{
-			reject(res)
-		}
+	return new Promise((resolve, reject) => {
+		get(urls.checkEmailsub, data, 'noHeader').then(res => {
+			if (res.s === 1 && res.m === 'ok') {
+				resolve(res.d.week)
+			} else {
+				reject(res)
+			}
+		})
 	})
+
 }
 
 
 // upload pic
 const uploadPic = (data) => {
-	return new Promise((resolve,reject) => {
+	return new Promise((resolve, reject) => {
 		uni.uploadFile({
-			url:urls.upload,
-			name:'file',
-			filePath:data
+			url: urls.upload,
+			name: 'file',
+			filePath: data
 		}).then(res => {
 			res = JSON.parse(res[1].data);
-			if(res.s === 1 && res.m === 'ok'){
+			if (res.s === 1 && res.m === 'ok') {
 				resolve(res.d.url.https);
-			}else{
+			} else {
 				reject(res);
 			}
 		})
@@ -263,8 +269,8 @@ const articleDetail = (data) => {
 		type: 'entryView',
 		...data
 	}
-	return new Promise((resolve,reject) => {
-		get(urls.articleDetail,data,'noHeader').then(res => {
+	return new Promise((resolve, reject) => {
+		get(urls.articleDetail, data, 'noHeader').then(res => {
 			resolve(res.d.content)
 		})
 	})
@@ -289,7 +295,7 @@ const likeList = (data) => {
 }
 
 // get collection set
-const collectionSet = (data,type) => {
+const collectionSet = (data, type) => {
 	const id = data.id;
 	data = {
 		src: 'web',
@@ -299,12 +305,12 @@ const collectionSet = (data,type) => {
 		...data
 	}
 	return new Promise(resolve => {
-		if(id){
+		if (id) {
 			get(`${urls.usercollectionSet}/${id}`, data, 'juejin').then(res => {
 				res = res.d.collectionSets;
 				resolve(res)
 			})
-		}else{
+		} else {
 			const url = type === 'follow' ? urls.followedCollectionSet : urls.usercollectionSet;
 			get(url, data, 'noHeader').then(res => {
 				res = res.d.collectionSets;
@@ -324,7 +330,7 @@ const collectionSetEntries = (data) => {
 		...data
 	}
 	return new Promise(resolve => {
-		get(urls.collection,data,'noHeader').then(res => {
+		get(urls.collection, data, 'noHeader').then(res => {
 			resolve(res.d);
 		})
 	})
@@ -341,11 +347,11 @@ const collection = (data) => {
 		...data
 	}
 	return new Promise((resolve, reject) => {
-		get(urls.timeline,data,'noHeader').then(res => {
+		get(urls.timeline, data, 'noHeader').then(res => {
 			resolve(res.d)
 		})
 	})
-	
+
 }
 
 //collect
@@ -375,12 +381,12 @@ const follow = (followee, type) => {
 //get followList
 const followList = (uid) => {
 	const data = {
-		currentUid:juejinHeaders.userId,
-		src:'web',
-		uid:uid || juejinHeaders.userId
+		currentUid: juejinHeaders.userId,
+		src: 'web',
+		uid: uid || juejinHeaders.userId
 	}
-	return new Promise((resolve,reject) => {
-		get(urls.followee,data,'noHeader').then(res => {
+	return new Promise((resolve, reject) => {
+		get(urls.followee, data, 'noHeader').then(res => {
 			resolve(res.d)
 		})
 	})
@@ -399,11 +405,11 @@ const postList = (data) => {
 		order: 'createdAt',
 		before: data.before || null
 	}
-	if(data.before === null){
+	if (data.before === null) {
 		delete data.before;
 	}
-	return new Promise((resolve,reject) => {
-		get(urls.postList,data,'noHeader').then(res => {
+	return new Promise((resolve, reject) => {
+		get(urls.postList, data, 'noHeader').then(res => {
 			resolve(res.d);
 		})
 	})
